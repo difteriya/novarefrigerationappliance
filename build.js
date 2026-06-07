@@ -13,7 +13,7 @@ const path = require("path");
 const CONFIG = {
   name: "Nova Refrigeration & Appliance Repair",
   shortName: "Nova Appliance Repair",
-  phoneDisplay: "(512) 555-0199",          // TODO: real phone
+  phoneDisplay: "(512) 555-0209",          // TODO: real phone
   phoneTel: "+15125550199",                 // TODO: real phone (E.164)
   smsBody: "Hi Nova, I need appliance repair service.",
   email: "service@novarefrigerationappliance.com", // TODO: real email
