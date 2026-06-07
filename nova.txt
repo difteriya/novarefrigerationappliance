@@ -1,0 +1,213 @@
+Company Overview
+
+Business Name: Nova Refrigeration & Appliance Repair
+
+Location: Austin, Texas
+
+Service Type: Residential appliance repair and refrigeration services.
+
+Main Goal of Website:
+Generate phone calls, text messages, and online service requests from homeowners in the Austin metropolitan area.
+
+⸻
+
+Services Offered
+
+Refrigerator Repair
+
+* Not cooling
+* Warm refrigerator section
+* Warm freezer section
+* Ice buildup / defrost issues
+* Water leaks
+* Noisy operation
+* Temperature control issues
+* Control board replacement
+* Fan motor replacement
+* Sensor replacement
+* Thermostat replacement
+
+Ice Maker Repair
+
+* No ice production
+* Slow ice production
+* Overflowing ice maker
+* Ice dispenser issues
+* Water valve replacement
+* Ice maker assembly replacement
+
+Freezer Repair
+
+* Not freezing
+* Excessive frost buildup
+* Temperature fluctuations
+* Door seal issues
+
+Washer Repair
+
+* Not draining
+* Not spinning
+* Not starting
+* Control board issues
+* Water leaks
+* Error codes
+
+Dryer Repair
+
+* Not heating
+* Long drying times
+* Won’t start
+* Thermal fuse replacement
+* Heating element replacement
+* Gas dryer repair
+* Ventilation-related issues
+
+Dishwasher Repair
+
+* Not cleaning properly
+* Not draining
+* Water leaks
+* Control board replacement
+* Pump replacement
+
+Oven & Range Repair
+
+* Not heating
+* Uneven heating
+* Ignition problems
+* Control board issues
+* Temperature sensor replacement
+* Gas and electric ovens
+
+Cooktop Repair
+
+* Burner issues
+* Igniter problems
+* Switch replacement
+* Gas valve replacement
+
+Microwave Repair
+
+* Door issues
+* Heating issues
+* Switch replacement
+* Control board repair
+
+⸻
+
+Specialized Services
+
+Sealed System Refrigeration Repair
+
+* Compressor replacement
+* Refrigerant leak diagnosis
+* Leak repair
+* Filter drier replacement
+* System evacuation and recharge
+* Capillary tube restrictions
+* Sealed system rebuilds
+
+Built-In Refrigerator Repair
+
+Specialized experience with:
+
+* Sub-Zero
+* Thermador
+* Viking
+* Bosch
+* GE Monogram
+
+⸻
+
+Brands Serviced
+
+* Samsung
+* LG
+* Whirlpool
+* Maytag
+* KitchenAid
+* GE Appliances
+* Frigidaire
+* Electrolux
+* Bosch
+* Thermador
+* Sub-Zero
+* Viking
+* JennAir
+* Wolf
+
+⸻
+
+Service Areas
+
+Create separate SEO pages for:
+
+* Austin
+* Round Rock
+* Cedar Park
+* Leander
+* Georgetown
+* Pflugerville
+* Lakeway
+* Bee Cave
+* West Lake Hills
+* Buda
+* Kyle
+* Hutto
+
+⸻
+
+Website Pages
+
+Home Page
+
+* Hero section
+* Same-day service message
+* Call Now button
+* Request Service button
+* Services overview
+* Brands serviced
+* Reviews
+* Service areas
+* Contact information
+
+About Us
+
+Services
+
+Individual pages for:
+
+* Refrigerator Repair
+* Washer Repair
+* Dryer Repair
+* Dishwasher Repair
+* Oven Repair
+* Ice Maker Repair
+* Freezer Repair
+
+Service Areas
+
+Reviews
+
+Contact Us
+
+FAQ
+
+⸻
+
+Lead Generation Features
+
+* Click-to-call button
+* Mobile-first design
+* Contact form
+* Google Maps
+* Google Reviews integration
+* SMS request button
+* Emergency service request form
+Main Call-To-Action
+
+“Call Now for Fast Appliance Repair Service”
+
+Secondary CTA:
+
+“Schedule Service Online”
