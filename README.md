@@ -185,20 +185,41 @@ you run `node build.js`. Always edit `build.js` instead.
 
 ---
 
-## Going live
+## Going live (Netlify — recommended)
 
-1. Run `node build.js` one final time.
-2. Upload everything **except** `build.js`, `nova.txt`, and `README.md` to your host
-   (the `.html` files + `css/` + `js/`). `index.html` is the home page.
-3. (Optional) Keep `build.js` in version control so you can keep editing and re-deploying.
+The repo is configured for Netlify (see [netlify.toml](netlify.toml)), which also powers
+the contact form.
+
+1. Go to [app.netlify.com](https://app.netlify.com) → **Add new site → Import an existing project**.
+2. Connect GitHub and pick the **novarefrigerationappliance** repo.
+3. Accept the detected settings (build command `node build.js`, publish directory `.`) and deploy.
+4. After it goes live, every `git push` to `main` auto-rebuilds and redeploys the site.
+
+Prefer manual hosting instead? Run `node build.js`, then upload everything **except**
+`build.js`, `nova.txt`, `README.md`, and `netlify.toml` (the `.html` files + `css/` + `js/`).
+`index.html` is the home page. (Note: the contact form only works on Netlify.)
+
+---
+
+## Contact form (Netlify Forms)
+
+The "Request Service" form on `contact.html` uses **Netlify Forms** — no backend code or
+third-party account needed. Once the site is deployed on Netlify:
+
+- Submissions appear in the Netlify dashboard under **Site → Forms** (form name: `service-request`).
+- To get **email notifications**, in Netlify go to **Site configuration → Forms →
+  Form notifications → Add notification → Email notification**, and enter the address(es).
+- A hidden honeypot field blocks most spam automatically.
+
+The form submits via AJAX and shows an inline "thank you" message — no page reload.
+It will **not** work when opening the file locally (it only posts to Netlify); that's expected.
 
 ---
 
 ## Still to do (not code — your input needed)
 
 - [ ] Replace placeholder phone / email / hours in `CONFIG`.
-- [ ] Connect the **contact form** to a form service (Formspree, Netlify Forms, etc.) — it
-      currently shows a confirmation but doesn't email yet.
+- [x] ~~Connect the contact form to a form service~~ → **Done: Netlify Forms** (set up email notifications in the Netlify dashboard).
 - [ ] Swap sample reviews for real **Google Reviews**.
 - [ ] Add real photos and a logo/favicon.
 - [ ] (SEO extras) sitemap.xml, robots.txt, breadcrumb schema — ask and these can be added.
