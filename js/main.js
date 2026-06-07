@@ -15,8 +15,8 @@
     });
   }
 
-  // Service request form — submits to Netlify Forms via AJAX (no page reload).
-  // The form's name/data-netlify attributes let Netlify detect and capture it.
+  // Service request form — submits to Web3Forms via AJAX (no page reload).
+  // The hidden access_key field (set in build.js CONFIG) routes the email.
   var form = document.querySelector("#service-form");
   if (form) {
     var success = form.parentNode.querySelector(".form-success");
@@ -35,18 +35,22 @@
       var btn = form.querySelector('button[type="submit"]');
       if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = "Sending…"; }
 
-      fetch("/", {
+      var payload = Object.fromEntries(new FormData(form).entries());
+      fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(new FormData(form)).toString(),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
       })
-        .then(function (res) {
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          showMsg("Thanks! Your request has been received. We'll call you back shortly — for fastest service, call us now.", true);
-          form.reset();
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data && data.success) {
+            showMsg("Thanks! Your request has been received. We'll call you back shortly — for fastest service, call us now.", true);
+            form.reset();
+          } else {
+            throw new Error((data && data.message) || "submit failed");
+          }
         })
         .catch(function () {
-          // Happens when not yet deployed to Netlify (e.g. opened as a local file).
           showMsg("Sorry, we couldn't send your request right now. Please call or text us and we'll help right away.", false);
         })
         .finally(function () {

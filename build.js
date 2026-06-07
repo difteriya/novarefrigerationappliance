@@ -21,6 +21,9 @@ const CONFIG = {
   hours: "Mon–Sat: 7:00 AM – 7:00 PM",
   domain: "novarefrigerationappliance.com",
   mapQuery: "Austin, Texas",
+  // Web3Forms access key — get a free one (no login) at https://web3forms.com
+  // by entering the email where you want submissions delivered, then paste it here.
+  web3formsKey: "REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY",
 };
 
 /* ----------------------------------------------------------------------- */
@@ -746,9 +749,11 @@ function buildContact() {
       <p>Tell us about your appliance and we'll get back to you fast. For the quickest response, call or text us directly.</p>
       <div class="form-wrap">
         <div class="form-success" role="status" style="display:none"></div>
-        <form id="service-form" name="service-request" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/?form=ok" novalidate>
-          <input type="hidden" name="form-name" value="service-request">
-          <p hidden><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+        <form id="service-form" method="POST" action="https://api.web3forms.com/submit" novalidate>
+          <input type="hidden" name="access_key" value="${C.web3formsKey}">
+          <input type="hidden" name="subject" value="New Service Request — ${C.name}">
+          <input type="hidden" name="from_name" value="${C.name} Website">
+          <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
           <div class="form-row">
             <div class="field">
               <label for="name">Full Name</label>
@@ -792,7 +797,7 @@ function buildContact() {
             <textarea id="message" name="message" placeholder="What's happening with your appliance?"></textarea>
           </div>
           <button class="btn btn-call btn-lg" type="submit" style="width:100%">Request Service</button>
-          <p class="form-note" style="margin-top:12px">By submitting, you agree to be contacted about your repair request. Submissions are delivered via Netlify Forms when this site is hosted on Netlify.</p>
+          <p class="form-note" style="margin-top:12px">By submitting, you agree to be contacted about your repair request. Submissions are delivered by email via Web3Forms.</p>
         </form>
       </div>
     </div>

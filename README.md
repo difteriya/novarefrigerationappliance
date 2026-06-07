@@ -185,41 +185,46 @@ you run `node build.js`. Always edit `build.js` instead.
 
 ---
 
-## Going live (Netlify — recommended)
+## Going live (any static host)
 
-The repo is configured for Netlify (see [netlify.toml](netlify.toml)), which also powers
-the contact form.
+The site is plain static files, so it runs on any host — Cloudflare Pages, Vercel,
+GitHub Pages, or traditional web hosting.
 
-1. Go to [app.netlify.com](https://app.netlify.com) → **Add new site → Import an existing project**.
-2. Connect GitHub and pick the **novarefrigerationappliance** repo.
-3. Accept the detected settings (build command `node build.js`, publish directory `.`) and deploy.
-4. After it goes live, every `git push` to `main` auto-rebuilds and redeploys the site.
+1. Run `node build.js` one final time.
+2. Upload everything **except** `build.js`, `nova.txt`, and `README.md`
+   (the `.html` files + `css/` + `js/`). `index.html` is the home page.
+3. If your host deploys from this Git repo, set the **build command** to `node build.js`
+   and the **publish/output directory** to the repo root (`.`).
 
-Prefer manual hosting instead? Run `node build.js`, then upload everything **except**
-`build.js`, `nova.txt`, `README.md`, and `netlify.toml` (the `.html` files + `css/` + `js/`).
-`index.html` is the home page. (Note: the contact form only works on Netlify.)
+The contact form (Web3Forms) works on any host — see below.
 
 ---
 
-## Contact form (Netlify Forms)
+## Contact form (Web3Forms)
 
-The "Request Service" form on `contact.html` uses **Netlify Forms** — no backend code or
-third-party account needed. Once the site is deployed on Netlify:
+The "Request Service" form on `contact.html` uses **Web3Forms** — submissions are emailed
+to you. No backend code and no account login required.
 
-- Submissions appear in the Netlify dashboard under **Site → Forms** (form name: `service-request`).
-- To get **email notifications**, in Netlify go to **Site configuration → Forms →
-  Form notifications → Add notification → Email notification**, and enter the address(es).
-- A hidden honeypot field blocks most spam automatically.
+**One-time setup:**
 
-The form submits via AJAX and shows an inline "thank you" message — no page reload.
-It will **not** work when opening the file locally (it only posts to Netlify); that's expected.
+1. Go to [web3forms.com](https://web3forms.com), enter the email address where you want to
+   receive submissions, and copy the **Access Key** it gives you.
+2. Open [build.js](build.js), find `web3formsKey` in the `CONFIG` block, and paste your key:
+   ```js
+   web3formsKey: "your-access-key-here",
+   ```
+3. Run `node build.js` and re-deploy.
+
+That's it. Submissions arrive by email; a hidden honeypot field blocks most spam. The form
+submits via AJAX and shows an inline "thank you" message — no page reload. It will **not**
+send until a real access key is set (until then it shows the "please call us" fallback).
 
 ---
 
 ## Still to do (not code — your input needed)
 
 - [ ] Replace placeholder phone / email / hours in `CONFIG`.
-- [x] ~~Connect the contact form to a form service~~ → **Done: Netlify Forms** (set up email notifications in the Netlify dashboard).
+- [ ] **Add your Web3Forms access key** to `web3formsKey` in `CONFIG` (see Contact form section).
 - [ ] Swap sample reviews for real **Google Reviews**.
 - [ ] Add real photos and a logo/favicon.
 - [ ] (SEO extras) sitemap.xml, robots.txt, breadcrumb schema — ask and these can be added.
