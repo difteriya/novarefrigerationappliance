@@ -16,14 +16,14 @@ const CONFIG = {
   phoneDisplay: "(512) 555-0209",          // TODO: real phone
   phoneTel: "+15125550199",                 // TODO: real phone (E.164)
   smsBody: "Hi Nova, I need appliance repair service.",
-  email: "service@novarefrigerationappliance.com", // TODO: real email
+  email: "info@novarefrigerationappliance.com", // TODO: real email
   cityState: "Austin, Texas",
   hours: "Mon–Sat: 7:00 AM – 7:00 PM",
   domain: "novarefrigerationappliance.com",
   mapQuery: "Austin, Texas",
   // Web3Forms access key — get a free one (no login) at https://web3forms.com
   // by entering the email where you want submissions delivered, then paste it here.
-  web3formsKey: "REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY",
+  web3formsKey: "3e3a576c-d904-49e5-871f-ee45dd499aa2",
 };
 
 /* ----------------------------------------------------------------------- */
@@ -123,7 +123,6 @@ const AREAS = [
   { slug: "austin", name: "Austin" },
   { slug: "round-rock", name: "Round Rock" },
   { slug: "cedar-park", name: "Cedar Park" },
-  { slug: "leander", name: "Leander" },
   { slug: "georgetown", name: "Georgetown" },
   { slug: "pflugerville", name: "Pflugerville" },
   { slug: "lakeway", name: "Lakeway" },
@@ -131,7 +130,8 @@ const AREAS = [
   { slug: "west-lake-hills", name: "West Lake Hills" },
   { slug: "buda", name: "Buda" },
   { slug: "kyle", name: "Kyle" },
-  { slug: "hutto", name: "Hutto" },
+  { slug: "the-hills", name: "The Hills" },
+  { slug: "dripping-springs", name: "Dripping Springs" },
 ];
 
 const REVIEWS = [
@@ -153,6 +153,41 @@ const FAQS = [
   { q: "How do I schedule a repair?", a: "Call us, send a text, or use the Request Service form on our website. Tell us your appliance, brand, and the problem, and we'll get you scheduled — often the same day." },
 ];
 
+/* Active promotions — swap the `img` files in /assets for your own photos any time. */
+const PROMOS = [
+  {
+    img: "assets/promo-labor.png",
+    badge: "Service Special",
+    price: "$185",
+    unit: "minimum labor",
+    title: "Flat Minimum Labor Rate",
+    desc: "Straightforward, up-front pricing on every visit — a $185 minimum labor charge covers diagnosis and getting hands on the repair. No hidden fees, no surprises.",
+  },
+  {
+    img: "assets/promo-military.jpg",
+    badge: "We Support Our Troops",
+    price: "$30 OFF",
+    unit: "for military",
+    title: "Military Discount",
+    desc: "A thank-you to those who serve. Active-duty and veteran households receive $30 off their appliance repair. Just mention it when you book.",
+  },
+];
+
+/* Trust / value highlights shown on the home page. */
+const FEATURES = [
+  { icon: "shield", title: "Spare Parts Guarantee", text: "We stand behind our work — every spare part we install is backed by a guarantee." },
+  { icon: "clock", title: "Same-Day Repair", text: "Same-day appliance repair is available across the Austin metro whenever scheduling allows." },
+  { icon: "badge", title: "Insured & EPA Certified", text: "Our technicians are fully insured and EPA certified for safe, code-compliant refrigeration work." },
+  { icon: "trophy", title: "Proven Track Record", text: "5+ years of experience and 10,000+ completed orders for homeowners across the metro." },
+];
+
+const FEATURE_ICONS = {
+  shield: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#1763b6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M40 8l28 10v20c0 18-12 30-28 34C24 68 12 56 12 38V18z"/><path d="M30 40l8 8 14-16"/></svg>',
+  clock: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#1763b6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="42" r="30"/><path d="M40 24v18l12 8"/><path d="M28 8h24"/></svg>',
+  badge: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#1763b6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="32" r="22"/><path d="M30 48l-6 24 16-9 16 9-6-24"/><path d="M31 32l6 6 12-12"/></svg>',
+  trophy: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none" stroke="#1763b6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 12h32v18a16 16 0 0 1-32 0z"/><path d="M24 18H14v6a10 10 0 0 0 10 10M56 18h10v6a10 10 0 0 1-10 10"/><path d="M34 46h12M30 68h20M40 46v22"/></svg>',
+};
+
 /* ----------------------------------------------------------------------- */
 /* HELPERS                                                                 */
 /* ----------------------------------------------------------------------- */
@@ -168,9 +203,12 @@ function head(depth, { title, desc, canonical }) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
+<script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${title}</title>
+<link rel="icon" href="${rel(depth, "assets/favicon.svg")}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="${rel(depth, "assets/favicon.svg")}">
 <meta name="description" content="${desc}">
 <link rel="canonical" href="${base}${canonical}">
 <meta property="og:title" content="${title}">
@@ -199,7 +237,8 @@ function header(depth, active) {
 <header class="site-header">
   <div class="container">
     <a class="brand" href="${rel(depth, "index.html")}">
-      <span class="logo-mark">N</span>
+      <img class="logo-mark logo-dark" src="${rel(depth, "assets/logo.svg")}" alt="${C.name} logo" width="48" height="54">
+      <img class="logo-mark logo-white" src="${rel(depth, "assets/logo-white.svg")}" alt="${C.name} logo" width="48" height="54">
       <span>${C.name.split(" & ")[0]}<small>Refrigeration &amp; Appliance Repair</small></span>
     </a>
     <nav class="nav" aria-label="Main navigation">
@@ -207,11 +246,11 @@ function header(depth, active) {
       ${link("about.html", "About", "about")}
       ${link("services.html", "Services", "services")}
       ${link("service-areas.html", "Service Areas", "areas")}
-      ${link("reviews.html", "Reviews", "reviews")}
-      ${link("faq.html", "FAQ", "faq")}
+      ${link("our-work.html", "Our Work", "work")}
       ${link("contact.html", "Contact", "contact")}
     </nav>
     <div class="header-actions">
+      <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
       <a class="btn btn-call" href="${telHref}">📞 Call Now</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
@@ -245,7 +284,7 @@ function footer(depth) {
     <div class="footer-grid">
       <div>
         <a class="brand" href="${rel(depth, "index.html")}" style="color:#fff">
-          <span class="logo-mark">N</span>
+          <img class="logo-mark" src="${rel(depth, "assets/logo-white.svg")}" alt="${C.name} logo" width="48" height="54">
           <span style="color:#fff">${C.name.split(" & ")[0]}<small style="color:#9fc1e3">Refrigeration &amp; Appliance Repair</small></span>
         </a>
         <p style="margin-top:14px;max-width:34ch">Residential appliance repair and refrigeration services for ${C.cityState} and the surrounding metro. Same-day service available.</p>
@@ -268,8 +307,9 @@ function footer(depth) {
         <h4>Company</h4>
         <ul>
           <li><a href="${rel(depth, "about.html")}">About Us</a></li>
-          <li><a href="${rel(depth, "reviews.html")}">Reviews</a></li>
-          <li><a href="${rel(depth, "faq.html")}">FAQ</a></li>
+          <li><a href="${rel(depth, "our-work.html")}">Our Work</a></li>
+          <li><a href="${rel(depth, "index.html")}#reviews">Reviews</a></li>
+          <li><a href="${rel(depth, "index.html")}#faq">FAQ</a></li>
           <li><a href="${rel(depth, "contact.html")}">Contact Us</a></li>
         </ul>
       </div>
@@ -334,11 +374,51 @@ function write(relPath, html) {
 function serviceCards(depth) {
   return SERVICES.map((s) => `
     <a class="card service-card" href="${rel(depth, "services/" + s.slug + ".html")}">
-      <div class="icon">${s.icon}</div>
+      <div class="icon"><img src="${rel(depth, "assets/icons/" + s.slug + ".svg")}" alt="${s.name} icon" width="44" height="44"></div>
       <h3>${s.name}</h3>
       <p>${s.blurb}</p>
       <span class="arrow">Learn more →</span>
     </a>`).join("");
+}
+
+function promoCards(depth) {
+  return PROMOS.map((p) => `
+    <div class="card promo-card">
+      <div class="promo-media"><img src="${rel(depth, p.img)}" alt="${p.title}" loading="lazy"><span class="promo-badge">${p.badge}</span></div>
+      <div class="promo-body">
+        <div class="promo-price">${p.price} <span>${p.unit}</span></div>
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <a class="btn btn-call" href="${telHref}">📞 Claim This Offer</a>
+      </div>
+    </div>`).join("");
+}
+
+function featureCards() {
+  return FEATURES.map((f) => `
+    <div class="feature">
+      <div class="feature-icon">${FEATURE_ICONS[f.icon]}</div>
+      <h3>${f.title}</h3>
+      <p>${f.text}</p>
+    </div>`).join("");
+}
+
+function faqItems() {
+  return FAQS.map((f) => `
+      <details class="faq-item">
+        <summary>${f.q}</summary>
+        <div class="faq-body">${f.a}</div>
+      </details>`).join("");
+}
+
+function faqSchema() {
+  return `<script type="application/ld+json">
+${JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+}, null, 2)}
+</script>`;
 }
 
 function brandChips() {
@@ -364,7 +444,7 @@ function buildHome() {
     title: `${C.name} | Same-Day Appliance & Refrigerator Repair in ${C.cityState}`,
     desc: `Fast, reliable residential appliance and refrigerator repair in ${C.cityState} and surrounding areas. Same-day service. Call ${C.phoneDisplay}.`,
     canonical: "index.html",
-  }) + localBusinessSchema() + header(0, "home") + `
+  }) + localBusinessSchema() + faqSchema() + header(0, "home") + `
 <section class="hero">
   <div class="container">
     <span class="same-day">⚡ Same-Day Service Available</span>
@@ -373,13 +453,37 @@ function buildHome() {
     <div class="hero-badges">
       <span>✓ Same-Day Service</span>
       <span>✓ All Major Brands</span>
-      <span>✓ Up-Front Pricing</span>
       <span>✓ Sealed-System Specialists</span>
     </div>
     <div class="hero-cta">
       <a class="btn btn-call btn-lg" href="${telHref}">📞 Call Now: ${C.phoneDisplay}</a>
       <a class="btn btn-outline btn-lg" href="${smsHref}">💬 Text Us</a>
       <a class="btn btn-ghost btn-lg" href="contact.html">Request Service</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="promos">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Active Promotions</span>
+      <h2>Current Offers &amp; Discounts</h2>
+      <p>Honest pricing and a little extra appreciation for our customers.</p>
+    </div>
+    <div class="grid grid-2 promo-grid">
+      ${promoCards(0)}
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Why Homeowners Choose Nova</span>
+      <h2>Repairs You Can Trust</h2>
+    </div>
+    <div class="grid grid-4 feature-grid">
+      ${featureCards()}
     </div>
   </div>
 </section>
@@ -403,10 +507,10 @@ function buildHome() {
 <section class="section alt">
   <div class="container">
     <div class="stats">
-      <div class="stat"><div class="big">Same-Day</div><div class="lbl">Service Available</div></div>
+      <div class="stat"><div class="big">10,000+</div><div class="lbl">Orders Completed</div></div>
+      <div class="stat"><div class="big">5+ yrs</div><div class="lbl">Experience</div></div>
       <div class="stat"><div class="big">14+</div><div class="lbl">Brands Serviced</div></div>
-      <div class="stat"><div class="big">12</div><div class="lbl">Cities Covered</div></div>
-      <div class="stat"><div class="big">5★</div><div class="lbl">Customer Rated</div></div>
+      <div class="stat"><div class="big">Same-Day</div><div class="lbl">Service Available</div></div>
     </div>
   </div>
 </section>
@@ -438,7 +542,7 @@ function buildHome() {
   </div>
 </section>
 
-<section class="section">
+<section class="section" id="reviews">
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">Reviews</span>
@@ -446,15 +550,26 @@ function buildHome() {
       <p>Homeowners across the ${C.cityState} metro trust Nova for honest, fast repairs.</p>
     </div>
     <div class="grid grid-3">
-      ${reviewCards(REVIEWS.slice(0, 3))}
+      ${reviewCards(REVIEWS)}
     </div>
-    <div style="text-align:center;margin-top:36px">
-      <a class="btn btn-ghost btn-lg" href="reviews.html">Read More Reviews →</a>
+    <p class="form-note" style="text-align:center;margin-top:28px">Reviews shown are representative customer testimonials.</p>
+  </div>
+</section>
+
+<section class="section alt" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>Frequently Asked Questions</h2>
+      <p>Everything you need to know about scheduling appliance repair with Nova.</p>
+    </div>
+    <div class="container" style="max-width:840px;padding:0">
+      ${faqItems()}
     </div>
   </div>
 </section>
 
-<section class="section alt">
+<section class="section">
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">Service Areas</span>
@@ -595,7 +710,7 @@ function buildServicePages() {
       <div class="card" style="margin-top:22px">
         <h3>Other Repairs</h3>
         <ul class="info-list">
-          ${others.map((o) => `<li><span class="ico">${o.icon}</span><div><a href="${o.slug}.html"><b>${o.name}</b></a></div></li>`).join("\n          ")}
+          ${others.map((o) => `<li><span class="ico ico-img"><img src="${rel(1, "assets/icons/" + o.slug + ".svg")}" alt="" width="24" height="24"></span><div><a href="${o.slug}.html"><b>${o.name}</b></a></div></li>`).join("\n          ")}
         </ul>
       </div>
     </div>
@@ -677,59 +792,30 @@ function buildAreaPages() {
   });
 }
 
-/* ---------- REVIEWS ---------- */
-function buildReviews() {
+/* ---------- OUR WORK ---------- */
+function buildOurWork() {
   const html = head(0, {
-    title: `Customer Reviews | ${C.name}`,
-    desc: `Read reviews from homeowners across the ${C.cityState} metro who trust Nova for fast, honest appliance and refrigerator repair.`,
-    canonical: "reviews.html",
-  }) + header(0, "reviews")
-    + pageHero(0, { title: "Customer Reviews", sub: "Homeowners across the metro trust Nova for fast, honest appliance and refrigerator repair.", crumbs: "Reviews" })
+    title: `Our Work | ${C.name}`,
+    desc: `A gallery of completed appliance and refrigeration repairs by ${C.name} in the ${C.cityState} metro — coming soon.`,
+    canonical: "our-work.html",
+  }) + header(0, "work")
+    + pageHero(0, { title: "Our Work", sub: "A look at recent appliance and refrigeration repairs we've completed across the metro.", crumbs: "Our Work" })
     + `
 <section class="section">
   <div class="container">
-    <div class="grid grid-3">
-      ${reviewCards(REVIEWS)}
-    </div>
-    <div style="text-align:center;margin-top:36px">
-      <p class="form-note">Reviews shown are representative customer testimonials. Connect your Google Business Profile to display live Google Reviews here.</p>
-      <a class="btn btn-primary btn-lg" href="${telHref}">📞 Experience It Yourself — Call ${C.phoneDisplay}</a>
+    <div class="coming-soon">
+      <div class="coming-soon-icon">🛠️</div>
+      <h2>Coming Soon</h2>
+      <p>We're putting together a gallery of our completed repairs and projects. Check back soon to see our work in action.</p>
+      <div class="hero-cta" style="justify-content:center">
+        <a class="btn btn-call btn-lg" href="${telHref}">📞 Call ${C.phoneDisplay}</a>
+        <a class="btn btn-ghost btn-lg" href="contact.html">Request Service</a>
+      </div>
     </div>
   </div>
 </section>
 ` + ctaBand(0) + footer(0);
-  write("reviews.html", html);
-}
-
-/* ---------- FAQ ---------- */
-function buildFaq() {
-  const items = FAQS.map((f) => `
-      <details class="faq-item">
-        <summary>${f.q}</summary>
-        <div class="faq-body">${f.a}</div>
-      </details>`).join("");
-  const schema = `<script type="application/ld+json">
-${JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-}, null, 2)}
-</script>`;
-
-  const html = head(0, {
-    title: `Frequently Asked Questions | ${C.name}`,
-    desc: `Answers to common questions about appliance repair, service areas, brands, pricing, and scheduling with ${C.name}.`,
-    canonical: "faq.html",
-  }) + schema + header(0, "faq")
-    + pageHero(0, { title: "Frequently Asked Questions", sub: "Everything you need to know about scheduling appliance repair with Nova.", crumbs: "FAQ" })
-    + `
-<section class="section">
-  <div class="container" style="max-width:840px">
-    ${items}
-  </div>
-</section>
-` + ctaBand(0) + footer(0);
-  write("faq.html", html);
+  write("our-work.html", html);
 }
 
 /* ---------- CONTACT ---------- */
@@ -833,7 +919,6 @@ buildServicesOverview();
 buildServicePages();
 buildAreasOverview();
 buildAreaPages();
-buildReviews();
-buildFaq();
+buildOurWork();
 buildContact();
 console.log("Done.");

@@ -2,6 +2,22 @@
 (function () {
   "use strict";
 
+  // Dark / night mode toggle (initial theme is set by an inline script in <head>)
+  var root = document.documentElement;
+  var themeBtn = document.querySelector(".theme-toggle");
+  var setIcon = function () {
+    if (themeBtn) themeBtn.textContent = root.getAttribute("data-theme") === "dark" ? "☀️" : "🌙";
+  };
+  setIcon();
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+      setIcon();
+    });
+  }
+
   // Mobile nav toggle
   var toggle = document.querySelector(".nav-toggle");
   var nav = document.querySelector(".nav");

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact Us | Nova Refrigeration & Appliance Repair</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/favicon.svg">
 <meta name="description" content="Contact Nova Refrigeration & Appliance Repair for same-day appliance and refrigerator repair in Austin, Texas. Call, text, or request service online.">
 <link rel="canonical" href="https://novarefrigerationappliance.com/contact.html">
 <meta property="og:title" content="Contact Us | Nova Refrigeration & Appliance Repair">
@@ -26,7 +29,8 @@
 <header class="site-header">
   <div class="container">
     <a class="brand" href="index.html">
-      <span class="logo-mark">N</span>
+      <img class="logo-mark logo-dark" src="assets/logo.svg" alt="Nova Refrigeration & Appliance Repair logo" width="48" height="54">
+      <img class="logo-mark logo-white" src="assets/logo-white.svg" alt="Nova Refrigeration & Appliance Repair logo" width="48" height="54">
       <span>Nova Refrigeration<small>Refrigeration &amp; Appliance Repair</small></span>
     </a>
     <nav class="nav" aria-label="Main navigation">
@@ -34,11 +38,11 @@
       <a href="about.html">About</a>
       <a href="services.html">Services</a>
       <a href="service-areas.html">Service Areas</a>
-      <a href="reviews.html">Reviews</a>
-      <a href="faq.html">FAQ</a>
+      <a href="our-work.html">Our Work</a>
       <a href="contact.html" class="active" aria-current="page">Contact</a>
     </nav>
     <div class="header-actions">
+      <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
       <a class="btn btn-call" href="tel:+15125550199">📞 Call Now</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
@@ -59,7 +63,7 @@
       <div class="form-wrap">
         <div class="form-success" role="status" style="display:none"></div>
         <form id="service-form" method="POST" action="https://api.web3forms.com/submit" novalidate>
-          <input type="hidden" name="access_key" value="REPLACE-WITH-YOUR-WEB3FORMS-ACCESS-KEY">
+          <input type="hidden" name="access_key" value="3e3a576c-d904-49e5-871f-ee45dd499aa2">
           <input type="hidden" name="subject" value="New Service Request — Nova Refrigeration & Appliance Repair">
           <input type="hidden" name="from_name" value="Nova Refrigeration & Appliance Repair Website">
           <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
@@ -84,7 +88,6 @@
                 <option>Austin</option>
                 <option>Round Rock</option>
                 <option>Cedar Park</option>
-                <option>Leander</option>
                 <option>Georgetown</option>
                 <option>Pflugerville</option>
                 <option>Lakeway</option>
@@ -92,7 +95,8 @@
                 <option>West Lake Hills</option>
                 <option>Buda</option>
                 <option>Kyle</option>
-                <option>Hutto</option>
+                <option>The Hills</option>
+                <option>Dripping Springs</option>
               </select>
             </div>
           </div>
@@ -134,7 +138,7 @@
       <ul class="info-list">
         <li><span class="ico">📞</span><div><b>Call</b><a href="tel:+15125550199">(512) 555-0209</a></div></li>
         <li><span class="ico">💬</span><div><b>Text</b><a href="sms:+15125550199?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">(512) 555-0209</a></div></li>
-        <li><span class="ico">✉️</span><div><b>Email</b><a href="mailto:service@novarefrigerationappliance.com">service@novarefrigerationappliance.com</a></div></li>
+        <li><span class="ico">✉️</span><div><b>Email</b><a href="mailto:info@novarefrigerationappliance.com">info@novarefrigerationappliance.com</a></div></li>
         <li><span class="ico">📍</span><div><b>Service Area</b>Austin, Texas & surrounding metro</div></li>
         <li><span class="ico">🕒</span><div><b>Hours</b>Mon–Sat: 7:00 AM – 7:00 PM</div></li>
       </ul>
@@ -164,11 +168,11 @@
     <div class="footer-grid">
       <div>
         <a class="brand" href="index.html" style="color:#fff">
-          <span class="logo-mark">N</span>
+          <img class="logo-mark" src="assets/logo-white.svg" alt="Nova Refrigeration & Appliance Repair logo" width="48" height="54">
           <span style="color:#fff">Nova Refrigeration<small style="color:#9fc1e3">Refrigeration &amp; Appliance Repair</small></span>
         </a>
         <p style="margin-top:14px;max-width:34ch">Residential appliance repair and refrigeration services for Austin, Texas and the surrounding metro. Same-day service available.</p>
-        <p><a href="tel:+15125550199">📞 (512) 555-0209</a><br><a href="sms:+15125550199?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">💬 Text us</a><br><a href="mailto:service@novarefrigerationappliance.com">✉️ service@novarefrigerationappliance.com</a></p>
+        <p><a href="tel:+15125550199">📞 (512) 555-0209</a><br><a href="sms:+15125550199?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">💬 Text us</a><br><a href="mailto:info@novarefrigerationappliance.com">✉️ info@novarefrigerationappliance.com</a></p>
       </div>
       <div>
         <h4>Services</h4>
@@ -188,11 +192,11 @@
         <li><a href="areas/austin.html">Austin</a></li>
         <li><a href="areas/round-rock.html">Round Rock</a></li>
         <li><a href="areas/cedar-park.html">Cedar Park</a></li>
-        <li><a href="areas/leander.html">Leander</a></li>
         <li><a href="areas/georgetown.html">Georgetown</a></li>
         <li><a href="areas/pflugerville.html">Pflugerville</a></li>
         <li><a href="areas/lakeway.html">Lakeway</a></li>
         <li><a href="areas/bee-cave.html">Bee Cave</a></li>
+        <li><a href="areas/west-lake-hills.html">West Lake Hills</a></li>
         <li><a href="service-areas.html">View all areas →</a></li>
         </ul>
       </div>
@@ -200,8 +204,9 @@
         <h4>Company</h4>
         <ul>
           <li><a href="about.html">About Us</a></li>
-          <li><a href="reviews.html">Reviews</a></li>
-          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="our-work.html">Our Work</a></li>
+          <li><a href="index.html#reviews">Reviews</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
           <li><a href="contact.html">Contact Us</a></li>
         </ul>
       </div>
