@@ -210,7 +210,7 @@ function head(depth, { title, desc, canonical }) {
 <link rel="icon" href="${rel(depth, "assets/favicon.svg")}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${rel(depth, "assets/favicon.svg")}">
 <meta name="description" content="${desc}">
-<link rel="canonical" href="${base}${canonical}">
+<link rel="canonical" href="${base}${canonical === "index.html" ? "" : canonical}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:type" content="website">
@@ -910,6 +910,52 @@ function buildContact() {
 }
 
 /* ----------------------------------------------------------------------- */
+/* SITEMAP + ROBOTS                                                        */
+/* ----------------------------------------------------------------------- */
+/* Every URL listed here must match the page's <link rel="canonical">.
+ * The home page is canonicalised to the bare domain, so it is listed as "". */
+function siteUrls() {
+  return [
+    { loc: "",                    changefreq: "weekly",  priority: "1.0" },
+    { loc: "services.html",       changefreq: "monthly", priority: "0.9" },
+    { loc: "service-areas.html",  changefreq: "monthly", priority: "0.9" },
+    { loc: "contact.html",        changefreq: "monthly", priority: "0.9" },
+    ...SERVICES.map((s) => ({ loc: "services/" + s.slug + ".html", changefreq: "monthly", priority: "0.8" })),
+    ...AREAS.map((a) => ({ loc: "areas/" + a.slug + ".html", changefreq: "monthly", priority: "0.7" })),
+    { loc: "about.html",          changefreq: "yearly",  priority: "0.6" },
+    { loc: "our-work.html",       changefreq: "monthly", priority: "0.6" },
+  ];
+}
+
+function buildSitemap() {
+  const base = `https://${C.domain}/`;
+  const lastmod = new Date().toISOString().slice(0, 10);
+  const urls = siteUrls()
+    .map((u) => `  <url>
+    <loc>${base}${u.loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`)
+    .join("\n");
+
+  write("sitemap.xml", `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls}
+</urlset>
+`);
+}
+
+function buildRobots() {
+  const base = `https://${C.domain}/`;
+  write("robots.txt", `User-agent: *
+Allow: /
+
+Sitemap: ${base}sitemap.xml
+`);
+}
+
+/* ----------------------------------------------------------------------- */
 /* RUN                                                                     */
 /* ----------------------------------------------------------------------- */
 console.log("Building " + C.name + " site...");
@@ -921,4 +967,6 @@ buildAreasOverview();
 buildAreaPages();
 buildOurWork();
 buildContact();
+buildSitemap();
+buildRobots();
 console.log("Done.");
