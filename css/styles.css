@@ -370,3 +370,170 @@ p  { margin: 0 0 1em; }
 @media (max-width: 460px) {
   .stats { grid-template-columns: 1fr; }
 }
+
+/* ======================================================================= */
+/* MOTION — page transitions, scroll reveals, micro-interactions           */
+/* ======================================================================= */
+
+/* ---------- Page transitions (native View Transitions where supported) -- */
+@view-transition { navigation: auto; }
+
+::view-transition-old(root) { animation: vt-out .26s ease both; }
+::view-transition-new(root) { animation: vt-in .42s cubic-bezier(.22,.75,.3,1) both; }
+@keyframes vt-out { to   { opacity: 0; transform: translateY(-10px); } }
+@keyframes vt-in  { from { opacity: 0; transform: translateY(16px);  } }
+
+/* JS fallback for browsers without View Transitions */
+body.page-enter { animation: page-in .5s cubic-bezier(.22,.75,.3,1) both; }
+body.page-leave { opacity: 0; transform: translateY(-8px); transition: opacity .22s ease, transform .22s ease; }
+@keyframes page-in { from { opacity: 0; transform: translateY(12px); } }
+
+/* ---------- Scroll progress bar ---------- */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 100%; z-index: 100;
+  transform: scaleX(0); transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--teal), var(--blue-500), var(--accent));
+  pointer-events: none; will-change: transform;
+}
+
+/* ---------- Scroll reveal ---------- */
+[data-reveal] { opacity: 0; will-change: transform, opacity; }
+[data-reveal="up"]    { transform: translateY(28px); }
+[data-reveal="down"]  { transform: translateY(-22px); }
+[data-reveal="left"]  { transform: translateX(-30px); }
+[data-reveal="right"] { transform: translateX(30px); }
+[data-reveal="zoom"]  { transform: scale(.93); }
+[data-reveal="blur"]  { transform: translateY(18px); filter: blur(8px); }
+
+[data-reveal].in-view {
+  opacity: 1; transform: none; filter: none;
+  transition:
+    opacity .75s cubic-bezier(.22,.75,.3,1),
+    transform .75s cubic-bezier(.22,.75,.3,1),
+    filter .75s ease;
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* ---------- Hero entrance ---------- */
+.hero .container > *,
+.page-hero .container > * { animation: hero-rise .8s cubic-bezier(.22,.75,.3,1) both; }
+.hero .container > *:nth-child(1), .page-hero .container > *:nth-child(1) { animation-delay: .05s; }
+.hero .container > *:nth-child(2), .page-hero .container > *:nth-child(2) { animation-delay: .15s; }
+.hero .container > *:nth-child(3), .page-hero .container > *:nth-child(3) { animation-delay: .25s; }
+.hero .container > *:nth-child(4), .page-hero .container > *:nth-child(4) { animation-delay: .35s; }
+.hero .container > *:nth-child(5), .page-hero .container > *:nth-child(5) { animation-delay: .45s; }
+.hero .container > *:nth-child(6), .page-hero .container > *:nth-child(6) { animation-delay: .55s; }
+@keyframes hero-rise { from { opacity: 0; transform: translateY(24px); } }
+
+.hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 80% at 85% 20%, rgba(22,177,196,.28), transparent 60%);
+  animation: hero-glow 9s ease-in-out infinite alternate;
+}
+.hero > * { position: relative; z-index: 1; }
+@keyframes hero-glow {
+  from { opacity: .5; transform: translate3d(0,0,0) scale(1); }
+  to   { opacity: 1;  transform: translate3d(-4%,3%,0) scale(1.12); }
+}
+
+/* Pulsing ring on the same-day badge — transform/opacity only, so it stays on
+   the compositor instead of repainting a box-shadow every frame. */
+.same-day { position: relative; }
+.same-day::after {
+  content: ""; position: absolute; inset: 0; border-radius: 999px; pointer-events: none;
+  box-shadow: 0 0 0 3px rgba(31,157,87,.55);
+  animation: pulse-ring 2.6s cubic-bezier(.22,.75,.3,1) infinite;
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(1);    opacity: .75; }
+  70%  { transform: scale(1.16); opacity: 0; }
+  100% { transform: scale(1.16); opacity: 0; }
+}
+
+.hero-badges span { transition: transform .25s ease, background .25s ease; }
+.hero-badges span:hover { transform: translateY(-3px); background: rgba(255,255,255,.2); }
+
+/* ---------- Header behaviour ---------- */
+.site-header { transition: box-shadow .25s ease, background .25s ease; }
+.site-header.scrolled { box-shadow: 0 6px 24px rgba(11,42,74,.14); }
+.site-header .container { transition: height .25s ease; }
+.site-header.scrolled .container { height: 62px; }
+.brand .logo-mark { transition: transform .35s cubic-bezier(.22,.75,.3,1); }
+.brand:hover .logo-mark { transform: rotate(-6deg) scale(1.06); }
+
+.nav a { position: relative; transition: color .2s ease, background .2s ease; }
+.nav a::after {
+  content: ""; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px;
+  background: var(--blue-500); border-radius: 2px;
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform .28s cubic-bezier(.22,.75,.3,1);
+}
+.nav a:hover::after, .nav a.active::after { transform: scaleX(1); }
+
+.nav.open { animation: nav-drop .28s cubic-bezier(.22,.75,.3,1) both; }
+@keyframes nav-drop { from { opacity: 0; transform: translateY(-10px); } }
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.theme-toggle { transition: background .2s ease, border-color .2s ease, transform .35s ease; }
+.theme-toggle:hover { transform: rotate(20deg) scale(1.08); }
+
+/* ---------- Buttons ---------- */
+.btn { position: relative; overflow: hidden; transition: transform .18s cubic-bezier(.22,.75,.3,1), background .2s ease, box-shadow .25s ease, color .2s ease; }
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.btn:active { transform: translateY(0) scale(.98); }
+.btn::before {
+  content: ""; position: absolute; top: 0; left: -80%; width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: skewX(-20deg); pointer-events: none;
+}
+.btn:hover::before { animation: btn-shine .7s ease; }
+@keyframes btn-shine { to { left: 130%; } }
+
+/* ---------- Cards & tiles ---------- */
+.card, .review, .step, .chip, .promo-card, .faq-item, .area-grid a {
+  transition: transform .3s cubic-bezier(.22,.75,.3,1), box-shadow .3s ease, border-color .3s ease, background .3s ease;
+}
+.card:hover, .review:hover, .step:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+.card:hover { border-color: rgba(42,130,214,.35); }
+.chip:hover { transform: translateY(-4px) scale(1.03); box-shadow: var(--shadow); }
+.area-grid a:hover { transform: translateX(4px); }
+
+.card .icon, .feature-icon { transition: transform .35s cubic-bezier(.22,.75,.3,1), background .3s ease; }
+.card:hover .icon { transform: translateY(-3px) rotate(-5deg) scale(1.06); }
+.feature:hover .feature-icon { transform: translateY(-5px) scale(1.07); }
+.card .arrow { display: inline-block; transition: transform .25s ease; }
+.card:hover .arrow { transform: translateX(6px); }
+
+.promo-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+.promo-media img { transition: transform .6s cubic-bezier(.22,.75,.3,1); }
+.promo-card:hover .promo-media img { transform: scale(1.07); }
+
+.step .num { transition: transform .35s cubic-bezier(.22,.75,.3,1); }
+.step:hover .num { transform: scale(1.12) rotate(6deg); }
+
+/* ---------- FAQ ---------- */
+.faq-item[open] { border-color: rgba(42,130,214,.35); }
+.faq-item[open] .faq-body { animation: faq-open .35s ease both; }
+@keyframes faq-open { from { opacity: 0; transform: translateY(-8px); } }
+.faq-item summary::after { transition: transform .3s cubic-bezier(.22,.75,.3,1); }
+
+/* ---------- Forms ---------- */
+.field input, .field select, .field textarea { transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
+.field input:focus, .field select:focus, .field textarea:focus { box-shadow: 0 0 0 4px rgba(42,130,214,.15); }
+.form-success { animation: page-in .4s ease both; }
+
+/* ---------- CTA band ---------- */
+.cta-band { background-size: 160% 160%; background-position: 0% 50%; transition: background-position 1.2s ease; }
+.cta-band:hover { background-position: 100% 50%; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important; scroll-behavior: auto !important;
+  }
+  [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .scroll-progress { display: none; }
+}
