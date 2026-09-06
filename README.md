@@ -38,8 +38,8 @@ placeholder values with the real business details:
 
 ```js
 const CONFIG = {
-  phoneDisplay: "(512) 555-0199",                    // ← real phone (for display)
-  phoneTel:     "+15125550199",                      // ← real phone (digits only, +1 format)
+  phoneDisplay: "(512) 740-0408",                    // ← real phone (for display)
+  phoneTel:     "+15127400408",                      // ← real phone (digits only, +1 format)
   email:        "service@novarefrigerationappliance.com", // ← real email
   hours:        "Mon–Sat: 7:00 AM – 7:00 PM",        // ← real hours
   // ...
