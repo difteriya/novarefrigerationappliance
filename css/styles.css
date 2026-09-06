@@ -133,7 +133,8 @@ p  { margin: 0 0 1em; }
 .brand:hover { text-decoration: none; }
 .brand .logo-mark { height: 48px; width: auto; flex: 0 0 auto; display: block; }
 .site-header .brand .logo-white { display: none; }
-.brand small { display: block; font-size: .72rem; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+.brand > span { display: block; white-space: nowrap; line-height: 1.2; }
+.brand small { display: block; font-size: .72rem; font-weight: 600; color: var(--muted); letter-spacing: .02em; white-space: nowrap; }
 
 .nav { display: flex; align-items: center; gap: 4px; }
 .nav a {
@@ -151,9 +152,13 @@ p  { margin: 0 0 1em; }
 .nav-toggle { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
 .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--ink); margin: 5px 0; transition: .2s; }
 
+/* Decorative glows/rings animate past their box; clip them so the page never
+   gains a horizontal scrollbar. `clip` (not `hidden`) keeps the sticky header. */
+html, body { overflow-x: clip; }
+
 /* ---------- Hero ---------- */
 .hero {
-  position: relative; color: #fff;
+  position: relative; overflow: hidden; color: #fff;
   background:
     linear-gradient(120deg, rgba(11,42,74,.93), rgba(19,78,142,.86)),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M0 0h60v60H0z' fill='none'/%3E%3Cpath d='M0 0h30v30H0zM30 30h30v30H30z' fill='%23ffffff' opacity='0.03'/%3E%3C/svg%3E");
@@ -342,7 +347,15 @@ p  { margin: 0 0 1em; }
   .split { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 760px) {
+/* Tablet/laptop: tighten the nav before it runs into the brand lockup. */
+@media (max-width: 1150px) {
+  .nav a { padding: 10px 8px; font-size: .92rem; }
+  .site-header .container { gap: 10px; }
+}
+
+/* The brand + nav + Call Now lockup stops fitting well before 760px, and a
+   wrapping brand used to collide with the nav — collapse to the menu here. */
+@media (max-width: 1000px) {
   .nav, .header-actions .btn-call { display: none; }
   .nav-toggle { display: block; }
   .site-header .container { height: 64px; }
@@ -350,7 +363,10 @@ p  { margin: 0 0 1em; }
     display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0;
     background: #fff; border-bottom: 1px solid var(--line); padding: 10px 16px; box-shadow: var(--shadow); align-items: stretch;
   }
-  .nav.open a { padding: 12px; border-bottom: 1px solid var(--line); }
+  .nav.open a { padding: 12px; border-bottom: 1px solid var(--line); font-size: 1rem; }
+}
+
+@media (max-width: 760px) {
   .grid-2, .grid-3, .grid-4, .steps, .stats { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(2,1fr); }
   .area-grid { grid-template-columns: repeat(2, 1fr); }
@@ -369,6 +385,9 @@ p  { margin: 0 0 1em; }
 
 @media (max-width: 460px) {
   .stats { grid-template-columns: 1fr; }
+  .brand { font-size: 1rem; }
+  .brand .logo-mark { height: 40px; }
+  .brand small { display: none; }
 }
 
 /* ======================================================================= */
