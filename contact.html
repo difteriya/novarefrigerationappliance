@@ -67,24 +67,32 @@
           <input type="hidden" name="subject" value="New Service Request — Nova Refrigeration & Appliance Repair">
           <input type="hidden" name="from_name" value="Nova Refrigeration & Appliance Repair Website">
           <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
+          <p class="form-note" style="margin-top:0">Fields marked <span class="req" aria-hidden="true">*</span> are required.</p>
           <div class="form-row">
             <div class="field">
-              <label for="name">Full Name</label>
-              <input id="name" name="name" type="text" required autocomplete="name">
+              <label for="name">Full Name <span class="req" aria-hidden="true">*</span></label>
+              <input id="name" name="name" type="text" required minlength="2" maxlength="60"
+                     autocomplete="name" placeholder="Jane Doe" aria-describedby="name-error">
+              <p class="field-error" id="name-error" role="alert"></p>
             </div>
             <div class="field">
-              <label for="phone">Phone</label>
-              <input id="phone" name="phone" type="tel" required autocomplete="tel">
+              <label for="phone">Phone <span class="req" aria-hidden="true">*</span></label>
+              <input id="phone" name="phone" type="tel" required maxlength="24" inputmode="tel"
+                     autocomplete="tel" placeholder="(512) 555-0123" aria-describedby="phone-error">
+              <p class="field-error" id="phone-error" role="alert"></p>
             </div>
           </div>
           <div class="form-row">
             <div class="field">
               <label for="email">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email">
+              <input id="email" name="email" type="email" maxlength="120" inputmode="email"
+                     autocomplete="email" placeholder="you@example.com" aria-describedby="email-error">
+              <p class="field-error" id="email-error" role="alert"></p>
             </div>
             <div class="field">
-              <label for="city">City</label>
-              <select id="city" name="city">
+              <label for="city">City <span class="req" aria-hidden="true">*</span></label>
+              <select id="city" name="city" required aria-describedby="city-error">
+                <option value="">Select your city…</option>
                 <option>Austin</option>
                 <option>Round Rock</option>
                 <option>Cedar Park</option>
@@ -97,13 +105,16 @@
                 <option>Kyle</option>
                 <option>The Hills</option>
                 <option>Dripping Springs</option>
+                <option>Other / nearby</option>
               </select>
+              <p class="field-error" id="city-error" role="alert"></p>
             </div>
           </div>
           <div class="form-row">
             <div class="field">
-              <label for="appliance">Appliance / Service Needed</label>
-              <select id="appliance" name="appliance">
+              <label for="appliance">Appliance / Service Needed <span class="req" aria-hidden="true">*</span></label>
+              <select id="appliance" name="appliance" required aria-describedby="appliance-error">
+                <option value="">Select a service…</option>
               <option>Refrigerator Repair</option>
               <option>Ice Maker Repair</option>
               <option>Freezer Repair</option>
@@ -115,18 +126,25 @@
               <option>Microwave Repair</option>
                 <option>Other</option>
               </select>
+              <p class="field-error" id="appliance-error" role="alert"></p>
             </div>
             <div class="field">
               <label for="brand">Appliance Brand</label>
-              <input id="brand" name="brand" type="text" placeholder="e.g. Samsung, Sub-Zero">
+              <input id="brand" name="brand" type="text" maxlength="40"
+                     placeholder="e.g. Samsung, Sub-Zero" aria-describedby="brand-error">
+              <p class="field-error" id="brand-error" role="alert"></p>
             </div>
           </div>
           <div class="field">
             <label for="urgency"><input type="checkbox" id="urgency" name="urgency" style="width:auto;margin-right:8px"> This is an emergency — I need same-day service</label>
           </div>
           <div class="field">
-            <label for="message">Describe the Problem</label>
-            <textarea id="message" name="message" placeholder="What's happening with your appliance?"></textarea>
+            <label for="message">Describe the Problem <span class="req" aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" required minlength="10" maxlength="1200"
+                      placeholder="What's happening with your appliance?"
+                      aria-describedby="message-count message-error"></textarea>
+            <p class="field-hint" id="message-count" aria-live="polite"></p>
+            <p class="field-error" id="message-error" role="alert"></p>
           </div>
           <button class="btn btn-call btn-lg" type="submit" style="width:100%">Request Service</button>
           <p class="form-note" style="margin-top:12px">By submitting, you agree to be contacted about your repair request. Submissions are delivered by email via Web3Forms.</p>
@@ -212,7 +230,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; <span data-year>2026</span> Nova Refrigeration & Appliance Repair. All rights reserved.</span>
+      <span>&copy; 2021&ndash;<span data-year>2026</span> Nova Refrigeration & Appliance Repair. All rights reserved.</span>
       <span>Austin, Texas · Mon–Sat: 7:00 AM – 7:00 PM</span>
     </div>
   </div>

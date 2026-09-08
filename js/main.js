@@ -31,8 +31,12 @@
     });
   }
 
-  // Service request form — submits to Web3Forms via AJAX (no page reload).
-  // The hidden access_key field (set in build.js CONFIG) routes the email.
+  /* --------------------------------------------------------------------- */
+  /* Service request form                                                    */
+  /* Every field is validated in the browser before anything is sent, so an  */
+  /* empty (or junk) form can never reach the inbox. The form keeps          */
+  /* `novalidate` so these messages replace the browser's native bubbles.    */
+  /* --------------------------------------------------------------------- */
   var form = document.querySelector("#service-form");
   if (form) {
     var success = form.parentNode.querySelector(".form-success");
@@ -46,12 +50,157 @@
       success.scrollIntoView({ behavior: "smooth", block: "center" });
     };
 
+    var EMAIL_RE = /^[^\s@;,"'<>()\[\]\\]+@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,24}$/;
+    var LETTER_RE = /[A-Za-z\u00C0-\u024F]/;
+    var URL_RE = /(https?:\/\/|www\.|<\s*a\s|\[url)/i;
+
+    var digitsOf = function (v) { return (v || "").replace(/\D/g, ""); };
+
+    // US/Canada numbers: 10 digits, or 11 with a leading country code 1.
+    // Area codes and exchange codes may not start with 0 or 1.
+    var phoneProblem = function (raw) {
+      var d = digitsOf(raw);
+      if (d.length === 11 && d.charAt(0) === "1") d = d.slice(1);
+      if (d.length < 10) return "Enter a 10-digit US phone number, e.g. (512) 555-0123.";
+      if (d.length > 10) return "That's too many digits for a US phone number.";
+      if (/^(\d)\1{9}$/.test(d)) return "Please enter a real phone number we can reach you on.";
+      if (d.charAt(0) === "0" || d.charAt(0) === "1") return "Area code can't start with 0 or 1.";
+      if (d.charAt(3) === "0" || d.charAt(3) === "1") return "That phone number isn't valid — please check it.";
+      return "";
+    };
+
+    var formatPhone = function (raw) {
+      var d = digitsOf(raw);
+      if (d.length === 11 && d.charAt(0) === "1") d = d.slice(1);
+      if (d.length !== 10) return raw;
+      return "(" + d.slice(0, 3) + ") " + d.slice(3, 6) + "-" + d.slice(6);
+    };
+
+    // Returns "" when the field is fine, otherwise the message to show.
+    var RULES = {
+      name: function (v) {
+        if (!v) return "Please enter your name.";
+        if (v.length < 2) return "Please enter your full name (at least 2 characters).";
+        if (v.length > 60) return "Please keep your name under 60 characters.";
+        if (!LETTER_RE.test(v)) return "Please enter your name using letters.";
+        if (URL_RE.test(v)) return "Please enter your name, not a web address.";
+        return "";
+      },
+      phone: function (v) {
+        if (!v) return "Please enter a phone number so we can call you back.";
+        return phoneProblem(v);
+      },
+      email: function (v) {
+        if (!v) return ""; // optional
+        if (v.length > 120) return "That email address is too long.";
+        if (!EMAIL_RE.test(v)) return "Please enter a valid email address, e.g. you@example.com.";
+        return "";
+      },
+      city: function (v) { return v ? "" : "Please choose the city you're in."; },
+      appliance: function (v) { return v ? "" : "Please choose the appliance or service you need."; },
+      brand: function (v) {
+        if (!v) return ""; // optional
+        if (v.length > 40) return "Please keep the brand under 40 characters.";
+        if (URL_RE.test(v)) return "Please enter a brand name, not a web address.";
+        return "";
+      },
+      message: function (v) {
+        if (!v) return "Please tell us what's wrong with the appliance.";
+        if (v.length < 10) return "Please add a little more detail (at least 10 characters).";
+        if (v.length > 1200) return "Please keep the description under 1200 characters.";
+        if (!LETTER_RE.test(v)) return "Please describe the problem in words so we can help.";
+        return "";
+      }
+    };
+
+    var fieldOf = function (name) { return form.querySelector("#" + name); };
+
+    var setError = function (el, msg) {
+      var box = document.getElementById(el.id + "-error");
+      var wrap = el.closest(".field");
+      if (msg) {
+        el.setAttribute("aria-invalid", "true");
+        if (wrap) wrap.classList.add("has-error");
+        if (box) box.textContent = msg;
+      } else {
+        el.removeAttribute("aria-invalid");
+        if (wrap) wrap.classList.remove("has-error");
+        if (box) box.textContent = "";
+      }
+      return !msg;
+    };
+
+    var checkField = function (name) {
+      var el = fieldOf(name);
+      if (!el) return true;
+      return setError(el, RULES[name](el.value.trim()));
+    };
+
+    // Validate on blur; once a field is flagged, re-check it as the user types
+    // so the error clears the moment it is fixed.
+    Object.keys(RULES).forEach(function (name) {
+      var el = fieldOf(name);
+      if (!el) return;
+      var evt = el.tagName === "SELECT" ? "change" : "blur";
+      el.addEventListener(evt, function () {
+        if (name === "phone" && !phoneProblem(el.value)) el.value = formatPhone(el.value);
+        checkField(name);
+      });
+      el.addEventListener("input", function () {
+        var wrap = el.closest(".field");
+        if (wrap && wrap.classList.contains("has-error")) checkField(name);
+      });
+    });
+
+    // Live character counter on the description.
+    var message = fieldOf("message");
+    var counter = document.getElementById("message-count");
+    if (message && counter) {
+      var max = parseInt(message.getAttribute("maxlength"), 10) || 1200;
+      var updateCount = function () {
+        var n = message.value.trim().length;
+        counter.textContent = n ? n + " / " + max + " characters" : "";
+      };
+      message.addEventListener("input", updateCount);
+      updateCount();
+    }
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+
+      // Honeypot: bots tick the hidden checkbox. Show the normal success
+      // message and drop the submission.
+      var honey = form.querySelector('[name="botcheck"]');
+      if (honey && honey.checked) {
+        showMsg("Thanks! Your request has been received.", true);
+        form.reset();
+        return;
+      }
+
+      var firstBad = null;
+      Object.keys(RULES).forEach(function (name) {
+        if (!checkField(name) && !firstBad) firstBad = fieldOf(name);
+      });
+      if (firstBad) {
+        showMsg("Please fix the highlighted fields and try again.", false);
+        firstBad.focus();
+        firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+
       var btn = form.querySelector('button[type="submit"]');
       if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = "Sending…"; }
 
       var payload = Object.fromEntries(new FormData(form).entries());
+      payload.name = (payload.name || "").trim();
+      payload.phone = formatPhone(payload.phone || "");
+      payload.email = (payload.email || "").trim();
+      payload.brand = (payload.brand || "").trim();
+      payload.message = (payload.message || "").trim();
+      payload.urgency = form.querySelector("#urgency") && form.querySelector("#urgency").checked
+        ? "YES — emergency, same-day service requested"
+        : "No";
+
       fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -62,6 +211,11 @@
           if (data && data.success) {
             showMsg("Thanks! Your request has been received. We'll call you back shortly — for fastest service, call us now.", true);
             form.reset();
+            Object.keys(RULES).forEach(function (name) {
+              var el = fieldOf(name);
+              if (el) setError(el, "");
+            });
+            if (counter) counter.textContent = "";
           } else {
             throw new Error((data && data.message) || "submit failed");
           }
@@ -176,13 +330,30 @@
   if ("IntersectionObserver" in window) {
     io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
+        // A fast flick (or jumping straight to the footer) can carry an element
+        // right past the viewport without it ever reporting as intersecting —
+        // anything already above the fold is revealed too, so nothing is left
+        // stuck at opacity 0.
+        var past = entry.boundingClientRect.bottom <= 0;
+        if (!entry.isIntersecting && !past) return;
         reveal(entry.target);
         io.unobserve(entry.target);
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     pending.forEach(function (el) { io.observe(el); });
   }
+
+  // Safety net: reveal anything that has scrolled above the viewport.
+  var catchUp = function () {
+    pending.slice().forEach(function (el) {
+      if (el.getBoundingClientRect().bottom <= 0) {
+        if (io) io.unobserve(el);
+        reveal(el);
+      }
+    });
+  };
+  window.addEventListener("scroll", catchUp, { passive: true });
+  window.addEventListener("resize", catchUp);
 
   /* ---------- Stat counters ---------- */
   var counters = [];
