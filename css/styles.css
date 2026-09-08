@@ -330,6 +330,21 @@ html, body { overflow-x: clip; }
 .faq-item[open] summary::after { transform: rotate(45deg); }
 .faq-item .faq-body { padding: 0 22px 18px; color: var(--muted); }
 
+/* ---------- Area-page content blocks ---------- */
+.lead-in { font-size: 1.1rem; color: var(--ink); }
+.reason-list { list-style: none; padding: 0; margin: 0 0 22px; }
+.reason-list li {
+  position: relative; padding: 14px 0 14px 30px; border-bottom: 1px solid var(--line);
+}
+.reason-list li:last-child { border-bottom: 0; }
+.reason-list li::before {
+  content: ""; position: absolute; left: 4px; top: 22px;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--blue-500);
+}
+.reason-list b { display: block; color: var(--blue-900); margin-bottom: 3px; }
+.reason-list span { color: var(--muted); }
+html[data-theme="dark"] .reason-list b { color: var(--ink); }
+
 /* ---------- Info / contact columns ---------- */
 .split { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 36px; align-items: start; }
 .info-list { list-style: none; padding: 0; margin: 0; }
