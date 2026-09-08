@@ -486,6 +486,16 @@ body.page-leave { opacity: 0; transform: translateY(-8px); transition: opacity .
 .hero .container > *:nth-child(6), .page-hero .container > *:nth-child(6) { animation-delay: .55s; }
 @keyframes hero-rise { from { opacity: 0; transform: translateY(24px); } }
 
+/* The hero headline is the LCP element on every page. Fading it in from
+   opacity 0 (plus the stagger delay) pushes Largest Contentful Paint back by
+   the length of the animation, so the headline and its lead paragraph slide in
+   without ever being transparent. */
+.hero .container > h1,
+.hero .container > .lead,
+.page-hero .container > h1,
+.page-hero .container > p { animation-name: hero-slide; animation-delay: 0s; }
+@keyframes hero-slide { from { transform: translateY(20px); } }
+
 .hero::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(60% 80% at 85% 20%, rgba(22,177,196,.28), transparent 60%);

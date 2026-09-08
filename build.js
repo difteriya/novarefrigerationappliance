@@ -24,6 +24,14 @@ const CONFIG = {
   // Web3Forms access key — get a free one (no login) at https://web3forms.com
   // by entering the email where you want submissions delivered, then paste it here.
   web3formsKey: "3e3a576c-d904-49e5-871f-ee45dd499aa2",
+  priceRange: "$$",
+  policyUpdated: "8 September 2026",   // bump when the privacy policy changes
+  ogImage: "assets/og-image.jpg",
+  geo: { lat: 30.2672, lng: -97.7431 },     // Austin, TX city centre
+  // Public profiles, emitted as schema.org sameAs. Add the Google Business
+  // Profile URL as soon as the listing is live — it is the strongest single
+  // local-SEO signal this site can carry.
+  social: [],
 };
 
 /* ----------------------------------------------------------------------- */
@@ -444,7 +452,8 @@ const FAQS = [
 /* Active promotions — swap the `img` files in /assets for your own photos any time. */
 const PROMOS = [
   {
-    img: "assets/promo-labor.png",
+    img: "assets/promo-labor.webp",
+    w: 1000, h: 571,
     badge: "Service Special",
     price: "$185",
     unit: "minimum labor",
@@ -452,7 +461,8 @@ const PROMOS = [
     desc: "Straightforward, up-front pricing on every visit — a $185 minimum labor charge covers diagnosis and getting hands on the repair. No hidden fees, no surprises.",
   },
   {
-    img: "assets/promo-military.jpg",
+    img: "assets/promo-military.webp",
+    w: 540, h: 360,
     badge: "We Support Our Troops",
     price: "$30 OFF",
     unit: "for military",
@@ -486,7 +496,7 @@ const telHref = `tel:${C.phoneTel}`;
 // `depth` = how many directories deep the page is from root (0 = root, 1 = services/x.html)
 const rel = (depth, p) => (depth === 0 ? "" : "../".repeat(depth)) + p;
 
-function head(depth, { title, desc, canonical }) {
+function head(depth, { title, desc, canonical, noindex }) {
   const base = `https://${C.domain}/`;
   return `<!DOCTYPE html>
 <html lang="en">
@@ -498,12 +508,23 @@ function head(depth, { title, desc, canonical }) {
 <link rel="icon" href="${rel(depth, "assets/favicon.svg")}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${rel(depth, "assets/favicon.svg")}">
 <meta name="description" content="${desc}">
+${noindex ? '<meta name="robots" content="noindex, follow">\n' : ""}
 <link rel="canonical" href="${base}${canonical === "index.html" ? "" : canonical}">
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="${C.name}">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="${base}${canonical === "index.html" ? "" : canonical}">
+<meta property="og:image" content="${base}${C.ogImage}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${C.name} \u2014 same-day appliance and refrigerator repair in ${C.cityState}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${title}">
+<meta name="twitter:description" content="${desc}">
+<meta name="twitter:image" content="${base}${C.ogImage}">
 <meta name="theme-color" content="#0b2a4a">
-<link rel="preconnect" href="https://www.google.com">
 <link rel="stylesheet" href="${rel(depth, "css/styles.css")}">
 </head>
 <body>`;
@@ -595,6 +616,7 @@ function footer(depth) {
         <h4>Company</h4>
         <ul>
           <li><a href="${rel(depth, "about.html")}">About Us</a></li>
+          <li><a href="${rel(depth, "privacy.html")}">Privacy Policy</a></li>
           <li><a href="${rel(depth, "our-work.html")}">Our Work</a></li>
           <li><a href="${rel(depth, "index.html")}#reviews">Reviews</a></li>
           <li><a href="${rel(depth, "index.html")}#faq">FAQ</a></li>
@@ -613,6 +635,7 @@ function footer(depth) {
   <a class="mc-text" href="${smsHref}">💬 Text Us</a>
 </div>
 <script src="${rel(depth, "js/main.js")}"></script>
+${localBusinessSchema()}
 </body>
 </html>`;
 }
@@ -631,28 +654,119 @@ function pageHero(depth, { title, sub, crumbs }) {
 </section>`;
 }
 
-function localBusinessSchema() {
-  return `<script type="application/ld+json">
-${JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "HomeAndConstructionBusiness",
-  name: C.name,
-  telephone: C.phoneDisplay,
-  email: C.email,
-  url: `https://${C.domain}/`,
-  areaServed: AREAS.map((a) => a.name + ", TX"),
-  address: { "@type": "PostalAddress", addressLocality: "Austin", addressRegion: "TX", addressCountry: "US" },
-  openingHours: "Mo-Sa 07:00-19:00",
-  description: "Residential appliance repair and refrigeration services in the Austin, Texas metro area.",
-}, null, 2)}
-</script>`;
+const SITE = `https://${C.domain}/`;
+const BIZ_ID = SITE + "#business";
+
+function ldBlock(obj) {
+  return `<script type="application/ld+json">\n${JSON.stringify(obj, null, 2)}\n</script>`;
 }
+
+/* The business itself. Emitted on every page from footer() under one stable
+ * @id, so every Service and BreadcrumbList can point back at the same node. */
+function localBusinessSchema() {
+  return ldBlock({
+    "@context": "https://schema.org",
+    "@type": ["HomeAndConstructionBusiness", "LocalBusiness"],
+    "@id": BIZ_ID,
+    name: C.name,
+    alternateName: C.shortName,
+    url: SITE,
+    telephone: C.phoneTel,
+    email: C.email,
+    image: SITE + C.ogImage,
+    logo: SITE + "assets/logo.svg",
+    priceRange: C.priceRange,
+    currenciesAccepted: "USD",
+    paymentAccepted: "Cash, Credit Card, Debit Card",
+    address: { "@type": "PostalAddress", addressLocality: "Austin", addressRegion: "TX", addressCountry: "US" },
+    geo: { "@type": "GeoCoordinates", latitude: C.geo.lat, longitude: C.geo.lng },
+    areaServed: AREAS.map((a) => ({ "@type": "City", name: a.name, addressRegion: "TX" })),
+    openingHoursSpecification: [{
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "07:00", closes: "19:00",
+    }],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Appliance repair services",
+      itemListElement: SERVICES.map((s) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: s.name, url: SITE + "services/" + s.slug + ".html" },
+      })),
+    },
+    description: "Residential appliance repair and refrigeration services in the Austin, Texas metro area.",
+    ...(C.social.length ? { sameAs: C.social } : {}),
+  });
+}
+
+function websiteSchema() {
+  return ldBlock({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": SITE + "#website",
+    url: SITE,
+    name: C.name,
+    publisher: { "@id": BIZ_ID },
+    inLanguage: "en-US",
+  });
+}
+
+/* trail: [["Services", "services.html"], ["Dryer Repair", null]] — the last
+ * item is the current page and carries no link. */
+function breadcrumbSchema(trail) {
+  return ldBlock({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [["Home", "index.html"], ...trail].map(([name, href], i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name,
+      ...(href ? { item: SITE + (href === "index.html" ? "" : href) } : {}),
+    })),
+  });
+}
+
+function serviceSchema(s) {
+  return ldBlock({
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": SITE + "services/" + s.slug + ".html#service",
+    name: `${s.name} in ${C.cityState}`,
+    serviceType: s.name,
+    description: s.metaDesc,
+    url: SITE + "services/" + s.slug + ".html",
+    provider: { "@id": BIZ_ID },
+    areaServed: AREAS.map((a) => ({ "@type": "City", name: a.name, addressRegion: "TX" })),
+    audience: { "@type": "Audience", audienceType: "Homeowners" },
+  });
+}
+
+
+/* Pages whose output actually changed in this run. The sitemap uses this so
+ * <lastmod> reflects a real content change rather than the build date — telling
+ * Google every page changed on every build devalues the signal. */
+const changed = new Set();
 
 function write(relPath, html) {
   const full = path.join(__dirname, relPath);
   fs.mkdirSync(path.dirname(full), { recursive: true });
+  let previous = null;
+  try { previous = fs.readFileSync(full, "utf8"); } catch (e) {}
+  if (previous !== html) changed.add(relPath.replace(/\\/g, "/"));
   fs.writeFileSync(full, html, "utf8");
   console.log("  wrote " + relPath);
+}
+
+/* Reuse the <lastmod> already published for pages that did not change. */
+function previousLastmod() {
+  const map = new Map();
+  try {
+    const xml = fs.readFileSync(path.join(__dirname, "sitemap.xml"), "utf8");
+    const re = /<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g;
+    let m;
+    while ((m = re.exec(xml))) map.set(m[1], m[2]);
+  } catch (e) {}
+  return map;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -672,7 +786,7 @@ function serviceCards(depth) {
 function promoCards(depth) {
   return PROMOS.map((p) => `
     <div class="card promo-card">
-      <div class="promo-media"><img src="${rel(depth, p.img)}" alt="${p.title}" loading="lazy"><span class="promo-badge">${p.badge}</span></div>
+      <div class="promo-media"><img src="${rel(depth, p.img)}" alt="${p.title}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async"><span class="promo-badge">${p.badge}</span></div>
       <div class="promo-body">
         <div class="promo-price">${p.price} <span>${p.unit}</span></div>
         <h3>${p.title}</h3>
@@ -732,7 +846,7 @@ function buildHome() {
     title: `Same-Day Appliance Repair in Austin, TX | Nova`,
     desc: `Fast, reliable residential appliance and refrigerator repair in ${C.cityState} and surrounding areas. Same-day service. Call ${C.phoneDisplay}.`,
     canonical: "index.html",
-  }) + localBusinessSchema() + faqSchema() + header(0, "home") + `
+  }) + websiteSchema() + faqSchema() + header(0, "home") + `
 <section class="hero">
   <div class="container">
     <span class="same-day">⚡ Same-Day Service Available</span>
@@ -879,7 +993,7 @@ function buildAbout() {
     title: `About Us | ${C.name}`,
     desc: `Meet the EPA-certified team behind Nova — residential appliance and refrigeration repair across the ${C.cityState} metro since 2021.`,
     canonical: "about.html",
-  }) + header(0, "about")
+  }) + breadcrumbSchema([["About Us", null]]) + header(0, "about")
     + pageHero(0, { title: "About Nova Refrigeration & Appliance Repair", sub: `Trusted residential appliance and refrigeration repair serving ${C.cityState} and surrounding communities.`, crumbs: "About" })
     + `
 <section class="section">
@@ -932,7 +1046,7 @@ function buildServicesOverview() {
     title: `Appliance Repair Services in Austin, TX | Nova`,
     desc: `Refrigerator, freezer, washer, dryer, dishwasher, oven and cooktop repair in ${C.cityState}. Built-in and sealed-system specialists.`,
     canonical: "services.html",
-  }) + header(0, "services")
+  }) + breadcrumbSchema([["Services", null]]) + header(0, "services")
     + pageHero(0, { title: "Appliance Repair Services", sub: "Expert residential repair for every major appliance in your home — plus specialized refrigeration services.", crumbs: "Services" })
     + `
 <section class="section">
@@ -967,7 +1081,9 @@ function buildServicePages() {
       title: `${s.name} in Austin, TX | Nova Refrigeration`,
       desc: s.metaDesc,
       canonical: "services/" + s.slug + ".html",
-    }) + header(1, "services")
+    }) + serviceSchema(s)
+      + breadcrumbSchema([["Services", "services.html"], [s.name, null]])
+      + header(1, "services")
       + pageHero(1, {
           title: s.name,
           sub: s.blurb,
@@ -1015,7 +1131,7 @@ function buildAreasOverview() {
     title: `Service Areas in the Austin Metro | Nova Repair`,
     desc: `Appliance and refrigerator repair across the ${C.cityState} metro — Austin, Round Rock, Cedar Park, Georgetown, Lakeway, Buda, Kyle and more.`,
     canonical: "service-areas.html",
-  }) + header(0, "areas")
+  }) + breadcrumbSchema([["Service Areas", null]]) + header(0, "areas")
     + pageHero(0, { title: "Service Areas", sub: `Proudly serving ${C.cityState} and communities across the metro with same-day appliance repair.`, crumbs: "Service Areas" })
     + `
 <section class="section">
@@ -1052,7 +1168,8 @@ function buildAreaPages() {
       title: a.title,
       desc: a.desc,
       canonical: "areas/" + a.slug + ".html",
-    }) + header(1, "areas")
+    }) + breadcrumbSchema([["Service Areas", "service-areas.html"], [a.name, null]])
+      + header(1, "areas")
       + pageHero(1, {
           title: `Appliance &amp; Refrigerator Repair in ${a.name}, TX`,
           sub: a.heroSub,
@@ -1121,7 +1238,7 @@ function buildOurWork() {
     title: `Our Work | ${C.name}`,
     desc: `Recent appliance and refrigeration repairs completed by Nova across the ${C.cityState} metro — built-ins, sealed systems and everyday fixes.`,
     canonical: "our-work.html",
-  }) + header(0, "work")
+  }) + breadcrumbSchema([["Our Work", null]]) + header(0, "work")
     + pageHero(0, { title: "Our Work", sub: "A look at recent appliance and refrigeration repairs we've completed across the metro.", crumbs: "Our Work" })
     + `
 <section class="section">
@@ -1141,6 +1258,96 @@ function buildOurWork() {
   write("our-work.html", html);
 }
 
+/* ---------- PRIVACY POLICY ---------- */
+function buildPrivacy() {
+  const html = head(0, {
+    title: `Privacy Policy | ${C.shortName}`,
+    desc: `How ${C.name} collects, uses and protects the information you share when you request appliance repair service in the ${C.cityState} metro.`,
+    canonical: "privacy.html",
+  }) + breadcrumbSchema([["Privacy Policy", null]]) + header(0, "")
+    + pageHero(0, {
+        title: "Privacy Policy",
+        sub: "What we collect when you contact us, why we collect it, and what we never do with it.",
+        crumbs: "Privacy Policy",
+      })
+    + `
+<section class="section">
+  <div class="container">
+    <div class="prose" style="max-width:760px">
+      <p class="lead-in">${C.name} is a residential appliance repair company serving the ${C.cityState} metro. This policy explains what happens to the information you give us when you call, text or use the service request form on this site. It was last updated on ${C.policyUpdated}.</p>
+
+      <h2>What we collect</h2>
+      <p>When you submit the service request form we receive the name, phone number, email address, city, appliance type, brand and problem description you enter. When you call or text us we have your phone number and whatever you tell us about the repair. That is the entire set \u2014 we do not ask for payment details through this website, and the site does not process payments.</p>
+
+      <h2>Why we collect it</h2>
+      <p>Solely to schedule and carry out your repair: to call you back, confirm an appointment window, bring the right parts and follow up on the work. We may contact you about that specific request by phone, text or email.</p>
+
+      <h2>What we do not do</h2>
+      <ul class="checklist">
+        <li>We do not sell, rent or trade your information to anyone.</li>
+        <li>We do not add you to a marketing list because you requested a repair.</li>
+        <li>We do not share your details with third parties except the service providers below.</li>
+      </ul>
+
+      <h2>Service providers</h2>
+      <p>Form submissions are delivered to our email inbox through <a href="https://web3forms.com/" rel="noopener nofollow" target="_blank">Web3Forms</a>, which processes the submission and forwards it to us. The service area maps on this site are embedded from Google Maps, and Google may set cookies when a map loads. We do not run advertising trackers or sell data to advertising networks.</p>
+
+      <h2>Cookies and local storage</h2>
+      <p>This site stores one thing in your browser: your light or dark mode preference, kept in local storage on your own device so the site looks the same on your next visit. It is not an identifier, it never leaves your browser, and clearing your browser data removes it.</p>
+
+      <h2>How long we keep it</h2>
+      <p>Service requests stay in our email and job records for as long as we need them for warranty, follow-up repairs and standard business records. You can ask us to delete your information at any time.</p>
+
+      <h2>Your choices</h2>
+      <p>Ask us to correct or delete what we hold, or ask us to stop contacting you, and we will \u2014 call ${C.phoneDisplay} or email <a href="mailto:${C.email}">${C.email}</a>. If you would rather not submit anything through this website at all, call or text us instead; nothing is required through the form.</p>
+
+      <h2>Children</h2>
+      <p>This site is meant for homeowners arranging appliance repair and is not directed at children under 13. We do not knowingly collect information from children.</p>
+
+      <h2>Changes</h2>
+      <p>If this policy changes we will update this page. Material changes will be reflected in the date at the top.</p>
+
+      <h2>Contact us</h2>
+      <p>Questions about this policy? Call or text ${C.phoneDisplay}, or email <a href="mailto:${C.email}">${C.email}</a>.</p>
+    </div>
+  </div>
+</section>
+` + ctaBand(0) + footer(0);
+  write("privacy.html", html);
+}
+
+/* ---------- 404 ---------- */
+function build404() {
+  const html = head(0, {
+    title: `Page Not Found | ${C.shortName}`,
+    desc: `That page could not be found. Call ${C.phoneDisplay} for same-day appliance and refrigerator repair in the ${C.cityState} metro, or browse our repair services.`,
+    canonical: "404.html",
+    noindex: true,
+  }) + header(0, "")
+    + pageHero(0, {
+        title: "That page has moved on",
+        sub: "The page you were after is not here \u2014 but your appliance still needs fixing. Start with one of these.",
+      })
+    + `
+<section class="section">
+  <div class="container">
+    <div class="hero-cta" style="justify-content:center;margin-bottom:36px">
+      <a class="btn btn-call btn-lg" href="${telHref}">\ud83d\udcde Call ${C.phoneDisplay}</a>
+      <a class="btn btn-primary btn-lg" href="${smsHref}">\ud83d\udcac Text Us</a>
+      <a class="btn btn-ghost btn-lg" href="contact.html">Request Service</a>
+    </div>
+    <h2 style="text-align:center">Repairs we handle</h2>
+    <div class="grid grid-4" style="margin-top:24px">${serviceCards(0)}</div>
+    <p class="form-note" style="text-align:center;margin-top:30px">
+      Looking for your city? See every <a href="service-areas.html">area we serve</a>,
+      or head back to the <a href="index.html">home page</a>.
+    </p>
+  </div>
+</section>
+` + ctaBand(0) + footer(0);
+  write("404.html", html);
+}
+
 /* ---------- CONTACT ---------- */
 function buildContact() {
   const serviceOptions = SERVICES.map((s) => `<option>${s.name}</option>`).join("\n              ");
@@ -1148,7 +1355,7 @@ function buildContact() {
     title: `Contact Us | ${C.name}`,
     desc: `Call, text or request service online for same-day appliance and refrigerator repair in ${C.cityState}. Talk to a real technician.`,
     canonical: "contact.html",
-  }) + header(0, "contact")
+  }) + breadcrumbSchema([["Contact", null]]) + header(0, "contact")
     + pageHero(0, { title: "Contact Us & Request Service", sub: "Call, text, or send a request — same-day appointments available across the metro.", crumbs: "Contact" })
     + `
 <section class="section">
@@ -1257,7 +1464,7 @@ function buildContact() {
  * The home page is canonicalised to the bare domain, so it is listed as "". */
 function siteUrls() {
   return [
-    { loc: "",                    changefreq: "weekly",  priority: "1.0" },
+    { loc: "", file: "index.html", changefreq: "weekly",  priority: "1.0" },
     { loc: "services.html",       changefreq: "monthly", priority: "0.9" },
     { loc: "service-areas.html",  changefreq: "monthly", priority: "0.9" },
     { loc: "contact.html",        changefreq: "monthly", priority: "0.9" },
@@ -1265,16 +1472,18 @@ function siteUrls() {
     ...AREAS.map((a) => ({ loc: "areas/" + a.slug + ".html", changefreq: "monthly", priority: "0.7" })),
     { loc: "about.html",          changefreq: "yearly",  priority: "0.6" },
     { loc: "our-work.html",       changefreq: "monthly", priority: "0.6" },
+    { loc: "privacy.html",        changefreq: "yearly",  priority: "0.3" },
   ];
 }
 
 function buildSitemap() {
   const base = `https://${C.domain}/`;
-  const lastmod = new Date().toISOString().slice(0, 10);
+  const today = new Date().toISOString().slice(0, 10);
+  const previous = previousLastmod();
   const urls = siteUrls()
     .map((u) => `  <url>
     <loc>${base}${u.loc}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <lastmod>${changed.has(u.file || u.loc) ? today : previous.get(base + u.loc) || today}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`)
@@ -1308,6 +1517,8 @@ buildAreasOverview();
 buildAreaPages();
 buildOurWork();
 buildContact();
+buildPrivacy();
+build404();
 buildSitemap();
 buildRobots();
 console.log("Done.");
