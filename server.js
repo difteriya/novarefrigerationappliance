@@ -132,7 +132,7 @@ function staticFile(req, res, pathname) {
   if (!/^(?:assets|css|js|services|areas|blog|work|brands)\/[\w %().-]+(?:\/[\w %().-]+)*$/.test(name) && !/^[a-z0-9-]+\.(?:html|xml|txt)$/.test(name)) return notFound(req, res, pathname);
   const full = path.resolve(root, name);
   if (!full.startsWith(root + path.sep) || !mime[path.extname(full)]) return notFound(req, res, pathname);
-  fs.readFile(full, (error, data) => error ? notFound(req, res, pathname) : send(res, 200, data, mime[path.extname(full)], { "Cache-Control": "public, max-age=300" }));
+  fs.readFile(full, (error, data) => error ? notFound(req, res, pathname) : send(res, 200, data, mime[path.extname(full)], { "Cache-Control": path.extname(full) === ".html" ? "no-store" : "public, max-age=300" }));
 }
 
 const server = http.createServer(async (req, res) => {
