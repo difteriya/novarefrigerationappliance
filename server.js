@@ -113,8 +113,11 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
     const pathname = url.pathname;
     if (pathname === "/services/microwave-repair.html" || pathname === "/services/microwave-repair") return send(res, 301, "", "text/plain; charset=utf-8", { Location: "/services" });
-    if (pathname === "/admin" || pathname === "/admin/") {
-      return send(res, 200, fs.readFileSync(path.join(root, "admin", "index.html")), "text/html; charset=utf-8", { "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-src 'self'" });
+    if (pathname === "/admin" || pathname === "/admin/" || pathname === "/coffeeplanet/") {
+      return send(res, 302, "", "text/plain; charset=utf-8", { Location: "/coffeeplanet" });
+    }
+    if (pathname === "/coffeeplanet") {
+      return send(res, 200, fs.readFileSync(path.join(root, "admin", "index.html")), "text/html; charset=utf-8", { "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-src 'self'", "X-Robots-Tag": "noindex, nofollow" });
     }
     if (pathname === "/admin/app.js" || pathname === "/admin/style.css") return send(res, 200, fs.readFileSync(path.join(root, pathname)), mime[path.extname(pathname)]);
     if (!pathname.startsWith("/admin/") && pathname.endsWith(".html")) {

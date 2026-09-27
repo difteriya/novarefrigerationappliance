@@ -25,7 +25,8 @@ the app creates its own tables and seeds them from the bundled `content/*.json` 
 On later starts it restores admin content, page overrides, and uploaded images from
 MySQL, then regenerates public pages and the sitemap. A database connection failure
 stops the app rather than serving stale content. The admin sidebar displays
-**Database connected** once the production connection is active.
+**Database connected** once the production connection is active. Open the admin panel
+at `/coffeeplanet`; `/admin` redirects there.
 
 Back up the MySQL database regularly in Hostinger. The database now contains all
 admin changes, including images; a backup of only the website files is insufficient.

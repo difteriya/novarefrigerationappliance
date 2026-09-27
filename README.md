@@ -34,7 +34,7 @@ $env:ALLOW_LOCAL_STORAGE = '1' # local preview only; deployed admin uses MySQL
 npm start
 ```
 
-Open `http://localhost:3000/admin`. Public pages are at `http://localhost:3000/`.
+Open `http://localhost:3000/coffeeplanet`. Public pages are at `http://localhost:3000/`.
 For Hostinger shared hosting deployment, see [HOSTINGER.md](HOSTINGER.md).
 
 ### The one command you need
