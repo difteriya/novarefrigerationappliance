@@ -1,19 +1,39 @@
 # Nova Refrigeration & Appliance Repair — Website
 
-A fast, SEO-friendly **static website**. All pages are generated from one data file
-([build.js](build.js)) so adding pages and editing content is simple and consistent.
+A fast, SEO-friendly website with a Node.js admin panel. Public pages are generated as
+HTML by [build.js](build.js). Home page FAQs and offers live in
+[content/home.json](content/home.json). Blog posts, project examples, and brand profiles live in
+[content/collections.json](content/collections.json); the admin panel edits both files and
+rebuilds the public pages automatically.
 
 ---
 
 ## How it works (read this once)
 
-- **All content lives in [build.js](build.js)** — in the `CONFIG` block and the data
-  arrays (`SERVICES`, `AREAS`, `BRANDS`, `REVIEWS`, `FAQS`).
+- **Existing site data lives in [build.js](build.js)** — in the `CONFIG` block and the data
+  arrays (`SERVICES`, `AREAS`, `BRANDS`, `REVIEWS`). The admin's Site Pages editor
+  can edit text, images, SEO fields, and HTML for each generated page.
+- **Home page FAQs and offers live in [content/home.json](content/home.json)** and have
+  dedicated fields under Home page in the admin. Published offers appear on the site;
+  draft offers stay hidden.
+- **Blog, Our Work, and brand pages live in [content/collections.json](content/collections.json)**.
+  They have dedicated admin forms for entries, images, FAQs, and SEO fields.
 - You **edit data → run one command → every page regenerates** (nav, footer, links,
   cross-links between pages all update automatically).
-- The generated `.html` files, plus `css/` and `js/`, are the actual website. You can
-  host them on any static host (Netlify, Vercel, GitHub Pages, Cloudflare Pages, or
-  plain web hosting) — no server or database needed.
+- The generated `.html` files are the public website. The admin requires the Node.js
+  app in [server.js](server.js) with a persistent writable project directory.
+
+### Local admin preview
+
+Set an admin password, then start the app:
+
+```powershell
+$env:ADMIN_PASSWORD = 'choose-a-long-unique-password'
+npm start
+```
+
+Open `http://localhost:3000/admin`. Public pages are at `http://localhost:3000/`.
+For Hostinger shared hosting deployment, see [HOSTINGER.md](HOSTINGER.md).
 
 ### The one command you need
 
@@ -59,7 +79,7 @@ Most text comes from the data arrays. Find the relevant entry, change the wordin
 - **Business name, phone, email, hours, city** → `CONFIG` block.
 - **A service's description** → find it in the `SERVICES` array, edit `intro` / `blurb`.
 - **A review** → edit the `REVIEWS` array.
-- **An FAQ answer** → edit the `FAQS` array.
+- **A home page FAQ or offer** → use Home page in the admin or edit `content/home.json`.
 
 Run `node build.js` when done.
 
@@ -125,10 +145,11 @@ Edit the **`REVIEWS`** array:
 
 ## Recipe 5 — Add an FAQ
 
-Edit the **`FAQS`** array:
+Use **Home page → Questions → Add question** in the admin, or add an item to
+`content/home.json`:
 
 ```js
-{ q: "Do you offer a warranty on repairs?", a: "Yes — parts and labor are guaranteed for 90 days." },
+{ "question": "Do you offer a warranty on repairs?", "answer": "Yes — ask us about the warranty for your specific repair." }
 ```
 
 Run `node build.js`. FAQs now appear in the **FAQ** section on the home page (`index.html#faq`), and FAQ structured data for Google updates automatically.

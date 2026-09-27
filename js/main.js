@@ -6,7 +6,13 @@
   var root = document.documentElement;
   var themeBtn = document.querySelector(".theme-toggle");
   var setIcon = function () {
-    if (themeBtn) themeBtn.textContent = root.getAttribute("data-theme") === "dark" ? "☀️" : "🌙";
+    if (!themeBtn) return;
+    var dark = root.getAttribute("data-theme") === "dark";
+    themeBtn.innerHTML = dark
+      ? '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>'
+      : '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.3 15.7A9 9 0 0 1 8.3 3.7 9 9 0 1 0 20.3 15.7Z"/></svg>';
+    themeBtn.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
+    themeBtn.title = dark ? "Switch to light mode" : "Switch to dark mode";
   };
   setIcon();
   if (themeBtn) {
@@ -30,6 +36,18 @@
       if (e.target.tagName === "A") nav.classList.remove("open");
     });
   }
+  // Desktop menus open on hover and close when the pointer leaves.
+  var desktopMenu = window.matchMedia("(hover: hover) and (min-width: 1001px)");
+  document.querySelectorAll(".nav-group").forEach(function (group) {
+    group.addEventListener("pointerenter", function (event) {
+      if (!desktopMenu.matches || event.pointerType === "touch") return;
+      document.querySelectorAll(".nav-group").forEach(function (other) { if (other !== group) other.open = false; });
+      group.open = true;
+    });
+    group.addEventListener("pointerleave", function (event) {
+      if (desktopMenu.matches && event.pointerType !== "touch") group.open = false;
+    });
+  });
 
   /* --------------------------------------------------------------------- */
   /* Service request form                                                    */

@@ -1,0 +1,171 @@
+{
+  "warranty": {
+    "heading": "Warranty",
+    "intro": "We stand behind the repairs we perform. Coverage depends on the work completed, and we explain the applicable terms before the repair begins.",
+    "cards": [
+      {
+        "duration": "3 Months",
+        "title": "Part Replacement",
+        "description": "Replacement parts installed by Nova are covered for three months from the repair date."
+      },
+      {
+        "duration": "12 Months",
+        "title": "Sealed System Repair",
+        "description": "When sealed-system work is performed, that repair is covered for 12 months from completion."
+      },
+      {
+        "duration": "Optional",
+        "title": "Extended Warranty",
+        "description": "Ask about extended coverage for eligible repairs. Available terms and pricing are explained before you choose it."
+      }
+    ]
+  },
+  "details": {
+    "refrigerator-repair": [
+      { "heading": "How we trace a cooling problem", "body": "A warm refrigerator can result from blocked airflow, a failed fan, a defrost fault, a door seal, or a sealed-system issue. We compare temperatures in both compartments, inspect the frost pattern and ventilation, and test the components tied to the symptom. That sequence helps identify the failed part before any replacement is recommended." },
+      { "heading": "What to note before your appointment", "body": "Record the model number, the temperatures you measure, any error code, and whether the freezer is still cooling. Keep the doors closed when possible and move perishable food to safe cold storage if the cabinet is warming. These details help us plan the visit and explain the repair options clearly." }
+    ],
+    "ice-maker-repair": [
+      { "heading": "Why ice production slows or stops", "body": "Ice-making depends on water supply, freezer temperature, the fill path, and a working harvest cycle. A clogged filter or frozen fill tube can resemble a failed ice-maker assembly. We check each part of the sequence so a water-flow problem is not mistaken for a new ice maker." },
+      { "heading": "Signs worth reporting", "body": "Tell us whether the unit makes no ice, produces small cubes, leaks, overfills, or has a dispenser that will not release ice. The model number and any recent filter change are useful too. The pattern helps narrow the diagnosis and identify whether the issue is in the ice maker, water system, or freezer." }
+    ],
+    "freezer-repair": [
+      { "heading": "Frost buildup versus weak cooling", "body": "Heavy frost near a door may point to a sealing or closing problem. Frost across a rear panel can suggest a defrost or airflow fault, while a freezer that runs constantly without reaching temperature needs a different set of checks. We inspect the pattern and test the relevant components before quoting a repair." },
+      { "heading": "Protecting food while you wait", "body": "Minimize door openings and check the freezer temperature with a thermometer if one is available. Move food to another freezer when the unit cannot maintain safe freezing. Share the model, the measured temperature, and when the problem began so the technician can prepare for the visit." }
+    ],
+    "washer-repair": [
+      { "heading": "Drain, spin, and fill problems", "body": "A washer that will not spin may be holding water because it never drained. A machine that will not fill may have a supply or inlet problem rather than a failed control. We follow the sequence of the cycle, check for blockages and leaks, and test parts only after confirming the symptom." },
+      { "heading": "Before a washer visit", "body": "Note the model number, displayed error code, cycle stage where it stops, and whether water remains in the drum. If water is leaking, stop using the machine and shut off its supply valves when safe to do so. Those observations help us target the diagnosis without replacing parts by guesswork." }
+    ],
+    "dryer-repair": [
+      { "heading": "Heat and airflow are different checks", "body": "Long drying cycles may come from weak heat, restricted venting, or both. We inspect the airflow path and then test the heating components appropriate to a gas or electric dryer. Checking ventilation matters because a new heating part will not solve an unresolved airflow restriction." },
+      { "heading": "When to stop using the dryer", "body": "Stop the dryer and arrange service if you notice a burning smell, unusual heat around the machine, or a vent that is not exhausting normally. Tell us whether the drum turns, whether it heats, and how many cycles a load now takes. This helps distinguish a heating failure from a vent problem." }
+    ],
+    "dishwasher-repair": [
+      { "heading": "Cleaning and draining diagnosis", "body": "Poor cleaning can begin with a blocked filter or spray arm, low water fill, weak circulation, or a heating problem. Standing water at the end of a cycle leads us to inspect the drain path and pump. We separate these symptoms so the repair addresses the actual cause." },
+      { "heading": "Useful details for a service request", "body": "Share the model number, whether water remains in the tub, whether the dishes are wet or dirty, and where any leak appears. If the dishwasher is leaking onto the floor, stop running it and turn off the water supply when safe. Photos of the leak or an error code can also help." }
+    ],
+    "oven-repair": [
+      { "heading": "Why an oven heats unevenly", "body": "Uneven baking can be caused by a heating element, igniter, temperature sensor, control response, or how the oven is calibrated. We compare the actual cavity temperature with the selected setting and test the relevant components before recommending a repair." },
+      { "heading": "Gas and electric safety", "body": "An oven that fails to ignite or smells of gas should not be used until it is checked. For electric units, avoid opening panels or testing live components. Tell us the model, whether the oven preheats, and which cooking mode fails; those details help focus the diagnosis." }
+    ],
+    "cooktop-repair": [
+      { "heading": "Burner and element faults", "body": "A gas burner that clicks without lighting may have an igniter, switch, burner, or gas-flow issue. An electric or induction zone that will not heat has a different set of controls and components. We identify the cooktop type and isolate the affected zone before replacing anything." },
+      { "heading": "What to tell us when booking", "body": "Let us know whether one burner or every burner is affected, whether there is clicking, and whether an error code appears. Share the model number and fuel type. If you smell gas, stop using the cooktop and follow your gas utility's safety instructions before arranging repair." }
+    ]
+  },
+  "faq": {
+    "refrigerator-repair": [
+      {
+        "question": "Why is my refrigerator warm while the freezer is still cold?",
+        "answer": "An airflow or defrost problem can leave the refrigerator section warm even when the freezer still cools. We check fans, vents, sensors, and defrost components to find the cause."
+      },
+      {
+        "question": "Can you repair a built-in refrigerator?",
+        "answer": "Yes. We diagnose and repair built-in refrigerators, including cooling, control, and sealed-system problems."
+      },
+      {
+        "question": "How soon can refrigerator repair be scheduled?",
+        "answer": "Same-day appointments are often available in the Austin area, depending on the schedule. Call or text us with the model and symptoms to check availability."
+      }
+    ],
+    "ice-maker-repair": [
+      {
+        "question": "Why has my ice maker stopped making ice?",
+        "answer": "Common causes include a blocked water supply, a failed inlet valve, a frozen fill tube, or an ice-maker assembly fault. We diagnose the cause before replacing parts."
+      },
+      {
+        "question": "Can you fix an ice maker that makes ice slowly?",
+        "answer": "Yes. We check water flow, temperature, filters, and the ice-maker cycle to find what is limiting production."
+      },
+      {
+        "question": "Do you repair built-in ice makers?",
+        "answer": "Yes. We service built-in ice makers as well as ice makers inside refrigerators."
+      }
+    ],
+    "freezer-repair": [
+      {
+        "question": "Why is my freezer building up frost?",
+        "answer": "Frost can result from a door that does not seal properly, a defrost-system fault, or airflow problems. We inspect the cause before recommending a repair."
+      },
+      {
+        "question": "Can you repair both upright and chest freezers?",
+        "answer": "Yes. We diagnose cooling and electrical problems in upright, chest, and built-in freezers."
+      },
+      {
+        "question": "What should I do if my freezer is not freezing?",
+        "answer": "Keep the door closed as much as possible and move vulnerable food to another freezer if available. Then contact us with the model and symptoms so we can arrange a diagnosis."
+      }
+    ],
+    "washer-repair": [
+      {
+        "question": "Why will my washer not drain?",
+        "answer": "A blocked drain path, failed pump, or control problem may stop a washer from draining. We inspect the machine to identify the specific fault."
+      },
+      {
+        "question": "Do you repair front-load and top-load washers?",
+        "answer": "Yes. We service both front-load and top-load washing machines from major brands."
+      },
+      {
+        "question": "Can you diagnose a washer error code?",
+        "answer": "Yes. An error code helps narrow the search, but we also test the related components to confirm the cause before repairing the machine."
+      }
+    ],
+    "dryer-repair": [
+      {
+        "question": "Why does my dryer run without heating?",
+        "answer": "A failed heating element, thermal fuse, thermostat, igniter, or gas component can cause this symptom. The correct repair depends on the dryer type and test results."
+      },
+      {
+        "question": "Do you service gas and electric dryers?",
+        "answer": "Yes. We diagnose and repair both gas and electric dryers."
+      },
+      {
+        "question": "Why does one load take several cycles to dry?",
+        "answer": "Restricted ventilation or a heating problem can extend drying time. We check airflow and the heating system to determine the cause."
+      }
+    ],
+    "dishwasher-repair": [
+      {
+        "question": "Why is water left in my dishwasher after a cycle?",
+        "answer": "A clogged filter or drain line, a failed pump, or a control fault may prevent draining. We inspect the drain system before replacing parts."
+      },
+      {
+        "question": "Can you repair a dishwasher that leaks?",
+        "answer": "Yes. We trace leaks to their source, which may be a door seal, hose, pump, or another component."
+      },
+      {
+        "question": "Do you service integrated dishwashers?",
+        "answer": "Yes. We service integrated and panel-ready dishwashers as well as standard models."
+      }
+    ],
+    "oven-repair": [
+      {
+        "question": "Why is my oven not heating evenly?",
+        "answer": "A heating element, igniter, temperature sensor, or calibration problem can cause uneven temperatures. We test the oven to identify the cause."
+      },
+      {
+        "question": "Do you repair gas and electric ovens?",
+        "answer": "Yes. We service gas, electric, and dual-fuel ovens and ranges."
+      },
+      {
+        "question": "Can you repair an oven that will not ignite?",
+        "answer": "Yes. We diagnose igniters, gas controls, and other components involved in ignition before recommending a repair."
+      }
+    ],
+    "cooktop-repair": [
+      {
+        "question": "Why will my cooktop burner not light?",
+        "answer": "The cause may be a dirty burner, failed igniter or switch, or a gas-flow problem. We test the ignition system to identify it."
+      },
+      {
+        "question": "Do you repair electric and gas cooktops?",
+        "answer": "Yes. We service gas, electric, and induction cooktops."
+      },
+      {
+        "question": "Can a cooktop element be replaced?",
+        "answer": "Often, yes. We first confirm whether the element, its controls, or the wiring is responsible for the problem."
+      }
+    ]
+  }
+}

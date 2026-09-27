@@ -1,0 +1,753 @@
+{
+  "blog": {
+    "title": "Appliance Repair Guides",
+    "metaDescription": "Practical refrigerator and appliance troubleshooting guides from Nova Refrigeration & Appliance Repair in Austin, TX.",
+    "intro": "Straightforward guidance to help you recognize a problem, protect your appliance, and know when to call a technician.",
+    "faq": [
+      {
+        "question": "Can these guides replace a professional diagnosis?",
+        "answer": "No. The guides cover safe observations and common causes. A technician should handle electrical testing, refrigerant systems, gas components, and repairs that require disassembly."
+      },
+      {
+        "question": "Do you offer appliance repair in the Austin area?",
+        "answer": "Yes. Nova services refrigerators and other household appliances across Austin and nearby communities. Call to describe the problem and check appointment availability."
+      }
+    ],
+    "posts": [
+      {
+        "slug": "refrigerator-warm-freezer-cold",
+        "status": "published",
+        "title": "Refrigerator Warm but Freezer Cold? What to Check First",
+        "seoTitle": "Refrigerator Warm but Freezer Cold? | Austin Repair Guide",
+        "metaDescription": "Learn why a refrigerator can run warm while the freezer stays cold, what you can safely check, and when to schedule refrigerator repair in Austin.",
+        "excerpt": "A cold freezer and warm fresh-food compartment often point to an airflow or defrost problem. Start with these safe checks.",
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "author": "Nova Refrigeration & Appliance Repair",
+        "image": "assets/blog/refrigerator-airflow.png",
+        "imageAlt": "Open refrigerator and freezer compartments in a modern kitchen",
+        "sections": [
+          {
+            "heading": "Why the two compartments can behave differently",
+            "paragraphs": [
+              "Most refrigerator-freezer combinations cool the freezer first and move some of that cold air into the fresh-food compartment. If airflow is blocked or the circulation fan stops, the freezer may still seem cold while milk and produce begin warming up. A defrost fault can also allow ice to build around the evaporator and restrict the air path.",
+              "This symptom does not identify one failed part by itself. Door seals, a blocked vent, fan operation, temperature controls, and frost patterns all matter when narrowing down the cause."
+            ]
+          },
+          {
+            "heading": "Safe checks you can make at home",
+            "paragraphs": [
+              "Check that food packages are not covering the air vents between compartments. Make sure the doors close fully and the gaskets are clean and seated. If you have a thermometer, check the actual temperatures rather than judging by touch: the refrigerator should stay at 40°F or below and the freezer at 0°F or below.",
+              "Look for a thick layer of frost on the freezer's rear interior panel. That can be a clue that the defrost system or airflow needs attention. Note any unusual fan noise and whether the compressor seems to run continuously. Keep the doors closed as much as possible while you decide what to do next."
+            ]
+          },
+          {
+            "heading": "When to schedule a repair",
+            "paragraphs": [
+              "If the fresh-food compartment remains above a safe temperature after vents and doors are checked, move perishable food to another refrigerator or cooler and arrange a diagnosis. Avoid removing panels or testing live electrical components yourself. A technician can inspect fan operation, the defrost circuit, sensors, and controls in a safe sequence.",
+              "Nova repairs refrigerator cooling and airflow problems across Austin and nearby areas. When you call, share the model number, measured temperatures, frost pattern, and any error code. Those details help the technician prepare for the visit."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "Can an overfilled freezer make the refrigerator warm?",
+            "answer": "Yes. Food packed tightly against an air vent can restrict circulation. Clear the vents and allow time for temperatures to stabilize, then check with a thermometer."
+          },
+          {
+            "question": "Should I unplug a refrigerator with heavy frost?",
+            "answer": "A full thaw can temporarily restore airflow, but it does not repair the underlying fault. Protect your food first and arrange a diagnosis if frost returns."
+          }
+        ],
+        "sources": [
+          {
+            "label": "FDA: Refrigerator Thermometers — Cold Facts about Food Safety",
+            "url": "https://www.fda.gov/food/buy-store-serve-safe-food/refrigerator-thermometers-cold-facts-about-food-safety"
+          }
+        ]
+      },
+      {
+        "slug": "appliance-repair-or-replace",
+        "status": "published",
+        "title": "Repair or Replace an Appliance? A Practical Decision Guide",
+        "seoTitle": "Repair or Replace an Appliance? | Nova Austin Guide",
+        "metaDescription": "Compare repair cost, appliance age, parts availability, and recurring problems before deciding whether to repair or replace a household appliance.",
+        "excerpt": "A clear diagnosis and written estimate make the repair-versus-replace decision much easier.",
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "author": "Nova Refrigeration & Appliance Repair",
+        "image": "assets/blog/repair-or-replace.png",
+        "imageAlt": "Technician inspecting a household washing machine in a bright laundry room",
+        "sections": [
+          {
+            "heading": "Start with the diagnosis, not a guess",
+            "paragraphs": [
+              "A machine that will not start might need a small switch, a control board, or something unrelated to the appliance, such as the power supply. The same outward symptom can lead to very different repair costs. Ask for a diagnosis and an estimate before deciding to replace a refrigerator, washer, dryer, dishwasher, or oven.",
+              "A useful estimate separates labor and parts, explains what failed, and states what is covered if the same problem returns. Compare that with the installed price of a replacement, including delivery, removal, and any cabinet or connection changes."
+            ]
+          },
+          {
+            "heading": "Consider age, condition, and parts",
+            "paragraphs": [
+              "Age matters, but it should not be the only deciding factor. Look at the appliance's overall condition, how often it has needed service, whether parts are available, and whether the repair addresses the root cause. A well-maintained appliance with a single failed component may be a good repair candidate; a machine with several recurring faults deserves a closer cost comparison.",
+              "Built-in and specialty appliances can have a higher replacement cost and may require installation work. In those cases, a repair that initially sounds expensive may still be reasonable when compared with the full cost of replacing the unit."
+            ]
+          },
+          {
+            "heading": "Make the choice with real numbers",
+            "paragraphs": [
+              "Get the total repair estimate and the realistic all-in replacement price. Consider the warranty on both options and the time needed to complete the work. If the repair is uncertain, ask the technician what additional faults could be found and whether those would change the recommendation.",
+              "Nova provides a diagnosis and an up-front estimate before work begins. If repair is impractical, we will explain why so you can make the decision with the facts in front of you."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "Is an older appliance always worth replacing?",
+            "answer": "No. Condition, fault, part availability, and replacement cost matter more than age alone. A diagnosis gives you a useful basis for comparison."
+          },
+          {
+            "question": "What should a repair estimate include?",
+            "answer": "Ask for the diagnosed fault, parts, labor, total price, expected completion time, and any warranty that applies to the repair."
+          }
+        ]
+      },
+      {
+        "status": "published",
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "author": "Nova Refrigeration & Appliance Repair",
+        "slug": "washer-not-draining-guide",
+        "title": "Washer Not Draining? Safe Checks Before a Repair",
+        "seoTitle": "Washer Not Draining? Austin Troubleshooting Guide",
+        "metaDescription": "Washer full of water after a cycle? Check settings, hose and model-specific filter guidance before scheduling washer repair in Austin.",
+        "excerpt": "Standing water can come from a cycle setting, a blocked drain path or a failed pump. Use these safe checks to narrow the problem.",
+        "image": "assets/work/washer-drain.png",
+        "imageAlt": "Technician inspecting the drain area of a front-load washer",
+        "relatedService": "washer-repair",
+        "sections": [
+          {
+            "heading": "First separate drainage from spin problems",
+            "paragraphs": [
+              "A washer may leave clothes wet because it did not drain, because it did not spin, or because the selected cycle uses a slower spin. Check whether there is standing water in the drum. If the tub is empty but clothes are soaked, tell the technician whether the spin cycle begins, pauses, or shows an error code.",
+              "Do not assume the pump has failed based on one load. An unbalanced bulky item, a low-spin setting or excess detergent can also interrupt the expected cycle. Try a model-approved drain or spin cycle only if there is no leak or unusual noise."
+            ]
+          },
+          {
+            "heading": "Check the visible drain path safely",
+            "paragraphs": [
+              "With the washer stopped, look for a kinked drain hose behind the machine and check whether the household standpipe or sink drain is backed up. Do not pull a heavy machine away from the wall if hoses are tight or water is on the floor.",
+              "Some front-load models have an owner-accessible pump filter, but many do not. Consult the model manual before opening a filter: trapped water can pour out quickly. If the access point is unclear, leave it for a technician."
+            ]
+          },
+          {
+            "heading": "When a technician should diagnose the washer",
+            "paragraphs": [
+              "Schedule service if water remains after a model-approved drain cycle, the pump makes an unusual sound, or the problem keeps returning. The drain pump, hose, lid or door lock, and control signals may need testing. A proper diagnosis distinguishes a blockage from a part failure.",
+              "When contacting Nova, share the brand and model, any error code, whether the machine is front-load or top-load, and whether the water is still in the tub. We can use those details to plan a washer repair visit in the Austin area."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "Does a washer that will not drain always need a new pump?",
+            "answer": "No. A blocked hose or filter, cycle setting, or other control issue can create a similar symptom. The drain path should be checked before replacing the pump."
+          },
+          {
+            "question": "Can I open the pump filter myself?",
+            "answer": "Only if your owner manual shows an accessible filter and explains how to drain the water safely. Otherwise, a technician should inspect it."
+          }
+        ],
+        "sources": [
+          {
+            "label": "Whirlpool: Why is my washing machine not draining?",
+            "url": "https://www.whirlpool.com/blog/washers-and-dryers/why-is-my-washing-machine-not-draining.html"
+          }
+        ]
+      },
+      {
+        "status": "published",
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "author": "Nova Refrigeration & Appliance Repair",
+        "slug": "dryer-not-heating-guide",
+        "title": "Dryer Not Heating? How to Narrow Down the Cause",
+        "seoTitle": "Dryer Not Heating? Austin Repair Guide",
+        "metaDescription": "A dryer that tumbles but stays cold may have a power, gas, airflow or heating fault. Learn safe checks and when to book dryer repair in Austin.",
+        "excerpt": "A turning drum does not prove the heating system works. Start with airflow and basic settings, then arrange a diagnosis if heat is still missing.",
+        "image": "assets/blog/dryer-not-heating.webp",
+        "imageAlt": "Technician inspecting a household clothes dryer in a laundry room",
+        "relatedService": "dryer-repair",
+        "sections": [
+          {
+            "heading": "Is the dryer cold or simply slow?",
+            "paragraphs": [
+              "A completely cold dryer and one that gets warm but takes several cycles are different problems. A restricted lint screen or exterior vent can slow drying even when the heater works. A very wet load from a washer spin problem can also make normal drying seem ineffective.",
+              "Start by cleaning the lint screen, checking the selected cycle and trying a reasonably sized load. If airflow at the exterior vent seems weak or the vent is blocked, stop using the dryer until the restriction is addressed."
+            ]
+          },
+          {
+            "heading": "What can interrupt heat production?",
+            "paragraphs": [
+              "Electric dryers can tumble while their heating circuit has a separate power problem. Gas dryers can also tumble when the gas supply or ignition system is not providing heat. Heating elements, thermal fuses, thermostats, igniters and controls require model-specific testing.",
+              "Avoid opening electrical or gas compartments to guess at the failed part. A safety device that has operated may be a symptom of another problem, including poor ventilation, so replacing it without finding the cause may not provide a lasting repair."
+            ]
+          },
+          {
+            "heading": "Information that helps with a repair visit",
+            "paragraphs": [
+              "Tell us whether the dryer is gas or electric, whether the drum turns, whether you feel any heat, and how long a normal load now takes. Share the model number and any recent change to the vent or laundry setup.",
+              "Nova diagnoses dryer heating and airflow problems in Austin and nearby communities. We check the relevant systems before explaining the repair and its cost."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "Why does my dryer turn but not heat?",
+            "answer": "The motor and heating system can have different causes of failure. Depending on the model, the issue may involve power, gas supply, airflow, a heating component or a control."
+          },
+          {
+            "question": "Can a clogged vent make drying take longer?",
+            "answer": "Yes. Restricted airflow can extend drying time and should be addressed before continued use."
+          }
+        ],
+        "sources": [
+          {
+            "label": "Whirlpool: Dryer not heating troubleshooting guide",
+            "url": "https://www.whirlpool.com/blog/washers-and-dryers/dryer-not-heating.html"
+          }
+        ]
+      },
+      {
+        "status": "published",
+        "datePublished": "2026-09-27",
+        "dateModified": "2026-09-27",
+        "author": "Nova Refrigeration & Appliance Repair",
+        "slug": "ice-maker-not-making-ice-guide",
+        "title": "Ice Maker Not Making Ice? Check Water and Temperature First",
+        "seoTitle": "Ice Maker Not Making Ice? Austin Repair Guide",
+        "metaDescription": "No ice or slow ice production? Check ice maker settings, freezer temperature, filter and water supply before scheduling ice maker repair in Austin.",
+        "excerpt": "An ice maker needs the right freezer temperature and water flow. These observations help separate a simple supply issue from a failed assembly.",
+        "image": "assets/blog/ice-maker-not-making-ice.webp",
+        "imageAlt": "Technician checking the ice maker compartment inside a refrigerator",
+        "relatedService": "ice-maker-repair",
+        "sections": [
+          {
+            "heading": "Start with the ice maker setting and freezer",
+            "paragraphs": [
+              "First confirm that the ice maker is switched on and that a full bin or raised shutoff arm is not telling it to stop. Controls vary by model, so check the owner manual before changing settings. If the freezer is running warm, ice production can slow or stop even when the ice maker itself is working.",
+              "Use a thermometer to compare the actual freezer temperature with the setting. Note whether food is softening or frost is building up; those clues may point to a freezer cooling problem rather than an ice-maker fault."
+            ]
+          },
+          {
+            "heading": "Look for a water-flow problem",
+            "paragraphs": [
+              "A clogged refrigerator filter, a closed supply valve or a kinked water line can keep the ice maker from filling. If the water dispenser is also slow, that is useful information. Do not force a frozen fill tube or dismantle the water valve without model-specific instructions.",
+              "Small or hollow cubes often suggest an incomplete fill, while cubes trapped in the mold suggest a different issue. Reporting the exact pattern helps a technician focus the diagnosis."
+            ]
+          },
+          {
+            "heading": "When service is the right next step",
+            "paragraphs": [
+              "If the freezer temperature and visible water supply appear normal but ice production does not return, the fill valve, sensors, wiring or ice-maker assembly may need testing. Replacing the assembly before checking water flow can leave the original problem unresolved.",
+              "When you contact Nova, send the refrigerator model number, note whether the dispenser works, and describe whether there is no ice, slow ice, leaking or overfilling. We service refrigerator and built-in ice makers across the Austin metro."
+            ]
+          }
+        ],
+        "faq": [
+          {
+            "question": "Can a clogged water filter stop an ice maker?",
+            "answer": "Yes. Reduced water flow through a clogged filter can prevent proper filling or slow ice production."
+          },
+          {
+            "question": "Does no ice always mean the ice maker assembly failed?",
+            "answer": "No. Freezer temperature, the on/off setting, water supply, filter and fill valve should also be checked."
+          }
+        ],
+        "sources": [
+          {
+            "label": "GE Appliances: Refrigerator icemaker not producing ice",
+            "url": "https://products.geappliances.com/appliance/gea-support-search-content?contentId=39364"
+          }
+        ]
+      }
+    ]
+  },
+  "work": {
+    "title": "Our Work",
+    "metaDescription": "Explore appliance repair project examples and diagnostic stories from Nova in the Austin area. Illustrative cases are clearly labeled until verified work is added.",
+    "intro": "Explore appliance repair scenarios, the symptoms involved, the diagnostic steps, and the result. The current cases are illustrative examples and will be replaced with verified project stories.",
+    "faq": [
+      {
+        "question": "What information will each project include?",
+        "answer": "Each published project can show the appliance and brand, the service area, the reported problem, the diagnosis, the repair, and photos when available."
+      },
+      {
+        "question": "Can I ask about a repair similar to one shown here?",
+        "answer": "Yes. Contact Nova with your appliance model and symptoms. A similar project can be a useful reference, but your appliance still needs its own diagnosis."
+      }
+    ],
+    "projects": [
+      {
+        "slug": "sub-zero-wine-cooler-repair",
+        "status": "published",
+        "sample": true,
+        "title": "Sub-Zero Wine Cooler Cooling Diagnosis",
+        "seoTitle": "Sub-Zero Wine Cooler Repair | Sample Project",
+        "metaDescription": "Illustrative Sub-Zero wine cooler repair case showing how a technician checks a built-in wine refrigerator with unstable temperatures.",
+        "excerpt": "A sample case showing how a built-in wine cooler temperature problem can be diagnosed.",
+        "appliance": "Built-in wine cooler",
+        "brand": "Sub-Zero",
+        "area": "Austin, TX",
+        "image": "assets/work/sub-zero-wine-cooler-repair.png",
+        "imageAlt": "Technician inspecting the lower cooling compartment of a glass-door built-in wine cooler; illustrative image",
+        "problem": "The wine cooler was running warmer than its set temperature, putting the stored bottles at risk of inconsistent cooling.",
+        "diagnosis": "The example diagnostic sequence checks the door seal, condenser cleanliness, ventilation clearance, fan operation, and temperature sensors before identifying a failed condenser fan.",
+        "solution": "In this illustrative scenario, the technician replaces the faulty fan, cleans the condenser area, and confirms stable temperatures after the repair.",
+        "faq": [
+          {
+            "question": "Can a fan problem make a wine cooler run warm?",
+            "answer": "Yes. A failed fan can reduce heat removal or cabinet airflow. The actual cause should be confirmed through a model-specific diagnosis."
+          }
+        ]
+      },
+      {
+        "slug": "washer-not-draining",
+        "status": "published",
+        "sample": true,
+        "title": "Washer Drainage Troubleshooting",
+        "seoTitle": "Washer Not Draining | Sample Repair Project",
+        "metaDescription": "Illustrative washer drainage project covering a blocked pump filter, inspection steps, and a test cycle. Sample project content.",
+        "excerpt": "A sample washer case about checking the drain path before replacing parts.",
+        "appliance": "Front-load washer",
+        "brand": "LG",
+        "area": "Round Rock, TX",
+        "image": "assets/work/washer-drain.png",
+        "imageAlt": "Technician inspecting the drain pump of a front-load washing machine; illustrative image",
+        "problem": "Water remained in the drum at the end of the wash cycle.",
+        "diagnosis": "The example inspection starts with the drain hose and pump filter, then checks whether the pump runs and whether the outlet is clear.",
+        "solution": "In this illustrative scenario, debris is removed from the pump filter and a full cycle confirms normal drainage.",
+        "faq": [
+          {
+            "question": "Does a washer that will not drain always need a new pump?",
+            "answer": "No. A blocked filter or drain hose can cause the same symptom. Inspecting the drain path is a useful first step."
+          }
+        ]
+      },
+      {
+        "slug": "oven-not-heating-evenly",
+        "status": "published",
+        "sample": true,
+        "title": "Oven Heating Problem Diagnosis",
+        "seoTitle": "Oven Heating Problem | Sample Repair Project",
+        "metaDescription": "Illustrative electric oven heating project explaining diagnosis of uneven temperature and verification after repair. Sample project content.",
+        "excerpt": "A sample oven case about measuring actual temperature before choosing a repair.",
+        "appliance": "Electric wall oven",
+        "brand": "Whirlpool",
+        "area": "Cedar Park, TX",
+        "image": "assets/work/oven-heat.png",
+        "imageAlt": "Technician inspecting an electric wall oven; illustrative image",
+        "problem": "The oven preheated slowly and baked unevenly.",
+        "diagnosis": "The example technician measures cavity temperature and checks the bake element, temperature sensor, and control response.",
+        "solution": "In this illustrative scenario, a failed bake element is replaced and the oven is tested at several settings.",
+        "faq": [
+          {
+            "question": "Why does an oven bake unevenly?",
+            "answer": "Possible causes include an element, sensor, control, or airflow issue. Measuring temperature helps identify the cause."
+          }
+        ]
+      }
+    ]
+  },
+  "brands": {
+    "title": "Appliance Brands We Service",
+    "metaDescription": "Explore appliance brands serviced by Nova Refrigeration & Appliance Repair in Austin, including refrigerators, washers, dryers, ovens, and built-in units.",
+    "intro": "Browse brand-specific service information. Brand names and logos identify equipment we work on; they do not imply manufacturer authorization or affiliation.",
+    "faq": [
+      {
+        "question": "Is Nova an authorized service center for every brand listed?",
+        "answer": "No manufacturer authorization is claimed on this page. The brands identify appliances our technicians service. Ask us if a specific warranty requires an authorized provider."
+      },
+      {
+        "question": "What should I have ready when I contact you?",
+        "answer": "The brand, model number, symptom, and any displayed error code help us plan a diagnosis and check parts availability."
+      }
+    ],
+    "profiles": [
+      {
+        "slug": "samsung",
+        "name": "Samsung",
+        "status": "published",
+        "logo": "assets/logo/residential/samsung.png",
+        "title": "Samsung Appliance Repair in Austin, TX",
+        "metaDescription": "Samsung refrigerator, washer, dryer, oven, and dishwasher repair in Austin, TX. Describe the symptom and schedule a diagnosis with Nova.",
+        "intro": "Nova diagnoses Samsung appliances in Austin homes, from cooling and ice-making problems to laundry and kitchen equipment faults.",
+        "focus": [
+          "Refrigerator and ice maker cooling",
+          "Washer drainage and spin problems",
+          "Dryer heat and airflow",
+          "Oven and dishwasher faults"
+        ],
+        "faq": [
+          {
+            "question": "Can you diagnose a Samsung refrigerator that is not cooling?",
+            "answer": "Yes. Share the model number, measured temperatures, and any error code when you contact us so we can plan the visit."
+          },
+          {
+            "question": "Do you work on Samsung washers and dryers?",
+            "answer": "Yes. We diagnose Samsung laundry appliances as well as refrigerators and kitchen appliances."
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Refrigerator and ice-maker diagnosis",
+            "body": "On a Samsung refrigerator, note whether the fresh-food section, freezer, or both are warm. Ice production, water flow, frost and fan noise offer different clues. We compare those symptoms with the model information before recommending a part."
+          },
+          {
+            "heading": "Laundry and kitchen appliance service",
+            "body": "Samsung washer, dryer, dishwasher and cooking-appliance problems need different test paths. Tell us the model number, displayed code and exact point in the cycle when the problem occurs so the visit starts with the right checks."
+          }
+        ]
+      },
+      {
+        "slug": "lg",
+        "name": "LG",
+        "status": "published",
+        "logo": "assets/logo/residential/LG_logo_(2014).svg.webp",
+        "title": "LG Appliance Repair in Austin, TX",
+        "metaDescription": "LG refrigerator, washer, dryer, oven, and dishwasher repair in Austin, TX. Nova provides diagnosis and clear repair estimates.",
+        "intro": "We service LG refrigeration, laundry, and kitchen appliances. A clear diagnosis helps separate a simple airflow issue from a part or control failure.",
+        "focus": [
+          "Refrigerator temperature and airflow",
+          "Ice maker and dispenser problems",
+          "Washer leaks and drainage",
+          "Dryer heating and cycle issues"
+        ],
+        "faq": [
+          {
+            "question": "Do you repair LG refrigerators and ice makers?",
+            "answer": "Yes. We inspect cooling, airflow, dispensing, and ice production concerns on LG refrigerator models."
+          },
+          {
+            "question": "Can you give a repair price before diagnosing the appliance?",
+            "answer": "We can discuss the symptoms, but an accurate repair estimate follows an on-site diagnosis."
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Cooling and dispenser concerns",
+            "body": "An LG refrigerator that is running warm may have an airflow, sensor, control or sealed-system problem. A slow dispenser or missing ice may involve the filter and water path instead. We separate these symptoms before deciding what repair is appropriate."
+          },
+          {
+            "heading": "Washer and dryer troubleshooting",
+            "body": "For an LG washer, record whether it fills, drains and spins. For a dryer, note whether the drum turns and whether it produces heat. These observations help distinguish a cycle or ventilation issue from a component fault."
+          }
+        ]
+      },
+      {
+        "slug": "whirlpool",
+        "name": "Whirlpool",
+        "status": "published",
+        "logo": "assets/logo/residential/whirlpool logo1.webp",
+        "title": "Whirlpool Appliance Repair in Austin, TX",
+        "metaDescription": "Whirlpool refrigerator, washer, dryer, dishwasher, oven, and cooktop repair in Austin, TX. Contact Nova for diagnosis and service.",
+        "intro": "Nova works on Whirlpool appliances throughout the Austin area. We check the reported symptom, the appliance's condition, and the parts involved before recommending a repair.",
+        "focus": [
+          "Refrigerator cooling and leaks",
+          "Washer filling and spinning",
+          "Dryer heating and vent-related issues",
+          "Dishwasher cleaning and drainage"
+        ],
+        "faq": [
+          {
+            "question": "Do you service Whirlpool laundry appliances?",
+            "answer": "Yes. We diagnose Whirlpool washers and dryers, including filling, draining, spinning, heating, and cycle concerns."
+          },
+          {
+            "question": "What details should I provide for a Whirlpool service call?",
+            "answer": "Send the model number, the symptom, when it started, and any error code or unusual noise."
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Refrigeration and kitchen repairs",
+            "body": "Whirlpool refrigerator cooling, dishwasher drainage, and oven heating problems can share outward symptoms with installation or airflow issues. We check the system around the failed function rather than choosing a part from the symptom alone."
+          },
+          {
+            "heading": "Laundry equipment checks",
+            "body": "A Whirlpool washer that leaves water in the drum needs a drain-path diagnosis; a dryer that takes too long may need both heat and ventilation checked. Share the model and any error code when booking."
+          }
+        ]
+      },
+      {
+        "slug": "sub-zero",
+        "name": "Sub-Zero",
+        "status": "published",
+        "logo": "assets/logo/luxury/Sub-Zero_(logo).svg.webp",
+        "title": "Sub-Zero Refrigerator Repair in Austin, TX",
+        "metaDescription": "Sub-Zero built-in refrigerator and freezer repair in Austin, TX. Nova diagnoses cooling, frost, leaks, and sealed-system concerns.",
+        "intro": "Built-in refrigeration calls for careful diagnosis and respect for the surrounding cabinetry. Nova investigates Sub-Zero cooling, frost, water, and sealed-system concerns in Austin-area homes.",
+        "focus": [
+          "Built-in refrigerator temperature problems",
+          "Freezer frost and airflow",
+          "Water leaks and ice production",
+          "Sealed-system diagnosis"
+        ],
+        "faq": [
+          {
+            "question": "Do you diagnose Sub-Zero built-in refrigerators?",
+            "answer": "Yes. We inspect the unit, cooling behavior, airflow, and relevant components before recommending a repair."
+          },
+          {
+            "question": "Should I replace a built-in refrigerator that is not cooling?",
+            "answer": "A diagnosis is the first step. The fault, condition, parts availability, and full replacement cost should all be considered."
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Built-in refrigerator diagnosis",
+            "body": "Sub-Zero units are often installed within cabinetry, so ventilation, door sealing, temperature readings and access all matter. We document the symptom and inspect cooling components before discussing a repair."
+          },
+          {
+            "heading": "Freezer, ice and sealed-system work",
+            "body": "A frost pattern, slow ice production and a warm compartment point to different systems. We check the relevant airflow, water and refrigeration components and explain the scope of any sealed-system work before it begins."
+          }
+        ]
+      },
+      {
+        "slug": "maytag",
+        "name": "Maytag",
+        "status": "published",
+        "logo": "assets/logo/residential/Maytag-logo-500x281.png",
+        "title": "Maytag Appliance Repair in Austin, TX",
+        "metaDescription": "Maytag washer, dryer, refrigerator and dishwasher repair in Austin. Nova diagnoses drainage, heating, cooling and cycle problems.",
+        "intro": "Nova services Maytag laundry and kitchen appliances in the Austin area. We use the model number and observed symptoms to choose the right diagnostic path.",
+        "focus": [
+          "Washer drainage and spin issues",
+          "Dryer heating and long cycles",
+          "Refrigerator cooling and ice production",
+          "Dishwasher cleaning and drainage"
+        ],
+        "sections": [
+          {
+            "heading": "Maytag washer and dryer symptoms",
+            "body": "A washer that stops before spin may still be holding water, while a dryer that runs without heat requires separate heating and airflow checks. We verify what happens during the cycle before recommending parts."
+          },
+          {
+            "heading": "Kitchen appliance diagnosis",
+            "body": "For a Maytag refrigerator or dishwasher, measured temperature, water flow and error codes can narrow the cause. Bring the model number and describe when the problem began so we can prepare for the visit."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Do you repair Maytag washers and dryers?",
+            "answer": "Yes. We diagnose Maytag laundry appliances, including drain, spin, heat and cycle problems."
+          },
+          {
+            "question": "What information helps with a Maytag service call?",
+            "answer": "The model number, appliance type, symptom and any error code help us plan the diagnosis."
+          }
+        ]
+      },
+      {
+        "slug": "kitchenaid",
+        "name": "KitchenAid",
+        "status": "published",
+        "logo": "assets/logo/luxury/kitchenaid.png",
+        "title": "KitchenAid Appliance Repair in Austin, TX",
+        "metaDescription": "KitchenAid refrigerator, dishwasher, oven and cooktop repair in Austin. Diagnosis for cooling, drainage, heating and ignition faults.",
+        "intro": "KitchenAid appliances include built-in and freestanding kitchen models. Nova investigates cooling, water, heating and control problems before recommending a repair.",
+        "focus": [
+          "Built-in and freestanding refrigerator cooling",
+          "Dishwasher drainage and wash performance",
+          "Oven temperature and heating",
+          "Cooktop burner and element faults"
+        ],
+        "sections": [
+          {
+            "heading": "Built-in refrigeration checks",
+            "body": "A built-in KitchenAid refrigerator needs clear ventilation and accurate temperature readings. We check doors, airflow and the relevant cooling components before deciding whether a part or sealed-system repair is needed."
+          },
+          {
+            "heading": "Dishwasher and cooking equipment",
+            "body": "A dishwasher with standing water has a different diagnostic path from one that washes poorly. Likewise, an oven that heats unevenly calls for temperature measurement before replacing a sensor or element."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Can you service a KitchenAid built-in refrigerator?",
+            "answer": "Yes. Share the model number and measured temperatures so we can plan the visit."
+          },
+          {
+            "question": "Do you repair KitchenAid dishwashers and ovens?",
+            "answer": "Yes. We diagnose drainage, cleaning, heating and control issues in KitchenAid kitchen appliances."
+          }
+        ]
+      },
+      {
+        "slug": "ge-appliances",
+        "name": "GE Appliances",
+        "status": "published",
+        "logo": "assets/logo/residential/ge-appliances.png",
+        "title": "GE Appliances Repair in Austin, TX",
+        "metaDescription": "GE refrigerator, ice maker, washer, dryer, dishwasher and oven repair in Austin. Nova provides model-specific diagnosis and clear estimates.",
+        "intro": "Nova services GE Appliances refrigeration, laundry and cooking equipment across Austin. The exact model and symptom guide our checks.",
+        "focus": [
+          "Refrigerator and ice-maker water flow",
+          "Washer drainage and spin",
+          "Dryer heat and ventilation",
+          "Oven and dishwasher faults"
+        ],
+        "sections": [
+          {
+            "heading": "Refrigerator and ice-maker problems",
+            "body": "When a GE ice maker stops producing, freezer temperature and water flow are useful first clues. A refrigerator that is warm requires separate airflow and cooling checks. We distinguish these paths before suggesting a repair."
+          },
+          {
+            "heading": "Laundry and kitchen service",
+            "body": "For a washer or dryer, tell us the stage where the cycle fails. For an oven or dishwasher, note whether the issue is heating, water, drainage or controls. Model-specific details help narrow the diagnosis."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Do you repair GE ice makers?",
+            "answer": "Yes. We check freezer temperature, water supply, filter, fill path and ice-maker operation."
+          },
+          {
+            "question": "Can you diagnose GE washers and dryers?",
+            "answer": "Yes. We service GE laundry appliances and explain the diagnosed fault before work begins."
+          }
+        ]
+      },
+      {
+        "slug": "frigidaire",
+        "name": "Frigidaire",
+        "status": "draft",
+        "logo": "assets/logo/residential/Frigidaire-Logo-500x281.png"
+      },
+      {
+        "slug": "electrolux",
+        "name": "Electrolux",
+        "status": "draft",
+        "logo": "assets/logo/residential/electrolux.webp"
+      },
+      {
+        "slug": "bosch",
+        "name": "Bosch",
+        "status": "published",
+        "logo": "assets/logo/residential/bosch.webp",
+        "title": "Bosch Appliance Repair in Austin, TX",
+        "metaDescription": "Bosch dishwasher, refrigerator and cooking appliance repair in Austin. Nova diagnoses drainage, cleaning, cooling and heating problems.",
+        "intro": "Nova works on Bosch dishwashers, refrigeration and cooking equipment. We focus on the reported symptom and the model-specific operating sequence.",
+        "focus": [
+          "Dishwasher drainage and wash quality",
+          "Built-in refrigerator temperature",
+          "Oven heating and controls",
+          "Water supply and leak diagnosis"
+        ],
+        "sections": [
+          {
+            "heading": "Bosch dishwasher diagnosis",
+            "body": "Standing water, poor cleaning and a leak are distinct symptoms. We inspect the filter, drain path, water supply and wash system as appropriate rather than treating every fault as a pump problem."
+          },
+          {
+            "heading": "Built-in and kitchen appliance checks",
+            "body": "Bosch refrigeration and cooking appliances may be integrated into cabinetry. Share the model number, any display code and how the issue appears so we can plan access and testing."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Can you repair a Bosch dishwasher that will not drain?",
+            "answer": "Yes. We inspect the filter, drain path, pump and relevant controls to determine the cause."
+          },
+          {
+            "question": "Do you service Bosch built-in appliances?",
+            "answer": "Yes. We diagnose Bosch built-in refrigeration and cooking appliances as well as dishwashers."
+          }
+        ]
+      },
+      {
+        "slug": "thermador",
+        "name": "Thermador",
+        "status": "published",
+        "logo": "assets/logo/luxury/Thermador_Logo-3000x443.png",
+        "title": "Thermador Appliance Repair in Austin, TX",
+        "metaDescription": "Thermador built-in refrigerator, freezer, oven, range and cooktop repair in Austin. Nova diagnoses cooling and cooking appliance faults.",
+        "intro": "Thermador built-in refrigeration and cooking appliances deserve careful, model-specific diagnosis. Nova investigates the problem while considering cabinet access and installation.",
+        "focus": [
+          "Built-in refrigerator and freezer temperatures",
+          "Ice and water system concerns",
+          "Oven and range heating",
+          "Cooktop ignition and element faults"
+        ],
+        "sections": [
+          {
+            "heading": "Integrated refrigeration",
+            "body": "A warm Thermador refrigerator or freezer may involve doors, airflow, controls or the sealed system. We measure the symptom and inspect accessible components before discussing repair options."
+          },
+          {
+            "heading": "Cooking appliance service",
+            "body": "An oven that misses its set temperature or a burner that will not light needs testing appropriate to its gas or electric system. Provide the model and exact behavior when booking."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Do you service Thermador built-in refrigerators?",
+            "answer": "Yes. We diagnose temperature, airflow, water and relevant sealed-system concerns."
+          },
+          {
+            "question": "Can you inspect a Thermador range or cooktop?",
+            "answer": "Yes. We service cooking appliances and check the affected heating or ignition system."
+          }
+        ]
+      },
+      {
+        "slug": "viking",
+        "name": "Viking",
+        "status": "draft",
+        "logo": "assets/logo/luxury/viking website.webp"
+      },
+      {
+        "slug": "jennair",
+        "name": "JennAir",
+        "status": "draft",
+        "logo": "assets/logo/luxury/jennair-logo-png_seeklogo-378387.png"
+      },
+      {
+        "slug": "wolf",
+        "name": "Wolf",
+        "status": "published",
+        "logo": "assets/logo/luxury/wolf.png",
+        "title": "Wolf Range, Oven and Cooktop Repair in Austin, TX",
+        "metaDescription": "Wolf range, oven and cooktop repair in Austin. Nova diagnoses uneven heating, burner ignition and control problems with clear estimates.",
+        "intro": "Nova diagnoses Wolf cooking appliances in Austin homes, including ranges, ovens and cooktops. We measure the reported issue before recommending a repair.",
+        "focus": [
+          "Oven temperature and preheat issues",
+          "Gas burner ignition",
+          "Electric or induction cooking zones",
+          "Controls and sensors"
+        ],
+        "sections": [
+          {
+            "heading": "Oven and range heating",
+            "body": "A Wolf oven that heats unevenly needs temperature measurement and checks of the components used in the affected mode. A gas range burner that clicks but does not light follows a different diagnostic path."
+          },
+          {
+            "heading": "Preparing for a Wolf service call",
+            "body": "Share the model number, whether the appliance is gas or electric, which burner or mode fails, and any display code. Those details help identify the correct tests and possible parts."
+          }
+        ],
+        "faq": [
+          {
+            "question": "Do you repair Wolf ovens and ranges?",
+            "answer": "Yes. We diagnose Wolf cooking appliances, including heating, ignition and control issues."
+          },
+          {
+            "question": "What should I do if a gas burner will not light?",
+            "answer": "Stop using the affected burner and describe the symptoms when you contact us. If you smell gas, follow your gas utility’s safety instructions."
+          }
+        ]
+      }
+    ]
+  }
+}

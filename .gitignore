@@ -1,5 +1,7 @@
 # Dependencies (none currently, but in case any are added)
 node_modules/
+.env
+content/page-overrides/
 
 # OS / editor cruft
 .DS_Store

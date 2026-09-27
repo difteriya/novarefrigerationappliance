@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<script>(function(){var t="light";try{if(localStorage.getItem("theme")==="dark")t="dark";}catch(e){}document.documentElement.setAttribute("data-theme",t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Same-Day Appliance Repair in Austin, TX | Nova</title>
@@ -19,13 +19,13 @@
 <meta property="og:image" content="https://novarefrigerationappliance.com/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Nova Refrigeration & Appliance Repair — same-day appliance and refrigerator repair in Austin, Texas">
+<meta property="og:image:alt" content="Nova Refrigeration &amp; Appliance Repair — same-day appliance and refrigerator repair in Austin, Texas">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Same-Day Appliance Repair in Austin, TX | Nova">
 <meta name="twitter:description" content="Fast, reliable residential appliance and refrigerator repair in Austin, Texas and surrounding areas. Same-day service. Call (512) 740-0408.">
 <meta name="twitter:image" content="https://novarefrigerationappliance.com/assets/og-image.jpg">
 <meta name="theme-color" content="#0b2a4a">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/styles.css?v=20260927-13">
 </head>
 <body><script type="application/ld+json">
 {
@@ -114,22 +114,29 @@
 </div>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="index.html">
+    <a class="brand" href="/">
       <img class="logo-mark logo-dark" src="assets/logo.svg" alt="Nova Refrigeration & Appliance Repair logo" width="48" height="54">
       <img class="logo-mark logo-white" src="assets/logo-white.svg" alt="Nova Refrigeration & Appliance Repair logo" width="48" height="54">
       <span>Nova Refrigeration<small>Refrigeration &amp; Appliance Repair</small></span>
     </a>
     <nav class="nav" aria-label="Main navigation">
-      <a href="index.html" class="active" aria-current="page">Home</a>
-      <a href="about.html">About</a>
-      <a href="services.html">Services</a>
-      <a href="service-areas.html">Service Areas</a>
-      <a href="our-work.html">Our Work</a>
-      <a href="contact.html">Contact</a>
+      <a href="/" class="active" aria-current="page">Home</a>
+      <details class="nav-group"><summary>Services</summary><div class="nav-submenu">
+        <a href="/services">All Services</a>
+        <a href="/services/refrigerator-repair">Refrigerator Repair</a><a href="/services/ice-maker-repair">Ice Maker Repair</a><a href="/services/freezer-repair">Freezer Repair</a><a href="/services/washer-repair">Washer Repair</a><a href="/services/dryer-repair">Dryer Repair</a><a href="/services/dishwasher-repair">Dishwasher Repair</a><a href="/services/oven-repair">Oven &amp; Range Repair</a><a href="/services/cooktop-repair">Cooktop Repair</a>
+      </div></details>
+      <details class="nav-group"><summary>Explore</summary><div class="nav-submenu">
+        <a href="/service-areas">Service Areas</a>
+        <a href="/our-work">Our Work</a>
+        <a href="/blog">Repair Guides</a>
+        <a href="/brands">Brands</a>
+        <a href="/about">About Us</a>
+      </div></details>
+      <a href="/contact">Contact</a>
     </nav>
     <div class="header-actions">
-      <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
-      <a class="btn btn-call" href="tel:+15127400408">📞 Call Now</a>
+      <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.3 15.7A9 9 0 0 1 8.3 3.7 9 9 0 1 0 20.3 15.7Z"/></svg></button>
+      <a class="btn btn-call" href="tel:+15127400408">Call Now</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -145,9 +152,90 @@
       <span>✓ Sealed-System Specialists</span>
     </div>
     <div class="hero-cta">
-      <a class="btn btn-call btn-lg" href="tel:+15127400408">📞 Call Now: (512) 740-0408</a>
-      <a class="btn btn-outline btn-lg" href="sms:+15127400408?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">💬 Text Us</a>
-      <a class="btn btn-ghost btn-lg" href="contact.html">Request Service</a>
+      <a class="btn btn-call btn-lg" href="tel:+15127400408">Call Now: (512) 740-0408</a>
+      <a class="btn btn-outline btn-lg" href="sms:+15127400408?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">Text Us</a>
+      <a class="btn btn-ghost btn-lg" href="/contact">Request Service</a>
+    </div>
+    <div class="hero-truck">
+      <img src="assets/nova-frontier-black.webp" alt="Black Nova-branded Nissan Frontier pickup facing left" width="1921" height="720" fetchpriority="high" decoding="async">
+    </div>
+  </div>
+</section>
+
+<section class="brand-logos" aria-labelledby="brand-logos-title">
+  <h2 id="brand-logos-title" class="sr-only">Appliance brands we service</h2>
+  <div class="brand-logo-row">
+    <div class="brand-logo-track">
+      <div class="brand-logo-group"><span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/residential/whirlpool%20logo1.webp" alt="Whirlpool logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/samsung.png" alt="Samsung logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper brand-logo-crop" src="assets/logo/residential/roper-1.jpg" alt="Roper logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/Maytag-logo-500x281.png" alt="Maytag logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/LG_logo_(2014).svg.webp" alt="LG logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/ge-appliances.png" alt="GE Appliances logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/residential/Frigidaire-Logo-500x281.png" alt="Frigidaire logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper brand-logo-crop" src="assets/logo/residential/electrolux.webp" alt="Electrolux logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/residential/bosch.webp" alt="Bosch logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/residential/Amana-Logo-500x300.png" alt="Amana logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/wolf.png" alt="Wolf logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-viking" src="assets/logo/luxury/viking%20website.webp" alt="Viking logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/true%20logo1.webp" alt="True Residential logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/thor%20kitchen.png" alt="Thor Kitchen logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Thermador_Logo-3000x443.png" alt="Thermador logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Sub-Zero_(logo).svg.webp" alt="Sub-Zero logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/luxury/sppedqueen.webp" alt="Speed Queen logo" width="160" height="72" loading="lazy" decoding="async"></span></div>
+      <div class="brand-logo-group" aria-hidden="true"><span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/residential/whirlpool%20logo1.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/samsung.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper brand-logo-crop" src="assets/logo/residential/roper-1.jpg" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/Maytag-logo-500x281.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/LG_logo_(2014).svg.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/residential/ge-appliances.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/residential/Frigidaire-Logo-500x281.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper brand-logo-crop" src="assets/logo/residential/electrolux.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/residential/bosch.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/residential/Amana-Logo-500x300.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/wolf.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-viking" src="assets/logo/luxury/viking%20website.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/true%20logo1.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/thor%20kitchen.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Thermador_Logo-3000x443.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Sub-Zero_(logo).svg.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/luxury/sppedqueen.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span></div>
+    </div>
+  </div>
+  <div class="brand-logo-row brand-logo-row-reverse">
+    <div class="brand-logo-track">
+      <div class="brand-logo-group"><span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Smeg_Logo-s1280.png" alt="Smeg logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/monogram.png" alt="Monogram logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/luxury/miele-logo-png_seeklogo-92498.png" alt="Miele logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/kitchenaid.png" alt="KitchenAid logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/luxury/jennair-logo-png_seeklogo-378387.png" alt="JennAir logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/luxury/gaggenau-logo.png" alt="Gaggenau logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-invert" src="assets/logo/luxury/fisher%20paykel.png" alt="Fisher &amp; Paykel logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/dacor-logo-png-transparent.png" alt="Dacor logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Cove_(logo).svg.webp" alt="Cove logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Asko_logo_wordmark-700x159.png" alt="Asko logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/67620f34e25f7843bb22e15f_monogram-logo-sandstone.svg" alt="Monogram logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper brand-logo-crop" src="assets/logo/commercial/Turbo_air_1200x666.png" alt="Turbo Air logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/commercial/true-manufacturing.png" alt="True Manufacturing logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/commercial/traulsen.png" alt="Traulsen logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/commercial/scotsman.png" alt="Scotsman logo" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/commercial/hoshizaki.png" alt="Hoshizaki logo" width="160" height="72" loading="lazy" decoding="async"></span></div>
+      <div class="brand-logo-group" aria-hidden="true"><span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Smeg_Logo-s1280.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/monogram.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/luxury/miele-logo-png_seeklogo-92498.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/kitchenaid.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/luxury/jennair-logo-png_seeklogo-378387.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-crop" src="assets/logo/luxury/gaggenau-logo.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-invert" src="assets/logo/luxury/fisher%20paykel.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/dacor-logo-png-transparent.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Cove_(logo).svg.webp" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/Asko_logo_wordmark-700x159.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/luxury/67620f34e25f7843bb22e15f_monogram-logo-sandstone.svg" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper brand-logo-crop" src="assets/logo/commercial/Turbo_air_1200x666.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/commercial/true-manufacturing.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/commercial/traulsen.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image" src="assets/logo/commercial/scotsman.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span>
+        <span class="brand-logo-item"><img class="brand-logo-image brand-logo-paper" src="assets/logo/commercial/hoshizaki.png" alt="" width="160" height="72" loading="lazy" decoding="async"></span></div>
     </div>
   </div>
 </section>
@@ -162,12 +250,30 @@
     <div class="grid grid-2 promo-grid">
       
     <div class="card promo-card">
-      <div class="promo-media"><img src="assets/promo-labor.webp" alt="Flat Minimum Labor Rate" width="1000" height="571" loading="lazy" decoding="async"><span class="promo-badge">Service Special</span></div>
+      <div class="promo-media"><img src="assets/promo-first-repair.webp" alt="Nova appliance repair technician greeting a new customer at home" width="1200" height="800" loading="lazy" decoding="async"><span class="promo-badge">New Customers</span></div>
       <div class="promo-body">
-        <div class="promo-price">$185 <span>minimum labor</span></div>
-        <h3>Flat Minimum Labor Rate</h3>
-        <p>Straightforward, up-front pricing on every visit — a $185 minimum labor charge covers diagnosis and getting hands on the repair. No hidden fees, no surprises.</p>
-        <a class="btn btn-call" href="tel:+15127400408">📞 Claim This Offer</a>
+        <div class="promo-price">$20 OFF <span>first repair labor</span></div>
+        <h3>First-Time Customer Discount</h3>
+        <p>New to Nova? Get $20 off labor on your first completed appliance repair. Mention this offer when booking. One offer per visit; cannot be combined with other discounts.</p>
+        <a class="btn btn-call" href="tel:+15127400408">Claim This Offer</a>
+      </div>
+    </div>
+    <div class="card promo-card">
+      <div class="promo-media"><img src="assets/promo-second-appliance.webp" alt="Technician inspecting a washer with a refrigerator in the same home" width="1200" height="800" loading="lazy" decoding="async"><span class="promo-badge">Same-Visit Savings</span></div>
+      <div class="promo-body">
+        <div class="promo-price">$25 OFF <span>second appliance labor</span></div>
+        <h3>Second Appliance Discount</h3>
+        <p>Need two appliances repaired? Get $25 off labor for the second appliance when both repairs are completed during the same visit. Mention this offer when booking.</p>
+        <a class="btn btn-call" href="tel:+15127400408">Claim This Offer</a>
+      </div>
+    </div>
+    <div class="card promo-card">
+      <div class="promo-media"><img src="assets/promo-community-discount.webp" alt="Older homeowner and first responder with an appliance technician at home" width="1200" height="800" loading="lazy" decoding="async"><span class="promo-badge">Community Appreciation</span></div>
+      <div class="promo-body">
+        <div class="promo-price">$20 OFF <span>for seniors &amp; first responders</span></div>
+        <h3>Senior &amp; First Responder Discount</h3>
+        <p>Seniors age 65+ and first responders receive $20 off labor on a completed appliance repair. Mention this offer when booking. Cannot be combined with the military discount or other offers.</p>
+        <a class="btn btn-call" href="tel:+15127400408">Claim This Offer</a>
       </div>
     </div>
     <div class="card promo-card">
@@ -176,7 +282,7 @@
         <div class="promo-price">$30 OFF <span>for military</span></div>
         <h3>Military Discount</h3>
         <p>A thank-you to those who serve. Active-duty and veteran households receive $30 off their appliance repair. Just mention it when you book.</p>
-        <a class="btn btn-call" href="tel:+15127400408">📞 Claim This Offer</a>
+        <a class="btn btn-call" href="tel:+15127400408">Claim This Offer</a>
       </div>
     </div>
     </div>
@@ -224,63 +330,57 @@
     </div>
     <div class="grid grid-3">
       
-    <a class="card service-card" href="services/refrigerator-repair.html">
+    <a class="card service-card" href="/services/refrigerator-repair">
       <div class="icon"><img src="assets/icons/refrigerator-repair.svg" alt="Refrigerator Repair icon" width="44" height="44"></div>
       <h3>Refrigerator Repair</h3>
       <p>Fridge not cooling, leaking, or making noise? We diagnose and fix all refrigerator problems fast.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/ice-maker-repair.html">
+    <a class="card service-card" href="/services/ice-maker-repair">
       <div class="icon"><img src="assets/icons/ice-maker-repair.svg" alt="Ice Maker Repair icon" width="44" height="44"></div>
       <h3>Ice Maker Repair</h3>
       <p>No ice, slow ice, or an overflowing ice maker? We get it producing again.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/freezer-repair.html">
+    <a class="card service-card" href="/services/freezer-repair">
       <div class="icon"><img src="assets/icons/freezer-repair.svg" alt="Freezer Repair icon" width="44" height="44"></div>
       <h3>Freezer Repair</h3>
       <p>Freezer not freezing or building up frost? Protect your frozen goods with a fast repair.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/washer-repair.html">
+    <a class="card service-card" href="/services/washer-repair">
       <div class="icon"><img src="assets/icons/washer-repair.svg" alt="Washer Repair icon" width="44" height="44"></div>
       <h3>Washer Repair</h3>
       <p>Washer won't drain, spin, or start? We repair top-load and front-load washers.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/dryer-repair.html">
+    <a class="card service-card" href="/services/dryer-repair">
       <div class="icon"><img src="assets/icons/dryer-repair.svg" alt="Dryer Repair icon" width="44" height="44"></div>
       <h3>Dryer Repair</h3>
       <p>Dryer not heating or taking forever? Gas and electric dryer repair, including vent issues.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/dishwasher-repair.html">
+    <a class="card service-card" href="/services/dishwasher-repair">
       <div class="icon"><img src="assets/icons/dishwasher-repair.svg" alt="Dishwasher Repair icon" width="44" height="44"></div>
       <h3>Dishwasher Repair</h3>
       <p>Dishes not getting clean or water pooling at the bottom? We fix it.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/oven-repair.html">
+    <a class="card service-card" href="/services/oven-repair">
       <div class="icon"><img src="assets/icons/oven-repair.svg" alt="Oven & Range Repair icon" width="44" height="44"></div>
       <h3>Oven & Range Repair</h3>
       <p>Oven not heating or heating unevenly? Gas and electric oven & range repair.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/cooktop-repair.html">
+    <a class="card service-card" href="/services/cooktop-repair">
       <div class="icon"><img src="assets/icons/cooktop-repair.svg" alt="Cooktop Repair icon" width="44" height="44"></div>
       <h3>Cooktop Repair</h3>
       <p>Burner or igniter trouble on your cooktop? We repair gas and electric cooktops.</p>
       <span class="arrow">Learn more →</span>
     </a>
-    <a class="card service-card" href="services/microwave-repair.html">
-      <div class="icon"><img src="assets/icons/microwave-repair.svg" alt="Microwave Repair icon" width="44" height="44"></div>
-      <h3>Microwave Repair</h3>
-      <p>Microwave not heating or door not latching? We repair built-in and OTR microwaves.</p>
-      <span class="arrow">Learn more →</span>
-    </a>
     </div>
     <div style="text-align:center;margin-top:36px">
-      <a class="btn btn-primary btn-lg" href="services.html">View All Services →</a>
+      <a class="btn btn-primary btn-lg" href="/services">View All Services →</a>
     </div>
   </div>
 </section>
@@ -415,7 +515,7 @@
       </details>
       <details class="faq-item">
         <summary>How do I schedule a repair?</summary>
-        <div class="faq-body">Call us, send a text, or use the Request Service form on our website. Tell us your appliance, brand, and the problem, and we'll get you scheduled — often the same day.</div>
+        <div class="faq-body">Call us, send a text, or use the Request Service form on our website. Tell us your appliance, brand, and the problem, and we&#39;ll get you scheduled — often the same day.</div>
       </details>
     </div>
   </div>
@@ -428,18 +528,18 @@
       <h2>Proudly Serving the Greater Austin, Texas Area</h2>
     </div>
     <div class="area-grid">
-      <a href="areas/austin.html">📍 Austin</a>
-      <a href="areas/round-rock.html">📍 Round Rock</a>
-      <a href="areas/cedar-park.html">📍 Cedar Park</a>
-      <a href="areas/georgetown.html">📍 Georgetown</a>
-      <a href="areas/pflugerville.html">📍 Pflugerville</a>
-      <a href="areas/lakeway.html">📍 Lakeway</a>
-      <a href="areas/bee-cave.html">📍 Bee Cave</a>
-      <a href="areas/west-lake-hills.html">📍 West Lake Hills</a>
-      <a href="areas/buda.html">📍 Buda</a>
-      <a href="areas/kyle.html">📍 Kyle</a>
-      <a href="areas/the-hills.html">📍 The Hills</a>
-      <a href="areas/dripping-springs.html">📍 Dripping Springs</a>
+      <a href="/areas/austin">📍 Austin</a>
+      <a href="/areas/round-rock">📍 Round Rock</a>
+      <a href="/areas/cedar-park">📍 Cedar Park</a>
+      <a href="/areas/georgetown">📍 Georgetown</a>
+      <a href="/areas/pflugerville">📍 Pflugerville</a>
+      <a href="/areas/lakeway">📍 Lakeway</a>
+      <a href="/areas/bee-cave">📍 Bee Cave</a>
+      <a href="/areas/west-lake-hills">📍 West Lake Hills</a>
+      <a href="/areas/buda">📍 Buda</a>
+      <a href="/areas/kyle">📍 Kyle</a>
+      <a href="/areas/the-hills">📍 The Hills</a>
+      <a href="/areas/dripping-springs">📍 Dripping Springs</a>
     </div>
   </div>
 </section>
@@ -450,9 +550,9 @@
     <h2>Call Now for Fast Appliance Repair Service</h2>
     <p>Same-day service available across the Austin, Texas metro. Talk to a real technician and get your appliance fixed today.</p>
     <div class="hero-cta">
-      <a class="btn btn-call btn-lg" href="tel:+15127400408">📞 Call (512) 740-0408</a>
-      <a class="btn btn-outline btn-lg" href="sms:+15127400408?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">💬 Text Us</a>
-      <a class="btn btn-ghost btn-lg" href="contact.html">Schedule Service Online</a>
+      <a class="btn btn-call btn-lg" href="tel:+15127400408">Call (512) 740-0408</a>
+      <a class="btn btn-outline btn-lg" href="sms:+15127400408?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">Text Us</a>
+      <a class="btn btn-ghost btn-lg" href="/contact">Schedule Service Online</a>
     </div>
   </div>
 </section>
@@ -460,7 +560,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a class="brand" href="index.html" style="color:#fff">
+        <a class="brand" href="/" style="color:#fff">
           <img class="logo-mark" src="assets/logo-white.svg" alt="Nova Refrigeration & Appliance Repair logo" width="48" height="54">
           <span style="color:#fff">Nova Refrigeration<small style="color:#9fc1e3">Refrigeration &amp; Appliance Repair</small></span>
         </a>
@@ -470,38 +570,41 @@
       <div>
         <h4>Services</h4>
         <ul>
-        <li><a href="services/refrigerator-repair.html">Refrigerator Repair</a></li>
-        <li><a href="services/ice-maker-repair.html">Ice Maker Repair</a></li>
-        <li><a href="services/freezer-repair.html">Freezer Repair</a></li>
-        <li><a href="services/washer-repair.html">Washer Repair</a></li>
-        <li><a href="services/dryer-repair.html">Dryer Repair</a></li>
-        <li><a href="services/dishwasher-repair.html">Dishwasher Repair</a></li>
-        <li><a href="services/oven-repair.html">Oven & Range Repair</a></li>
+        <li><a href="/services/refrigerator-repair">Refrigerator Repair</a></li>
+        <li><a href="/services/ice-maker-repair">Ice Maker Repair</a></li>
+        <li><a href="/services/freezer-repair">Freezer Repair</a></li>
+        <li><a href="/services/washer-repair">Washer Repair</a></li>
+        <li><a href="/services/dryer-repair">Dryer Repair</a></li>
+        <li><a href="/services/dishwasher-repair">Dishwasher Repair</a></li>
+        <li><a href="/services/oven-repair">Oven & Range Repair</a></li>
+        <li><a href="/services/cooktop-repair">Cooktop Repair</a></li>
         </ul>
       </div>
       <div>
         <h4>Service Areas</h4>
         <ul>
-        <li><a href="areas/austin.html">Austin</a></li>
-        <li><a href="areas/round-rock.html">Round Rock</a></li>
-        <li><a href="areas/cedar-park.html">Cedar Park</a></li>
-        <li><a href="areas/georgetown.html">Georgetown</a></li>
-        <li><a href="areas/pflugerville.html">Pflugerville</a></li>
-        <li><a href="areas/lakeway.html">Lakeway</a></li>
-        <li><a href="areas/bee-cave.html">Bee Cave</a></li>
-        <li><a href="areas/west-lake-hills.html">West Lake Hills</a></li>
-        <li><a href="service-areas.html">View all areas →</a></li>
+        <li><a href="/areas/austin">Austin</a></li>
+        <li><a href="/areas/round-rock">Round Rock</a></li>
+        <li><a href="/areas/cedar-park">Cedar Park</a></li>
+        <li><a href="/areas/georgetown">Georgetown</a></li>
+        <li><a href="/areas/pflugerville">Pflugerville</a></li>
+        <li><a href="/areas/lakeway">Lakeway</a></li>
+        <li><a href="/areas/bee-cave">Bee Cave</a></li>
+        <li><a href="/areas/west-lake-hills">West Lake Hills</a></li>
+        <li><a href="/service-areas">View all areas →</a></li>
         </ul>
       </div>
       <div>
         <h4>Company</h4>
         <ul>
-          <li><a href="about.html">About Us</a></li>
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="our-work.html">Our Work</a></li>
-          <li><a href="index.html#reviews">Reviews</a></li>
-          <li><a href="index.html#faq">FAQ</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/our-work">Our Work</a></li>
+          <li><a href="/blog">Repair Guides</a></li>
+          <li><a href="/brands">Brands</a></li>
+          <li><a href="/#reviews">Reviews</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/contact">Contact Us</a></li>
         </ul>
       </div>
     </div>
@@ -512,8 +615,8 @@
   </div>
 </footer>
 <div class="mobile-callbar">
-  <a class="mc-call" href="tel:+15127400408">📞 Call Now</a>
-  <a class="mc-text" href="sms:+15127400408?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">💬 Text Us</a>
+  <a class="mc-call" href="tel:+15127400408">Call Now</a>
+  <a class="mc-text" href="sms:+15127400408?&body=Hi%20Nova%2C%20I%20need%20appliance%20repair%20service.">Text Us</a>
 </div>
 <script src="js/main.js"></script>
 <script type="application/ld+json">
@@ -631,7 +734,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Refrigerator Repair",
-          "url": "https://novarefrigerationappliance.com/services/refrigerator-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/refrigerator-repair"
         }
       },
       {
@@ -639,7 +742,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Ice Maker Repair",
-          "url": "https://novarefrigerationappliance.com/services/ice-maker-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/ice-maker-repair"
         }
       },
       {
@@ -647,7 +750,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Freezer Repair",
-          "url": "https://novarefrigerationappliance.com/services/freezer-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/freezer-repair"
         }
       },
       {
@@ -655,7 +758,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Washer Repair",
-          "url": "https://novarefrigerationappliance.com/services/washer-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/washer-repair"
         }
       },
       {
@@ -663,7 +766,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Dryer Repair",
-          "url": "https://novarefrigerationappliance.com/services/dryer-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/dryer-repair"
         }
       },
       {
@@ -671,7 +774,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Dishwasher Repair",
-          "url": "https://novarefrigerationappliance.com/services/dishwasher-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/dishwasher-repair"
         }
       },
       {
@@ -679,7 +782,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Oven & Range Repair",
-          "url": "https://novarefrigerationappliance.com/services/oven-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/oven-repair"
         }
       },
       {
@@ -687,15 +790,7 @@
         "itemOffered": {
           "@type": "Service",
           "name": "Cooktop Repair",
-          "url": "https://novarefrigerationappliance.com/services/cooktop-repair.html"
-        }
-      },
-      {
-        "@type": "Offer",
-        "itemOffered": {
-          "@type": "Service",
-          "name": "Microwave Repair",
-          "url": "https://novarefrigerationappliance.com/services/microwave-repair.html"
+          "url": "https://novarefrigerationappliance.com/services/cooktop-repair"
         }
       }
     ]

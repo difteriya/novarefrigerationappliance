@@ -6,6 +6,10 @@
 
 const fs = require("fs");
 const path = require("path");
+const COLLECTIONS = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "collections.json"), "utf8"));
+const HOME = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "home.json"), "utf8"));
+const SERVICE_CONTENT = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "services.json"), "utf8"));
+const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
 /* ----------------------------------------------------------------------- */
 /* CONFIG — replace these placeholders with real business details          */
@@ -110,15 +114,6 @@ const SERVICES = [
     intro: "We fix burner, igniter, switch, and gas valve problems on gas and electric cooktops so every burner lights and heats the way it should.",
     issues: ["Burner issues", "Igniter problems", "Switch replacement", "Gas valve replacement"],
   },
-  {
-    slug: "microwave-repair",
-    name: "Microwave Repair",
-    icon: "📻",
-    blurb: "Microwave not heating or door not latching? We repair built-in and OTR microwaves.",
-    metaDesc: "Microwave repair in Austin, TX. Not heating, door latch faults or turntable problems — built-in and over-the-range units. Call (512) 740-0408.",
-    intro: "We repair over-the-range and built-in microwaves — heating problems, door and switch failures, and control board faults.",
-    issues: ["Door issues", "Heating issues", "Switch replacement", "Control board repair"],
-  },
 ];
 
 const SPECIALIZED = [
@@ -135,6 +130,43 @@ const SPECIALIZED = [
 ];
 
 const BRANDS = ["Samsung","LG","Whirlpool","Maytag","KitchenAid","GE Appliances","Frigidaire","Electrolux","Bosch","Thermador","Sub-Zero","Viking","JennAir","Wolf"];
+
+// Every supplied logo appears in the two rows directly below the home hero.
+const BRAND_LOGOS = [
+  ["Whirlpool", "residential/whirlpool logo1.webp"],
+  ["Samsung", "residential/samsung.png"],
+  ["Roper", "residential/roper-1.jpg"],
+  ["Maytag", "residential/Maytag-logo-500x281.png"],
+  ["LG", "residential/LG_logo_(2014).svg.webp"],
+  ["GE Appliances", "residential/ge-appliances.png"],
+  ["Frigidaire", "residential/Frigidaire-Logo-500x281.png"],
+  ["Electrolux", "residential/electrolux.webp"],
+  ["Bosch", "residential/bosch.webp"],
+  ["Amana", "residential/Amana-Logo-500x300.png"],
+  ["Wolf", "luxury/wolf.png"],
+  ["Viking", "luxury/viking website.webp"],
+  ["True Residential", "luxury/true logo1.webp"],
+  ["Thor Kitchen", "luxury/thor kitchen.png"],
+  ["Thermador", "luxury/Thermador_Logo-3000x443.png"],
+  ["Sub-Zero", "luxury/Sub-Zero_(logo).svg.webp"],
+  ["Speed Queen", "luxury/sppedqueen.webp"],
+  ["Smeg", "luxury/Smeg_Logo-s1280.png"],
+  ["Monogram", "luxury/monogram.png"],
+  ["Miele", "luxury/miele-logo-png_seeklogo-92498.png"],
+  ["KitchenAid", "luxury/kitchenaid.png"],
+  ["JennAir", "luxury/jennair-logo-png_seeklogo-378387.png"],
+  ["Gaggenau", "luxury/gaggenau-logo.png"],
+  ["Fisher & Paykel", "luxury/fisher paykel.png"],
+  ["Dacor", "luxury/dacor-logo-png-transparent.png"],
+  ["Cove", "luxury/Cove_(logo).svg.webp"],
+  ["Asko", "luxury/Asko_logo_wordmark-700x159.png"],
+  ["Monogram", "luxury/67620f34e25f7843bb22e15f_monogram-logo-sandstone.svg"],
+  ["Turbo Air", "commercial/Turbo_air_1200x666.png"],
+  ["True Manufacturing", "commercial/true-manufacturing.png"],
+  ["Traulsen", "commercial/traulsen.png"],
+  ["Scotsman", "commercial/scotsman.png"],
+  ["Hoshizaki", "commercial/hoshizaki.png"],
+];
 
 /* Per-city content. Everything below the slug/name is unique to that city so
  * the area pages are genuinely distinct pages rather than one template with a
@@ -439,37 +471,10 @@ const REVIEWS = [
   { stars: 5, text: "Dryer was taking three cycles to dry a load. Turned out to be a clogged vent and a failing heating element. Fast, friendly, and reasonably priced.", who: "Ben S.", where: "Leander" },
 ];
 
-const FAQS = [
-  { q: "Do you offer same-day appliance repair?", a: "Yes. We offer same-day service for most refrigerator, freezer, and appliance repairs throughout the Austin metro area whenever scheduling allows. Call us early in the day for the best chance at a same-day appointment." },
-  { q: "What areas do you serve?", a: "We serve Austin and the surrounding metro, including Round Rock, Cedar Park, Leander, Georgetown, Pflugerville, Lakeway, Bee Cave, West Lake Hills, Buda, Kyle, and Hutto." },
-  { q: "Which appliance brands do you repair?", a: "We service all major brands including Samsung, LG, Whirlpool, Maytag, KitchenAid, GE Appliances, Frigidaire, Electrolux, Bosch, Thermador, Sub-Zero, Viking, JennAir, and Wolf — plus built-in and high-end refrigeration like Sub-Zero, Thermador, Viking, Bosch, and GE Monogram." },
-  { q: "Do you repair sealed refrigeration systems?", a: "Yes. Sealed-system work is a specialty. We handle compressor replacement, refrigerant leak diagnosis and repair, filter drier replacement, system evacuation and recharge, capillary tube restrictions, and full sealed-system rebuilds." },
-  { q: "How much does a repair cost?", a: "Every repair is different. We provide a clear diagnosis and an up-front estimate before any work begins, so you can decide with no surprises. Call or request service online for a quote." },
-  { q: "Do you repair both gas and electric appliances?", a: "Yes. We service gas and electric ovens, ranges, cooktops, and dryers, including ignition, gas valve, and ventilation-related issues." },
-  { q: "How do I schedule a repair?", a: "Call us, send a text, or use the Request Service form on our website. Tell us your appliance, brand, and the problem, and we'll get you scheduled — often the same day." },
-];
+const FAQS = HOME.faq.map((item) => ({ q: item.question, a: item.answer }));
 
 /* Active promotions — swap the `img` files in /assets for your own photos any time. */
-const PROMOS = [
-  {
-    img: "assets/promo-labor.webp",
-    w: 1000, h: 571,
-    badge: "Service Special",
-    price: "$185",
-    unit: "minimum labor",
-    title: "Flat Minimum Labor Rate",
-    desc: "Straightforward, up-front pricing on every visit — a $185 minimum labor charge covers diagnosis and getting hands on the repair. No hidden fees, no surprises.",
-  },
-  {
-    img: "assets/promo-military.webp",
-    w: 540, h: 360,
-    badge: "We Support Our Troops",
-    price: "$30 OFF",
-    unit: "for military",
-    title: "Military Discount",
-    desc: "A thank-you to those who serve. Active-duty and veteran households receive $30 off their appliance repair. Just mention it when you book.",
-  },
-];
+const PROMOS = HOME.offers;
 
 /* Trust / value highlights shown on the home page. */
 const FEATURES = [
@@ -496,36 +501,51 @@ const telHref = `tel:${C.phoneTel}`;
 // `depth` = how many directories deep the page is from root (0 = root, 1 = services/x.html)
 const rel = (depth, p) => (depth === 0 ? "" : "../".repeat(depth)) + p;
 
-function head(depth, { title, desc, canonical, noindex }) {
+function cleanPath(p) {
+  return p === "index.html" || p === "" ? "" : p.replace(/\.html$/, "");
+}
+
+function cleanPublicLinks(html, relPath) {
   const base = `https://${C.domain}/`;
+  const domain = C.domain.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  html = html.replace(new RegExp(`https://${domain}/([a-z0-9/-]+)\\.html(?=[#?"<\\s]|$)`, "g"), (_, p) => base + cleanPath(p + ".html"));
+  return html.replace(/href="([^"]+\.html(?:[?#][^"]*)?)"/g, (match, href) => {
+    const target = new URL(href, base + relPath);
+    if (target.origin !== new URL(base).origin) return match;
+    return `href="/${cleanPath(target.pathname.slice(1))}${target.search}${target.hash}"`;
+  });
+}
+
+function head(depth, { title, desc, canonical, noindex, image, imageAlt, ogType }) {
+  const base = `https://${C.domain}/`;
+  const socialImage = image || C.ogImage;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
-<script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
+<script>(function(){var t="light";try{if(localStorage.getItem("theme")==="dark")t="dark";}catch(e){}document.documentElement.setAttribute("data-theme",t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${title}</title>
+<title>${esc(title)}</title>
 <link rel="icon" href="${rel(depth, "assets/favicon.svg")}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="${rel(depth, "assets/favicon.svg")}">
-<meta name="description" content="${desc}">
+<meta name="description" content="${esc(desc)}">
 ${noindex ? '<meta name="robots" content="noindex, follow">\n' : ""}
 <link rel="canonical" href="${base}${canonical === "index.html" ? "" : canonical}">
-<meta property="og:title" content="${title}">
-<meta property="og:description" content="${desc}">
-<meta property="og:type" content="website">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:type" content="${ogType || "website"}">
 <meta property="og:site_name" content="${C.name}">
 <meta property="og:locale" content="en_US">
 <meta property="og:url" content="${base}${canonical === "index.html" ? "" : canonical}">
-<meta property="og:image" content="${base}${C.ogImage}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="${C.name} \u2014 same-day appliance and refrigerator repair in ${C.cityState}">
+<meta property="og:image" content="${base}${socialImage}">
+${image ? "" : '<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">'}
+<meta property="og:image:alt" content="${esc(imageAlt || `${C.name} — same-day appliance and refrigerator repair in ${C.cityState}`)}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${title}">
-<meta name="twitter:description" content="${desc}">
-<meta name="twitter:image" content="${base}${C.ogImage}">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="${base}${socialImage}">
 <meta name="theme-color" content="#0b2a4a">
-<link rel="stylesheet" href="${rel(depth, "css/styles.css")}">
+<link rel="stylesheet" href="${rel(depth, "css/styles.css")}?v=20260927-13">
 </head>
 <body>`;
 }
@@ -552,15 +572,22 @@ function header(depth, active) {
     </a>
     <nav class="nav" aria-label="Main navigation">
       ${link("index.html", "Home", "home")}
-      ${link("about.html", "About", "about")}
-      ${link("services.html", "Services", "services")}
-      ${link("service-areas.html", "Service Areas", "areas")}
-      ${link("our-work.html", "Our Work", "work")}
+      <details class="nav-group"><summary${active === "services" || active.startsWith("service:") ? ' class="active"' : ""}>Services</summary><div class="nav-submenu">
+        ${link("services.html", "All Services", "services")}
+        ${SERVICES.map((s) => link("services/" + s.slug + ".html", esc(s.name), "service:" + s.slug)).join("")}
+      </div></details>
+      <details class="nav-group"><summary${["areas", "work", "blog", "brands"].includes(active) ? ' class="active"' : ""}>Explore</summary><div class="nav-submenu">
+        ${link("service-areas.html", "Service Areas", "areas")}
+        ${link("our-work.html", "Our Work", "work")}
+        ${link("blog.html", "Repair Guides", "blog")}
+        ${link("brands.html", "Brands", "brands")}
+        ${link("about.html", "About Us", "about")}
+      </div></details>
       ${link("contact.html", "Contact", "contact")}
     </nav>
     <div class="header-actions">
-      <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
-      <a class="btn btn-call" href="${telHref}">📞 Call Now</a>
+      <button class="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.3 15.7A9 9 0 0 1 8.3 3.7 9 9 0 1 0 20.3 15.7Z"/></svg></button>
+      <a class="btn btn-call" href="${telHref}">Call Now</a>
       <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -574,8 +601,8 @@ function ctaBand(depth) {
     <h2>Call Now for Fast Appliance Repair Service</h2>
     <p>Same-day service available across the ${C.cityState} metro. Talk to a real technician and get your appliance fixed today.</p>
     <div class="hero-cta">
-      <a class="btn btn-call btn-lg" href="${telHref}">📞 Call ${C.phoneDisplay}</a>
-      <a class="btn btn-outline btn-lg" href="${smsHref}">💬 Text Us</a>
+      <a class="btn btn-call btn-lg" href="${telHref}">Call ${C.phoneDisplay}</a>
+      <a class="btn btn-outline btn-lg" href="${smsHref}">Text Us</a>
       <a class="btn btn-ghost btn-lg" href="${rel(depth, "contact.html")}">Schedule Service Online</a>
     </div>
   </div>
@@ -583,7 +610,7 @@ function ctaBand(depth) {
 }
 
 function footer(depth) {
-  const sLinks = SERVICES.slice(0, 7)
+  const sLinks = SERVICES
     .map((s) => `<li><a href="${rel(depth, "services/" + s.slug + ".html")}">${s.name}</a></li>`).join("\n        ");
   const aLinks = AREAS.slice(0, 8)
     .map((a) => `<li><a href="${rel(depth, "areas/" + a.slug + ".html")}">${a.name}</a></li>`).join("\n        ");
@@ -618,6 +645,8 @@ function footer(depth) {
           <li><a href="${rel(depth, "about.html")}">About Us</a></li>
           <li><a href="${rel(depth, "privacy.html")}">Privacy Policy</a></li>
           <li><a href="${rel(depth, "our-work.html")}">Our Work</a></li>
+          <li><a href="${rel(depth, "blog.html")}">Repair Guides</a></li>
+          <li><a href="${rel(depth, "brands.html")}">Brands</a></li>
           <li><a href="${rel(depth, "index.html")}#reviews">Reviews</a></li>
           <li><a href="${rel(depth, "index.html")}#faq">FAQ</a></li>
           <li><a href="${rel(depth, "contact.html")}">Contact Us</a></li>
@@ -631,8 +660,8 @@ function footer(depth) {
   </div>
 </footer>
 <div class="mobile-callbar">
-  <a class="mc-call" href="${telHref}">📞 Call Now</a>
-  <a class="mc-text" href="${smsHref}">💬 Text Us</a>
+  <a class="mc-call" href="${telHref}">Call Now</a>
+  <a class="mc-text" href="${smsHref}">Text Us</a>
 </div>
 <script src="${rel(depth, "js/main.js")}"></script>
 ${localBusinessSchema()}
@@ -658,7 +687,7 @@ const SITE = `https://${C.domain}/`;
 const BIZ_ID = SITE + "#business";
 
 function ldBlock(obj) {
-  return `<script type="application/ld+json">\n${JSON.stringify(obj, null, 2)}\n</script>`;
+  return `<script type="application/ld+json">\n${JSON.stringify(obj, null, 2).replace(/</g, "\\u003c")}\n</script>`;
 }
 
 /* The business itself. Emitted on every page from footer() under one stable
@@ -749,12 +778,36 @@ const changed = new Set();
 
 function write(relPath, html) {
   const full = path.join(__dirname, relPath);
+  const override = path.join(__dirname, "content", "page-overrides", relPath);
+  if (relPath.endsWith(".html") && fs.existsSync(override)) {
+    const saved = fs.readFileSync(override, "utf8");
+    html = relPath === "index.html" ? syncHomeContent(saved, html) : saved;
+  }
+  if (relPath.endsWith(".html")) html = cleanPublicLinks(html, relPath);
   fs.mkdirSync(path.dirname(full), { recursive: true });
   let previous = null;
   try { previous = fs.readFileSync(full, "utf8"); } catch (e) {}
   if (previous !== html) changed.add(relPath.replace(/\\/g, "/"));
   fs.writeFileSync(full, html, "utf8");
   console.log("  wrote " + relPath);
+}
+
+/* Keep structured home content current even when the visual page editor has
+ * saved other customizations in an HTML override. */
+function syncHomeContent(saved, generated) {
+  for (const id of ["promos", "faq"]) {
+    const re = new RegExp(`<section\\b[^>]*\\bid=["']${id}["'][^>]*>[\\s\\S]*?<\\/section>`, "i");
+    const latest = generated.match(re)?.[0];
+    if (latest && re.test(saved)) saved = saved.replace(re, latest);
+  }
+  const scriptRe = /<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi;
+  const faqScript = [...generated.matchAll(scriptRe)].find(([block]) => {
+    try { return JSON.parse(block.replace(/^<script[^>]*>|<\/script>$/gi, "").trim())["@type"] === "FAQPage"; } catch { return false; }
+  })?.[0];
+  if (faqScript) saved = saved.replace(scriptRe, (block) => {
+    try { return JSON.parse(block.replace(/^<script[^>]*>|<\/script>$/gi, "").trim())["@type"] === "FAQPage" ? faqScript : block; } catch { return block; }
+  });
+  return saved;
 }
 
 /* Reuse the <lastmod> already published for pages that did not change. */
@@ -784,14 +837,14 @@ function serviceCards(depth) {
 }
 
 function promoCards(depth) {
-  return PROMOS.map((p) => `
+  return PROMOS.filter((p) => p.status !== "draft").map((p) => `
     <div class="card promo-card">
-      <div class="promo-media"><img src="${rel(depth, p.img)}" alt="${p.title}" width="${p.w}" height="${p.h}" loading="lazy" decoding="async"><span class="promo-badge">${p.badge}</span></div>
+      <div class="promo-media"><img src="${rel(depth, esc(p.img))}" alt="${esc(p.alt || p.title)}" width="${Number(p.w) || 1200}" height="${Number(p.h) || 800}" loading="lazy" decoding="async"><span class="promo-badge">${esc(p.badge)}</span></div>
       <div class="promo-body">
-        <div class="promo-price">${p.price} <span>${p.unit}</span></div>
-        <h3>${p.title}</h3>
-        <p>${p.desc}</p>
-        <a class="btn btn-call" href="${telHref}">📞 Claim This Offer</a>
+        <div class="promo-price">${esc(p.price)} <span>${esc(p.unit)}</span></div>
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.desc)}</p>
+        <a class="btn btn-call" href="${telHref}">Claim This Offer</a>
       </div>
     </div>`).join("");
 }
@@ -808,23 +861,49 @@ function featureCards() {
 function faqItems() {
   return FAQS.map((f) => `
       <details class="faq-item">
-        <summary>${f.q}</summary>
-        <div class="faq-body">${f.a}</div>
+        <summary>${esc(f.q)}</summary>
+        <div class="faq-body">${esc(f.a)}</div>
       </details>`).join("");
 }
 
 function faqSchema() {
-  return `<script type="application/ld+json">
-${JSON.stringify({
+  return ldBlock({
   "@context": "https://schema.org",
   "@type": "FAQPage",
   mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-}, null, 2)}
-</script>`;
+  });
 }
 
 function brandChips() {
   return BRANDS.map((b) => `<div class="chip">${b}</div>`).join("\n      ");
+}
+
+function brandLogoRow(logos, reverse = false) {
+  const items = (hidden) => logos.map(([name, file]) => {
+    const src = encodeURI(`assets/logo/${file}`);
+    const alt = hidden ? "" : `${name.replace(/&/g, "&amp;")} logo`;
+    const classes = ["brand-logo-image"];
+    if (name === "Viking") classes.push("brand-logo-viking");
+    if (name === "Fisher & Paykel") classes.push("brand-logo-invert");
+    if (["Whirlpool", "Bosch", "Electrolux", "Speed Queen", "Turbo Air", "Hoshizaki", "Roper"].includes(name)) classes.push("brand-logo-paper");
+    if (["Roper", "Amana", "Frigidaire", "JennAir", "Miele", "Gaggenau", "Turbo Air", "Electrolux"].includes(name)) classes.push("brand-logo-crop");
+    return `<span class="brand-logo-item"><img class="${classes.join(" ")}" src="${src}" alt="${alt}" width="160" height="72" loading="lazy" decoding="async"></span>`;
+  }).join("\n        ");
+  return `<div class="brand-logo-row${reverse ? " brand-logo-row-reverse" : ""}">
+    <div class="brand-logo-track">
+      <div class="brand-logo-group">${items(false)}</div>
+      <div class="brand-logo-group" aria-hidden="true">${items(true)}</div>
+    </div>
+  </div>`;
+}
+
+function brandLogoSection() {
+  const midpoint = Math.ceil(BRAND_LOGOS.length / 2);
+  return `<section class="brand-logos" aria-labelledby="brand-logos-title">
+  <h2 id="brand-logos-title" class="sr-only">Appliance brands we service</h2>
+  ${brandLogoRow(BRAND_LOGOS.slice(0, midpoint))}
+  ${brandLogoRow(BRAND_LOGOS.slice(midpoint), true)}
+</section>`;
 }
 
 function areaLinks(depth) {
@@ -858,12 +937,17 @@ function buildHome() {
       <span>✓ Sealed-System Specialists</span>
     </div>
     <div class="hero-cta">
-      <a class="btn btn-call btn-lg" href="${telHref}">📞 Call Now: ${C.phoneDisplay}</a>
-      <a class="btn btn-outline btn-lg" href="${smsHref}">💬 Text Us</a>
+      <a class="btn btn-call btn-lg" href="${telHref}">Call Now: ${C.phoneDisplay}</a>
+      <a class="btn btn-outline btn-lg" href="${smsHref}">Text Us</a>
       <a class="btn btn-ghost btn-lg" href="contact.html">Request Service</a>
+    </div>
+    <div class="hero-truck">
+      <img src="assets/nova-frontier-black.webp" alt="Black Nova-branded Nissan Frontier pickup facing left" width="1921" height="720" fetchpriority="high" decoding="async">
     </div>
   </div>
 </section>
+
+${brandLogoSection()}
 
 <section class="section" id="promos">
   <div class="container">
@@ -1016,8 +1100,8 @@ function buildAbout() {
       <div class="form-wrap">
         <h3>Need a repair now?</h3>
         <p class="form-note">Call or text and talk to a real technician. Same-day appointments available.</p>
-        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">📞 Call ${C.phoneDisplay}</a>
-        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%;margin-bottom:10px">💬 Text Us</a>
+        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">Call ${C.phoneDisplay}</a>
+        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%;margin-bottom:10px">Text Us</a>
         <a class="btn btn-ghost btn-lg" href="contact.html" style="width:100%">Request Service Online</a>
         <ul class="info-list" style="margin-top:18px">
           <li><span class="ico">📍</span><div><b>Service Area</b>${C.cityState} & surrounding metro</div></li>
@@ -1075,15 +1159,18 @@ function buildServicesOverview() {
 
 /* ---------- INDIVIDUAL SERVICE PAGES ---------- */
 function buildServicePages() {
+  const relatedGuides = { "refrigerator-repair": "refrigerator-warm-freezer-cold", "ice-maker-repair": "ice-maker-not-making-ice-guide", "washer-repair": "washer-not-draining-guide", "dryer-repair": "dryer-not-heating-guide" };
   SERVICES.forEach((s) => {
     const others = SERVICES.filter((o) => o.slug !== s.slug).slice(0, 4);
+    const warranty = SERVICE_CONTENT.warranty;
+    const serviceFaq = SERVICE_CONTENT.faq[s.slug] || [];
     const html = head(1, {
       title: `${s.name} in Austin, TX | Nova Refrigeration`,
       desc: s.metaDesc,
       canonical: "services/" + s.slug + ".html",
-    }) + serviceSchema(s)
+    }) + serviceSchema(s) + collectionFaqSchema(serviceFaq)
       + breadcrumbSchema([["Services", "services.html"], [s.name, null]])
-      + header(1, "services")
+      + header(1, "service:" + s.slug)
       + pageHero(1, {
           title: s.name,
           sub: s.blurb,
@@ -1098,6 +1185,8 @@ function buildServicePages() {
       <ul class="checklist">
         ${s.issues.map((i) => `<li>${i}</li>`).join("\n        ")}
       </ul>
+      ${(SERVICE_CONTENT.details[s.slug] || []).map((item) => `<h2>${esc(item.heading)}</h2><p>${esc(item.body)}</p>`).join("\n      ")}
+${relatedGuides[s.slug] ? `      <p class="related-service-link">Want to understand the symptoms first? Read our <a href="${rel(1, `blog/${relatedGuides[s.slug]}.html`)}">${esc(COLLECTIONS.blog.posts.find((post) => post.slug === relatedGuides[s.slug]).title)}</a>.</p>` : ""}
       <h2>All major brands serviced</h2>
       <p>We repair ${BRANDS.join(", ")}, and more — including high-end and built-in models.</p>
       <h2>Same-day service across the ${C.cityState} metro</h2>
@@ -1107,8 +1196,8 @@ function buildServicePages() {
       <div class="form-wrap">
         <h3>Request ${s.name}</h3>
         <p class="form-note">Talk to a real technician. Same-day appointments available.</p>
-        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">📞 Call ${C.phoneDisplay}</a>
-        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%;margin-bottom:10px">💬 Text Us</a>
+        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">Call ${C.phoneDisplay}</a>
+        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%;margin-bottom:10px">Text Us</a>
         <a class="btn btn-ghost btn-lg" href="${rel(1, "contact.html")}" style="width:100%">Schedule Online</a>
       </div>
       <div class="card" style="margin-top:22px">
@@ -1120,27 +1209,51 @@ function buildServicePages() {
     </div>
   </div>
 </section>
-` + ctaBand(1) + footer(1);
+<section class="section alt warranty-section" aria-labelledby="warranty-heading">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Our commitment</span>
+      <h2 id="warranty-heading">${esc(warranty.heading)}</h2>
+      <p>${esc(warranty.intro)}</p>
+    </div>
+    <div class="grid grid-2 warranty-grid">
+      ${warranty.cards.map((card) => `<div class="warranty-card"><span class="warranty-duration">${esc(card.duration)}</span><h3>${esc(card.title)}</h3><p>${esc(card.description)}</p></div>`).join("\n      ")}
+    </div>
+  </div>
+</section>
+` + faqSection(serviceFaq) + ctaBand(1) + footer(1);
     write("services/" + s.slug + ".html", html);
   });
 }
 
 /* ---------- SERVICE AREAS OVERVIEW ---------- */
 function buildAreasOverview() {
+  const areaFaq = [
+    { question: "Which Austin-area cities does Nova serve?", answer: "We serve Austin and nearby communities including Round Rock, Cedar Park, Georgetown, Pflugerville, Lakeway, Bee Cave, West Lake Hills, Buda, Kyle, The Hills, and Dripping Springs. Contact us to confirm an address near the edge of the service area." },
+    { question: "Can I request more than one appliance repair during a visit?", answer: "Yes. Tell us about every appliance and its symptoms when booking so we can plan the appointment and explain the available options." }
+  ];
   const html = head(0, {
     title: `Service Areas in the Austin Metro | Nova Repair`,
     desc: `Appliance and refrigerator repair across the ${C.cityState} metro — Austin, Round Rock, Cedar Park, Georgetown, Lakeway, Buda, Kyle and more.`,
     canonical: "service-areas.html",
-  }) + breadcrumbSchema([["Service Areas", null]]) + header(0, "areas")
+  }) + breadcrumbSchema([["Service Areas", null]]) + collectionSchema("Appliance Repair Service Areas", "service-areas.html", `Appliance repair across the ${C.cityState} metro.`, AREAS.map((a) => ({ name: a.name, url: `areas/${a.slug}.html` }))) + collectionFaqSchema(areaFaq) + header(0, "areas")
     + pageHero(0, { title: "Service Areas", sub: `Proudly serving ${C.cityState} and communities across the metro with same-day appliance repair.`, crumbs: "Service Areas" })
     + `
 <section class="section">
   <div class="container">
-    <div class="area-grid">
-      ${areaLinks(0)}
+    <div class="section-head"><span class="eyebrow">Local coverage</span><h2>Find appliance repair in your city</h2><p>Choose your area for local service details, common appliance concerns, and the neighborhoods we cover.</p></div>
+    <div class="area-overview-grid">
+      ${AREAS.map((a) => `<a class="area-overview-card" href="${rel(0, `areas/${a.slug}.html`)}"><h3>${esc(a.name)}, TX</h3><p>${esc(a.heroSub)}</p><span>Explore ${esc(a.name)} service →</span></a>`).join("\n      ")}
     </div>
   </div>
 </section>
+<section class="section alt">
+  <div class="container"><div class="section-head"><span class="eyebrow">What we repair</span><h2>Refrigeration, laundry, and kitchen appliances</h2><p>Our service area covers refrigerator and freezer cooling, ice makers, washers, dryers, dishwashers, ovens, and cooktops. Start with the appliance that needs attention, then check your city page.</p></div><div class="grid grid-3 area-service-links"><a href="${rel(0, "services/refrigerator-repair.html")}">Refrigerator Repair</a><a href="${rel(0, "services/washer-repair.html")}">Washer Repair</a><a href="${rel(0, "services/oven-repair.html")}">Oven &amp; Range Repair</a></div></div>
+</section>
+<section class="section">
+  <div class="container narrow"><h2>Before you request an appointment</h2><p>Share the appliance brand and model number, the symptom, any error code, and your city. If more than one appliance needs attention, mention both when you contact us. Those details help us plan a useful visit and discuss availability.</p></div>
+</section>
+${faqSection(areaFaq)}
 <section class="section alt">
   <div class="container" style="text-align:center">
     <iframe class="map-embed" loading="lazy" title="Service area map"
@@ -1203,6 +1316,9 @@ function buildAreaPages() {
       <h2>Neighborhoods we cover in ${a.name}</h2>
       <p>We take calls throughout ${a.name} and ${a.county}, including ${a.hoods.slice(0, -1).join(", ")} and ${a.hoods[a.hoods.length - 1]}. If you are just outside these, call us anyway \u2014 we cover the surrounding ${C.cityState} metro.</p>
 
+      <h2>Planning a repair visit in ${a.name}</h2>
+      <p>Have the appliance model number, a description of the problem, and any error code ready when you contact us. If your concern involves ${a.common[0][0].toLowerCase()}, note when it started and whether the symptom changes during a cycle or at a particular time of day. That information helps us plan the right diagnostic checks.</p>
+
       <h2>${a.name} appliance repair questions</h2>
       <div class="faq">
         ${a.faqs.map(([q, ans]) => `<details class="faq-item"><summary>${q}</summary><div class="faq-body"><p>${ans}</p></div></details>`).join("\n        ")}
@@ -1215,8 +1331,8 @@ function buildAreaPages() {
       <div class="form-wrap">
         <h3>Book Repair in ${a.name}</h3>
         <p class="form-note">Same-day appointments available. Talk to a real technician.</p>
-        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">\ud83d\udcde Call ${C.phoneDisplay}</a>
-        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%;margin-bottom:10px">\ud83d\udcac Text Us</a>
+        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">Call ${C.phoneDisplay}</a>
+        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%;margin-bottom:10px">Text Us</a>
         <a class="btn btn-ghost btn-lg" href="${rel(1, "contact.html")}" style="width:100%">Schedule Online</a>
       </div>
       <iframe class="map-embed" style="margin-top:22px;height:240px" loading="lazy" title="${a.name}, TX service area map"
@@ -1233,29 +1349,73 @@ ${JSON.stringify(faqLd, null, 2)}
 }
 
 /* ---------- OUR WORK ---------- */
+const published = (items) => items.filter((item) => item.status === "published");
+const faqSection = (faq) => !faq?.length ? "" : `<section class="section section-alt"><div class="container narrow"><h2>Frequently Asked Questions</h2>${faq.map((item) => `<details class="faq-item"><summary>${esc(item.question)}</summary><div class="faq-body">${esc(item.answer)}</div></details>`).join("")}</div></section>`;
+const collectionFaqSchema = (faq) => !faq?.length ? "" : ldBlock({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((item) => ({ "@type": "Question", name: item.question, acceptedAnswer: { "@type": "Answer", text: item.answer } })) });
+const collectionSchema = (name, url, description, items) => ldBlock({ "@context": "https://schema.org", "@type": "CollectionPage", name, url: SITE + url, description, mainEntity: { "@type": "ItemList", itemListElement: items.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: item.name || item.title, url: SITE + item.url })) } });
+const collectionCard = (depth, item) => `<a class="collection-card" href="${rel(depth, item.url)}">${item.image ? `<div class="collection-media"><img src="${rel(depth, item.image)}" alt="${esc(item.imageAlt || item.title)}" loading="lazy"></div>` : ""}<div class="collection-card-body">${item.kicker ? `<span class="eyebrow">${esc(item.kicker)}</span>` : ""}<h2>${esc(item.title)}</h2><p>${esc(item.excerpt)}</p><span class="arrow">Read more →</span></div></a>`;
+
 function buildOurWork() {
-  const html = head(0, {
-    title: `Our Work | ${C.name}`,
-    desc: `Recent appliance and refrigeration repairs completed by Nova across the ${C.cityState} metro — built-ins, sealed systems and everyday fixes.`,
-    canonical: "our-work.html",
-  }) + breadcrumbSchema([["Our Work", null]]) + header(0, "work")
-    + pageHero(0, { title: "Our Work", sub: "A look at recent appliance and refrigeration repairs we've completed across the metro.", crumbs: "Our Work" })
-    + `
-<section class="section">
-  <div class="container">
-    <div class="coming-soon">
-      <div class="coming-soon-icon">🛠️</div>
-      <h2>Coming Soon</h2>
-      <p>We're putting together a gallery of our completed repairs and projects. Check back soon to see our work in action.</p>
-      <div class="hero-cta" style="justify-content:center">
-        <a class="btn btn-call btn-lg" href="${telHref}">📞 Call ${C.phoneDisplay}</a>
-        <a class="btn btn-ghost btn-lg" href="contact.html">Request Service</a>
-      </div>
-    </div>
-  </div>
-</section>
-` + ctaBand(0) + footer(0);
-  write("our-work.html", html);
+  const data = COLLECTIONS.work;
+  const projects = published(data.projects);
+  const cards = projects.map((project) => ({ ...project, url: `work/${project.slug}.html`, kicker: project.sample ? "Illustrative example" : `${project.appliance} · ${project.area}` }));
+  write("our-work.html", head(0, { title: `${data.title} | ${C.name}`, desc: data.metaDescription, canonical: "our-work.html" })
+    + breadcrumbSchema([["Our Work", null]]) + collectionSchema(data.title, "our-work.html", data.metaDescription, cards) + collectionFaqSchema(data.faq)
+    + header(0, "work") + pageHero(0, { title: data.title, sub: data.intro, crumbs: "Our Work" })
+    + `<section class="section"><div class="container"><div class="collection-intro"><span class="eyebrow">Project gallery</span><h2>How appliance problems get solved</h2><p>Each story describes the symptoms, the diagnostic path, and the result. The examples below are illustrative placeholders until verified customer projects and photos are available.</p></div><div class="collection-grid">${cards.map((card) => collectionCard(0, card)).join("")}</div></div></section>`
+    + faqSection(data.faq) + ctaBand(0) + footer(0));
+  for (const project of projects) {
+    const url = `work/${project.slug}.html`;
+    const title = project.seoTitle || project.title;
+    write(url, head(1, { title, desc: project.metaDescription, canonical: url, noindex: !!project.sample, image: project.image, imageAlt: project.imageAlt })
+      + breadcrumbSchema([["Our Work", "our-work.html"], [project.title, null]])
+      + ldBlock({ "@context": "https://schema.org", "@type": "WebPage", name: project.title, description: project.metaDescription, url: SITE + url, image: SITE + project.image, about: { "@type": "Service", name: `${project.appliance} repair`, provider: { "@id": BIZ_ID } } }) + collectionFaqSchema(project.faq)
+      + header(1, "work") + pageHero(1, { title: project.title, sub: project.excerpt, crumbs: `<a href="${rel(1, "our-work.html")}">Our Work</a> › ${esc(project.title)}` })
+      + `<section class="section"><div class="container article-layout"><article class="article-main">${project.sample ? `<p class="sample-note"><strong>Illustrative example:</strong> This scenario is sample content and does not describe a verified customer job.</p>` : ""}<img class="article-hero-image" src="${rel(1, project.image)}" alt="${esc(project.imageAlt)}"><div class="case-facts"><span>${esc(project.appliance)}</span><span>${esc(project.brand)}</span><span>${esc(project.area)}</span></div><h2>The problem</h2><p>${esc(project.problem)}</p><h2>Diagnosis</h2><p>${esc(project.diagnosis)}</p><h2>Result</h2><p>${esc(project.solution)}</p></article><aside class="article-aside"><h3>Have a similar problem?</h3><p>Describe your appliance and its symptoms. We can plan a diagnosis for your specific unit.</p><a class="btn btn-call" href="${telHref}">Call ${C.phoneDisplay}</a></aside></div></section>`
+      + faqSection(project.faq) + ctaBand(1) + footer(1));
+  }
+}
+
+function buildBlog() {
+  const data = COLLECTIONS.blog;
+  const posts = published(data.posts);
+  const cards = posts.map((post) => ({ ...post, url: `blog/${post.slug}.html`, kicker: post.datePublished }));
+  write("blog.html", head(0, { title: `${data.title} | ${C.name}`, desc: data.metaDescription, canonical: "blog.html" })
+    + breadcrumbSchema([["Repair Guides", null]]) + collectionSchema(data.title, "blog.html", data.metaDescription, cards) + collectionFaqSchema(data.faq)
+    + header(0, "blog") + pageHero(0, { title: data.title, sub: data.intro, crumbs: "Repair Guides" })
+    + `<section class="section"><div class="container"><div class="collection-grid">${cards.map((card) => collectionCard(0, card)).join("")}</div></div></section>`
+    + faqSection(data.faq) + ctaBand(0) + footer(0));
+  for (const post of posts) {
+    const url = `blog/${post.slug}.html`;
+    write(url, head(1, { title: post.seoTitle || post.title, desc: post.metaDescription, canonical: url, image: post.image, imageAlt: post.imageAlt, ogType: "article" })
+      + breadcrumbSchema([["Repair Guides", "blog.html"], [post.title, null]])
+      + ldBlock({ "@context": "https://schema.org", "@type": "BlogPosting", headline: post.title, description: post.metaDescription, image: SITE + post.image, datePublished: post.datePublished, dateModified: post.dateModified, author: { "@type": "Organization", name: post.author, url: SITE }, publisher: { "@id": BIZ_ID }, mainEntityOfPage: SITE + url }) + collectionFaqSchema(post.faq)
+      + header(1, "blog") + pageHero(1, { title: post.title, sub: post.excerpt, crumbs: `<a href="${rel(1, "blog.html")}">Repair Guides</a> › ${esc(post.title)}` })
+      + `<section class="section"><div class="container article-layout"><article class="article-main"><p class="article-meta">${esc(post.datePublished)} · ${esc(post.author)}</p><img class="article-hero-image" src="${rel(1, post.image)}" alt="${esc(post.imageAlt)}">${post.sections.map((section) => `<h2>${esc(section.heading)}</h2>${section.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("")}`).join("")}${post.relatedService && SERVICES.some((s) => s.slug === post.relatedService) ? `<p class="related-service-link">Need hands-on help? Explore our <a href="${rel(1, `services/${post.relatedService}.html`)}">${esc(SERVICES.find((s) => s.slug === post.relatedService).name)} service</a> in Austin.</p>` : ""}${post.sources?.length ? `<div class="article-sources"><h2>Sources</h2><ul>${post.sources.filter((source) => /^https:\/\//.test(source.url)).map((source) => `<li><a href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.label)}</a></li>`).join("")}</ul></div>` : ""}</article><aside class="article-aside"><h3>Need a diagnosis?</h3><p>Tell us the model and what your appliance is doing. We serve Austin and nearby communities.</p><a class="btn btn-call" href="${telHref}">Call ${C.phoneDisplay}</a></aside></div></section>`
+      + faqSection(post.faq) + ctaBand(1) + footer(1));
+  }
+}
+
+function buildBrands() {
+  const data = COLLECTIONS.brands;
+  const profiles = published(data.profiles);
+  const cards = profiles.map((brand) => ({ ...brand, url: `brands/${brand.slug}.html` }));
+  write("brands.html", head(0, { title: `${data.title} | ${C.name}`, desc: data.metaDescription, canonical: "brands.html" })
+    + breadcrumbSchema([["Brands", null]]) + collectionSchema(data.title, "brands.html", data.metaDescription, cards) + collectionFaqSchema(data.faq)
+    + header(0, "brands") + pageHero(0, { title: data.title, sub: data.intro, crumbs: "Brands" })
+    + `<section class="section"><div class="container"><div class="brand-page-grid">${cards.map((brand) => `<a class="brand-page-card" href="${rel(0, brand.url)}"><img src="${rel(0, brand.logo)}" alt="${esc(brand.name)} logo" loading="lazy"><h2>${esc(brand.name)}</h2><span>Explore service information →</span></a>`).join("")}</div></div></section>`
+    + faqSection(data.faq) + ctaBand(0) + footer(0));
+  for (const brand of profiles) {
+    const url = `brands/${brand.slug}.html`;
+    const index = profiles.findIndex((item) => item.slug === brand.slug);
+    const related = Array.from({ length: Math.min(4, profiles.length - 1) }, (_, offset) => profiles[(index + offset + 1) % profiles.length]);
+    write(url, head(1, { title: brand.title, desc: brand.metaDescription, canonical: url })
+      + breadcrumbSchema([["Brands", "brands.html"], [brand.name, null]])
+      + ldBlock({ "@context": "https://schema.org", "@type": "Service", name: brand.title, description: brand.metaDescription, url: SITE + url, provider: { "@id": BIZ_ID }, areaServed: { "@type": "City", name: "Austin", addressRegion: "TX" }, serviceType: `${brand.name} appliance repair` }) + collectionFaqSchema(brand.faq)
+      + header(1, "brands") + pageHero(1, { title: brand.title, sub: brand.intro, crumbs: `<a href="${rel(1, "brands.html")}">Brands</a> › ${esc(brand.name)}` })
+      + `<section class="section"><div class="container brand-detail"><div><span class="eyebrow">Brand service</span><h2>Common ${esc(brand.name)} issues we diagnose</h2><p>${esc(brand.intro)}</p><ul class="checklist">${brand.focus.map((item) => `<li>${esc(item)}</li>`).join("")}</ul>${(brand.sections || []).map((section) => `<h2>${esc(section.heading)}</h2><p>${esc(section.body)}</p>`).join("")}<p class="form-note">${esc(brand.name)} is a trademark of its owner. Nova does not claim manufacturer authorization.</p></div><div class="brand-logo-panel"><img src="${rel(1, brand.logo)}" alt="${esc(brand.name)} logo"><a class="btn btn-call" href="${telHref}">Call ${C.phoneDisplay}</a></div></div></section><section class="section alt"><div class="container"><div class="section-head"><span class="eyebrow">More brands</span><h2>Other appliance brands we service</h2><p>Explore repair information for other brands used in Austin homes.</p></div><div class="brand-page-grid">${related.map((item) => `<a class="brand-page-card" href="${rel(1, `brands/${item.slug}.html`)}"><img src="${rel(1, item.logo)}" alt="${esc(item.name)} logo" loading="lazy"><h3>${esc(item.name)}</h3><span>View brand service →</span></a>`).join("")}</div></div></section>`
+      + faqSection(brand.faq) + ctaBand(1) + footer(1));
+  }
 }
 
 /* ---------- PRIVACY POLICY ---------- */
@@ -1332,8 +1492,8 @@ function build404() {
 <section class="section">
   <div class="container">
     <div class="hero-cta" style="justify-content:center;margin-bottom:36px">
-      <a class="btn btn-call btn-lg" href="${telHref}">\ud83d\udcde Call ${C.phoneDisplay}</a>
-      <a class="btn btn-primary btn-lg" href="${smsHref}">\ud83d\udcac Text Us</a>
+      <a class="btn btn-call btn-lg" href="${telHref}">Call ${C.phoneDisplay}</a>
+      <a class="btn btn-primary btn-lg" href="${smsHref}">Text Us</a>
       <a class="btn btn-ghost btn-lg" href="contact.html">Request Service</a>
     </div>
     <h2 style="text-align:center">Repairs we handle</h2>
@@ -1445,8 +1605,8 @@ function buildContact() {
         <li><span class="ico">🕒</span><div><b>Hours</b>${C.hours}</div></li>
       </ul>
       <div style="margin:18px 0">
-        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">📞 Call Now</a>
-        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%">💬 Text Us</a>
+        <a class="btn btn-call btn-lg" href="${telHref}" style="width:100%;margin-bottom:10px">Call Now</a>
+        <a class="btn btn-primary btn-lg" href="${smsHref}" style="width:100%">Text Us</a>
       </div>
       <iframe class="map-embed" loading="lazy" title="Service area map"
         src="https://www.google.com/maps?q=${encodeURIComponent(C.mapQuery)}&output=embed"></iframe>
@@ -1472,6 +1632,11 @@ function siteUrls() {
     ...AREAS.map((a) => ({ loc: "areas/" + a.slug + ".html", changefreq: "monthly", priority: "0.7" })),
     { loc: "about.html",          changefreq: "yearly",  priority: "0.6" },
     { loc: "our-work.html",       changefreq: "monthly", priority: "0.6" },
+    ...published(COLLECTIONS.work.projects).filter((p) => !p.sample).map((p) => ({ loc: `work/${p.slug}.html`, changefreq: "monthly", priority: "0.6" })),
+    { loc: "blog.html",           changefreq: "weekly", priority: "0.7" },
+    ...published(COLLECTIONS.blog.posts).map((p) => ({ loc: `blog/${p.slug}.html`, changefreq: "monthly", priority: "0.6" })),
+    { loc: "brands.html",         changefreq: "monthly", priority: "0.7" },
+    ...published(COLLECTIONS.brands.profiles).map((p) => ({ loc: `brands/${p.slug}.html`, changefreq: "monthly", priority: "0.6" })),
     { loc: "privacy.html",        changefreq: "yearly",  priority: "0.3" },
   ];
 }
@@ -1482,8 +1647,8 @@ function buildSitemap() {
   const previous = previousLastmod();
   const urls = siteUrls()
     .map((u) => `  <url>
-    <loc>${base}${u.loc}</loc>
-    <lastmod>${changed.has(u.file || u.loc) ? today : previous.get(base + u.loc) || today}</lastmod>
+    <loc>${base}${cleanPath(u.loc)}</loc>
+    <lastmod>${changed.has(u.file || u.loc) ? today : previous.get(base + cleanPath(u.loc)) || today}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
   </url>`)
@@ -1516,6 +1681,8 @@ buildServicePages();
 buildAreasOverview();
 buildAreaPages();
 buildOurWork();
+buildBlog();
+buildBrands();
 buildContact();
 buildPrivacy();
 build404();

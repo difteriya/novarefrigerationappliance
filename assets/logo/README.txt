@@ -1,0 +1,1 @@
+Nova recommended appliance brand logo pack. Transparent PNG wordmarks, normalized for web use. Trademarks belong to their respective owners. Use “brands we service”; do not claim authorized status without written authorization.

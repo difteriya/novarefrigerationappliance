@@ -1,0 +1,134 @@
+[
+  {
+    "brand": "Whirlpool",
+    "category": "residential",
+    "file": "residential/whirlpool.png",
+    "source": "https://www.arisit.com/cdn/shop/files/whirlpool_logo-black-01.png?v=1651541702"
+  },
+  {
+    "brand": "LG",
+    "category": "residential",
+    "file": "residential/lg.png",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/LG_Electronics_Logo_%28modern%29.svg/3840px-LG_Electronics_Logo_%28modern%29.svg.png"
+  },
+  {
+    "brand": "GE Appliances",
+    "category": "residential",
+    "file": "residential/ge-appliances.png",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/GE_Appliances_logo.svg/3840px-GE_Appliances_logo.svg.png"
+  },
+  {
+    "brand": "Maytag",
+    "category": "residential",
+    "file": "residential/maytag.png",
+    "source": "https://cdn.freebiesupply.com/logos/large/2x/maytag-3-logo-png-transparent.png"
+  },
+  {
+    "brand": "Viking",
+    "category": "luxury",
+    "file": "luxury/viking.png",
+    "source": "https://images.seeklogo.com/logo-png/23/1/viking-logo-png_seeklogo-233342.png"
+  },
+  {
+    "brand": "JennAir",
+    "category": "luxury",
+    "file": "luxury/jennair.png",
+    "source": "https://images.seeklogo.com/logo-png/37/1/jennair-logo-png_seeklogo-378387.png"
+  },
+  {
+    "brand": "Thermador",
+    "category": "luxury",
+    "file": "luxury/thermador.png",
+    "source": "https://images.seeklogo.com/logo-png/13/1/thermador-logo-png_seeklogo-139441.png"
+  },
+  {
+    "brand": "Miele",
+    "category": "luxury",
+    "file": "luxury/miele.png",
+    "source": "https://logoeps.com/wp-content/uploads/2013/04/miele-black-vector-logo.png"
+  },
+  {
+    "brand": "Frigidaire",
+    "category": "residential",
+    "file": "residential/frigidaire.png",
+    "source": "https://cdn.freebiesupply.com/logos/large/2x/frigidaire-1-logo-png-transparent.png"
+  },
+  {
+    "brand": "Samsung",
+    "category": "residential",
+    "file": "residential/samsung.png",
+    "source": "https://toppng.com/public/uploads/preview/samsung-logo-png-transparent-background-photoshop-11661248819m0mcm18det.png"
+  },
+  {
+    "brand": "True Residential",
+    "category": "luxury",
+    "file": "luxury/true-residential.png",
+    "source": "https://cdn.shopify.com/s/files/1/0614/5035/4750/files/True_Residential_logo_black.png?height=628&pad_color=fff&v=1748455140&width=1200"
+  },
+  {
+    "brand": "True Manufacturing",
+    "category": "commercial",
+    "file": "commercial/true-manufacturing.png",
+    "source": "https://www.logotypes101.com/logos/555/5A79B4FFD3DE3043DCABBE8173E4F0A8/true-manufacturing-logo.png"
+  },
+  {
+    "brand": "Traulsen",
+    "category": "commercial",
+    "file": "commercial/traulsen.png",
+    "source": "https://restaurantcity.com/cdn/shop/collections/Traulsen_Logo_1740x630.png?v=1605284253"
+  },
+  {
+    "brand": "Scotsman",
+    "category": "commercial",
+    "file": "commercial/scotsman.png",
+    "source": "https://ddius.com/wp-content/uploads/2022/12/Scottsman-Brand-Main-Wide-White-Background-1.png"
+  },
+  {
+    "brand": "Manitowoc Ice",
+    "category": "commercial",
+    "file": "commercial/manitowoc-ice.png",
+    "source": "https://images.seeklogo.com/logo-png/52/1/manitowoc-ice-logo-png_seeklogo-527980.png"
+  },
+  {
+    "brand": "Sub-Zero",
+    "category": "luxury",
+    "file": "luxury/sub-zero.png",
+    "source": "https://seeklogo.com/images/S/sub-zero-logo-B06C723D76-seeklogo.com.png"
+  },
+  {
+    "brand": "Hoshizaki",
+    "category": "commercial",
+    "file": "commercial/hoshizaki.png",
+    "source": "https://images.seeklogo.com/logo-png/27/1/hoshizaki-america-inc-logo-png_seeklogo-272306.png"
+  },
+  {
+    "brand": "Turbo Air",
+    "category": "commercial",
+    "file": "commercial/turbo-air.png",
+    "source": "https://s3.amazonaws.com/zcom-media/sites/a0i0L00000VH4TSQA1/media/mediamanager/Turbo_Air_logo.jpg"
+  },
+  {
+    "brand": "Ice-O-Matic",
+    "category": "commercial",
+    "file": "commercial/ice-o-matic.png",
+    "source": "https://icemachinesplus.com/cdn/shop/collections/ice-o-matic-logo-company-ice-products.jpg?crop=center&height=1200&v=1727890590&width=1200"
+  },
+  {
+    "brand": "KitchenAid",
+    "category": "residential",
+    "file": "residential/kitchenaid.png",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/c/c6/Kitchenaid_logo.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+  },
+  {
+    "brand": "Wolf",
+    "category": "luxury",
+    "file": "luxury/wolf.png",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/a/ad/Wolf_%28logo%29.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+  },
+  {
+    "brand": "Bosch",
+    "category": "residential",
+    "file": "residential/bosch.png",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/c/c3/Bosch_logo.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+  }
+]

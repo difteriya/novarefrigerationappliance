@@ -1,0 +1,81 @@
+{
+  "faq": [
+    {
+      "question": "Do you offer same-day appliance repair?",
+      "answer": "Yes. We offer same-day service for most refrigerator, freezer, and appliance repairs throughout the Austin metro area whenever scheduling allows. Call us early in the day for the best chance at a same-day appointment."
+    },
+    {
+      "question": "What areas do you serve?",
+      "answer": "We serve Austin and the surrounding metro, including Round Rock, Cedar Park, Leander, Georgetown, Pflugerville, Lakeway, Bee Cave, West Lake Hills, Buda, Kyle, and Hutto."
+    },
+    {
+      "question": "Which appliance brands do you repair?",
+      "answer": "We service all major brands including Samsung, LG, Whirlpool, Maytag, KitchenAid, GE Appliances, Frigidaire, Electrolux, Bosch, Thermador, Sub-Zero, Viking, JennAir, and Wolf — plus built-in and high-end refrigeration like Sub-Zero, Thermador, Viking, Bosch, and GE Monogram."
+    },
+    {
+      "question": "Do you repair sealed refrigeration systems?",
+      "answer": "Yes. Sealed-system work is a specialty. We handle compressor replacement, refrigerant leak diagnosis and repair, filter drier replacement, system evacuation and recharge, capillary tube restrictions, and full sealed-system rebuilds."
+    },
+    {
+      "question": "How much does a repair cost?",
+      "answer": "Every repair is different. We provide a clear diagnosis and an up-front estimate before any work begins, so you can decide with no surprises. Call or request service online for a quote."
+    },
+    {
+      "question": "Do you repair both gas and electric appliances?",
+      "answer": "Yes. We service gas and electric ovens, ranges, cooktops, and dryers, including ignition, gas valve, and ventilation-related issues."
+    },
+    {
+      "question": "How do I schedule a repair?",
+      "answer": "Call us, send a text, or use the Request Service form on our website. Tell us your appliance, brand, and the problem, and we'll get you scheduled — often the same day."
+    }
+  ],
+  "offers": [
+    {
+      "img": "assets/promo-first-repair.webp",
+      "w": 1200,
+      "h": 800,
+      "alt": "Nova appliance repair technician greeting a new customer at home",
+      "badge": "New Customers",
+      "price": "$20 OFF",
+      "unit": "first repair labor",
+      "title": "First-Time Customer Discount",
+      "desc": "New to Nova? Get $20 off labor on your first completed appliance repair. Mention this offer when booking. One offer per visit; cannot be combined with other discounts.",
+      "status": "published"
+    },
+    {
+      "img": "assets/promo-second-appliance.webp",
+      "w": 1200,
+      "h": 800,
+      "alt": "Technician inspecting a washer with a refrigerator in the same home",
+      "badge": "Same-Visit Savings",
+      "price": "$25 OFF",
+      "unit": "second appliance labor",
+      "title": "Second Appliance Discount",
+      "desc": "Need two appliances repaired? Get $25 off labor for the second appliance when both repairs are completed during the same visit. Mention this offer when booking.",
+      "status": "published"
+    },
+    {
+      "img": "assets/promo-community-discount.webp",
+      "w": 1200,
+      "h": 800,
+      "alt": "Older homeowner and first responder with an appliance technician at home",
+      "badge": "Community Appreciation",
+      "price": "$20 OFF",
+      "unit": "for seniors & first responders",
+      "title": "Senior & First Responder Discount",
+      "desc": "Seniors age 65+ and first responders receive $20 off labor on a completed appliance repair. Mention this offer when booking. Cannot be combined with the military discount or other offers.",
+      "status": "published"
+    },
+    {
+      "img": "assets/promo-military.webp",
+      "w": 540,
+      "h": 360,
+      "badge": "We Support Our Troops",
+      "price": "$30 OFF",
+      "unit": "for military",
+      "title": "Military Discount",
+      "desc": "A thank-you to those who serve. Active-duty and veteran households receive $30 off their appliance repair. Just mention it when you book.",
+      "status": "published"
+    }
+  ]
+}
