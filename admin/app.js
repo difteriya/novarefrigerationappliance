@@ -5,6 +5,7 @@
   const groups = { blog: { title: "Repair guides", field: "posts", singular: "guide" }, work: { title: "Our work", field: "projects", singular: "project" }, brands: { title: "Brands", field: "profiles", singular: "brand" } };
   let state = null, view = "home", selected = 0, pageList = [], pagePath = "index.html", sourceMode = false, pageHtml = "";
   let pageLayoutVersion = "", pageSharedBefore = {};
+  let mediaSearch = "", mediaFilter = "all";
   let savedBrandMeta = "", savedBrandProfiles = new Map();
   function brandMeta() { const { profiles, ...meta } = state.brands; return meta; }
   async function saveBrands() {
@@ -65,9 +66,11 @@
   document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", async () => {
     view = button.dataset.view; selected = 0;
     document.querySelectorAll("[data-view]").forEach((item) => item.classList.toggle("active", item === button));
-    await render();
+    status("");
+    try { await render(); } catch (error) { status(error.message, true); $("#workspace").innerHTML = '<section class="panel"><h2>Could not load this section</h2><p>Please try again.</p></section>'; }
   }));
   $("#save").addEventListener("click", async () => {
+    if (view === "media") return;
     const button = $("#save"); button.disabled = true; status("Saving…");
     try {
       if (view === "pages" || view === "contact") await savePage();
@@ -109,13 +112,14 @@
     const image = key === "image" || key === "logo" || key === "img";
     const long = /description|intro|excerpt|answer|problem|diagnosis|solution|paragraph|body|^Value$/i.test(key) && String(value).length > 75;
     const control = long ? `<textarea data-field="${encoded}">${esc(value)}</textarea>` : `<input ${typeof value === "number" ? 'type="number" min="1"' : ""} data-field="${encoded}" value="${esc(value)}">`;
-    return `<div class="field"><label>${esc(label(key))}</label>${image ? `<div class="upload-row">${control}<button type="button" class="upload-button" data-upload="${encoded}">Upload</button></div>` : control}</div>`;
+    return `<div class="field"><label>${esc(label(key))}</label>${image ? `<div class="upload-row">${control}<button type="button" class="upload-button" data-upload="${encoded}">Upload</button><button type="button" class="upload-button" data-media="${encoded}">Media library</button></div>` : control}</div>`;
   }
   function bindFields(rerender) {
     document.querySelectorAll("[data-field]").forEach((input) => input.addEventListener("input", () => set(JSON.parse(input.dataset.field), input.type === "checkbox" ? input.checked : input.type === "number" ? Number(input.value) : input.value)));
     document.querySelectorAll("[data-add]").forEach((button) => button.addEventListener("click", () => { const path = JSON.parse(button.dataset.add); const array = at(path); array.push(arrayTemplate(path.at(-1), array, path)); rerender(); }));
     document.querySelectorAll("[data-remove]").forEach((button) => button.addEventListener("click", () => { const path = JSON.parse(button.dataset.remove); at(path.slice(0, -1)).splice(path.at(-1), 1); rerender(); }));
     document.querySelectorAll("[data-upload]").forEach((button) => button.addEventListener("click", async () => { try { const path = JSON.parse(button.dataset.upload); const uploaded = await pickUpload(); if (uploaded) { set(path, uploaded); rerender(); status("Image uploaded. Save to publish."); } } catch (error) { status(error.message, true); } }));
+    document.querySelectorAll("[data-media]").forEach((button) => button.addEventListener("click", async () => { try { const path = JSON.parse(button.dataset.media); const chosen = await chooseImage(path.includes("gallery")); if (chosen) { set(path, chosen); rerender(); status("Image selected. Save to publish."); } } catch (error) { status(error.message, true); } }));
   }
   function renderHome() {
     $("#workspace").innerHTML = `<section class="panel"><h2>Home page FAQ</h2><p class="help">These questions appear on the home page and in its structured data.</p>${field("faq", state.home.faq, ["home", "faq"])}</section><section class="panel"><h2>Current offers</h2><p class="help">Add offers as drafts, upload their images, then publish when the details are approved.</p>${field("offers", state.home.offers, ["home", "offers"])}</section>`;
@@ -142,7 +146,39 @@
   }
   async function pickUpload() {
     const input = document.createElement("input"); input.type = "file"; input.accept = "image/png,image/jpeg,image/webp,image/gif";
-    return new Promise((resolve, reject) => { input.onchange = async () => { const file = input.files?.[0]; if (!file) return resolve(null); if (file.size > 8 * 1024 * 1024) return reject(new Error("Image must be under 8 MB")); try { resolve(await uploadImage(file)); } catch (error) { reject(error); } }; input.click(); });
+    return new Promise((resolve, reject) => { input.oncancel = () => resolve(null); input.onchange = async () => { const file = input.files?.[0]; if (!file) return resolve(null); if (file.size > 8 * 1024 * 1024) return reject(new Error("Image must be under 8 MB")); try { resolve(await uploadImage(file)); } catch (error) { reject(error); } }; input.click(); });
+  }
+  const imageUrl = (path) => encodeURI("/" + path);
+  function mediaCard(item, selectable = false) {
+    return `<article class="media-card"><div class="media-thumb"><img src="${esc(imageUrl(item.path))}" alt="${esc(item.path.split("/").at(-1))}" loading="lazy"></div><div class="media-card-body"><strong title="${esc(item.path)}">${esc(item.path.split("/").at(-1))}</strong><small>${item.uploaded ? "Uploaded" : "Site asset"} · ${item.used ? "Used on site" : "Not used on site"}</small><button type="button" class="upload-button" ${selectable ? `data-choose="${esc(item.path)}"` : `data-copy="${esc(item.path)}"`}>${selectable ? "Use this image" : "Copy path"}</button></div></article>`;
+  }
+  async function chooseImage(rasterOnly = false) {
+    const items = (await api("/admin/api/media")).items.filter((item) => !rasterOnly || !/\.(?:svg|ico)$/i.test(item.path));
+    const dialog = document.createElement("dialog"); dialog.className = "media-dialog";
+    dialog.innerHTML = `<div class="media-dialog-head"><div><h2>Choose an image</h2><p>Upload a new image or select one from the media library.</p></div><button type="button" class="media-close" aria-label="Close">×</button></div><div class="media-picker-actions"><button type="button" class="primary" data-picker-upload>Upload image</button><input type="search" placeholder="Search images" aria-label="Search images"></div><div class="media-grid"></div>`;
+    document.body.append(dialog);
+    const grid = dialog.querySelector(".media-grid"), search = dialog.querySelector('input[type="search"]');
+    const draw = () => { const query = search.value.trim().toLowerCase(); const shown = items.filter((item) => item.path.toLowerCase().includes(query)); grid.innerHTML = shown.length ? shown.map((item) => mediaCard(item, true)).join("") : `<p class="muted">No images found.</p>`; };
+    draw();
+    return new Promise((resolve) => {
+      let chosen = null;
+      dialog.addEventListener("close", () => { dialog.remove(); resolve(chosen); }, { once: true });
+      dialog.querySelector(".media-close").addEventListener("click", () => dialog.close());
+      search.addEventListener("input", draw);
+      grid.addEventListener("click", (event) => { const button = event.target.closest("[data-choose]"); if (button) { chosen = button.dataset.choose; dialog.close(); } });
+      dialog.querySelector("[data-picker-upload]").addEventListener("click", async () => { try { const uploaded = await pickUpload(); if (uploaded) { chosen = uploaded; dialog.close(); } } catch (error) { status(error.message, true); } });
+      dialog.showModal();
+    });
+  }
+  async function renderMedia() {
+    const items = (await api("/admin/api/media")).items;
+    $("#workspace").innerHTML = `<section class="panel"><div class="media-toolbar"><div><h2>Media library</h2><p class="help">All site images, including unused files and images uploaded through the admin panel.</p></div><button type="button" class="primary" id="media-upload">Upload image</button></div><div class="media-filters"><input id="media-search" type="search" placeholder="Search by file name or folder" aria-label="Search media" value="${esc(mediaSearch)}"><select id="media-filter" aria-label="Filter media"><option value="all" ${mediaFilter === "all" ? "selected" : ""}>All images</option><option value="used" ${mediaFilter === "used" ? "selected" : ""}>Used on site</option><option value="unused" ${mediaFilter === "unused" ? "selected" : ""}>Not used on site</option><option value="uploaded" ${mediaFilter === "uploaded" ? "selected" : ""}>Uploads</option></select></div><p class="media-count" id="media-count"></p><div class="media-grid" id="media-grid"></div></section>`;
+    const draw = () => { const shown = items.filter((item) => item.path.toLowerCase().includes(mediaSearch.toLowerCase()) && (mediaFilter === "all" || mediaFilter === "uploaded" && item.uploaded || mediaFilter === "used" && item.used || mediaFilter === "unused" && !item.used)); $("#media-count").textContent = `${shown.length} of ${items.length} images`; $("#media-grid").innerHTML = shown.length ? shown.map((item) => mediaCard(item)).join("") : `<p class="muted">No images found.</p>`; };
+    $("#media-search").addEventListener("input", (event) => { mediaSearch = event.target.value; draw(); });
+    $("#media-filter").addEventListener("change", (event) => { mediaFilter = event.target.value; draw(); });
+    $("#media-upload").addEventListener("click", async () => { try { if (await pickUpload()) { status("Image uploaded to the media library."); await renderMedia(); } } catch (error) { status(error.message, true); } });
+    $("#media-grid").addEventListener("click", async (event) => { const button = event.target.closest("[data-copy]"); if (!button) return; try { await navigator.clipboard.writeText(button.dataset.copy); status("Image path copied."); } catch { status("Could not copy the image path.", true); } });
+    draw();
   }
   async function renderPages(contactOnly = false) {
     if (contactOnly) pagePath = "contact.html";
@@ -168,7 +204,7 @@
       $("#seo-description").value = doc.querySelector('meta[name="description"]')?.content || "";
       doc.addEventListener("click", async (event) => {
         if (event.target.closest("a")) event.preventDefault();
-        if (event.target.tagName === "IMG") { event.preventDefault(); try { const uploaded = await pickUpload(); if (uploaded) { event.target.setAttribute("src", "/" + uploaded); status("Image uploaded. Save to publish."); } } catch (error) { status(error.message, true); } }
+        if (event.target.tagName === "IMG") { event.preventDefault(); try { const chosen = await chooseImage(); if (chosen) { event.target.setAttribute("src", imageUrl(chosen)); status("Image selected. Save to publish."); } } catch (error) { status(error.message, true); } }
       }, true);
     };
   }
@@ -210,9 +246,10 @@
     pageSharedBefore = shared;
   }
   async function render() {
-    $("#view-title").textContent = view === "home" ? "Home page" : view === "services" ? "Services" : view === "contact" ? "Contact page" : groups[view]?.title || "Site pages";
+    $("#view-title").textContent = view === "home" ? "Home page" : view === "services" ? "Services" : view === "contact" ? "Contact page" : view === "media" ? "Media library" : groups[view]?.title || "Site pages";
+    $("#save").hidden = view === "media";
     $("#save").textContent = "Save and publish";
-    if (view === "pages" || view === "contact") await renderPages(view === "contact"); else if (view === "home") renderHome(); else if (view === "services") renderServices(); else renderCollection();
+    if (view === "media") await renderMedia(); else if (view === "pages" || view === "contact") await renderPages(view === "contact"); else if (view === "home") renderHome(); else if (view === "services") renderServices(); else renderCollection();
   }
   api("/admin/api/collections").then(() => load()).catch(() => {});
 })();

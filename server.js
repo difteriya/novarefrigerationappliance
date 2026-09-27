@@ -74,6 +74,19 @@ function htmlPages() {
     return fs.readdirSync(folder).filter((file) => file.endsWith(".html")).map((file) => path.posix.join(dir, file));
   }).sort();
 }
+function mediaItems() {
+  const assetRoot = path.join(root, "assets");
+  const imageType = /\.(?:png|jpe?g|webp|gif|svg|ico)$/i;
+  const scan = (dir, prefix = "assets") => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const name = `${prefix}/${entry.name}`;
+    return entry.isDirectory() ? scan(path.join(dir, entry.name), name) : imageType.test(entry.name) ? [{ path: name, uploaded: name.startsWith("assets/uploads/"), bytes: fs.statSync(path.join(root, name)).size }] : [];
+  });
+  const pages = htmlPages().map((name) => fs.readFileSync(path.join(root, name), "utf8"));
+  const styles = fs.existsSync(path.join(root, "css")) ? fs.readdirSync(path.join(root, "css")).filter((name) => name.endsWith(".css")).map((name) => fs.readFileSync(path.join(root, "css", name), "utf8")) : [];
+  const references = pages.concat(styles);
+  return scan(assetRoot).map((item) => ({ ...item, used: references.some((source) => source.includes(item.path) || source.includes(encodeURI(item.path))) }))
+    .sort((a, b) => Number(b.uploaded) - Number(a.uploaded) || a.path.localeCompare(b.path));
+}
 function validateCollections(data) {
   if (!data || typeof data !== "object") throw new Error("Invalid content");
   for (const [name, field] of [["blog", "posts"], ["work", "projects"], ["brands", "profiles"]]) {
@@ -173,7 +186,7 @@ const server = http.createServer(async (req, res) => {
     if (pathname === "/coffeeplanet") {
       return send(res, 200, fs.readFileSync(path.join(root, "admin", "index.html")), "text/html; charset=utf-8", { "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-src 'self'", "X-Robots-Tag": "noindex, nofollow" });
     }
-    if (pathname === "/admin/app.js" || pathname === "/admin/style.css") return send(res, 200, fs.readFileSync(path.join(root, pathname)), mime[path.extname(pathname)]);
+    if (pathname === "/admin/app.js" || pathname === "/admin/style.css" || pathname === "/admin/media.css") return send(res, 200, fs.readFileSync(path.join(root, pathname)), mime[path.extname(pathname)]);
     if (!pathname.startsWith("/admin/") && pathname.endsWith(".html")) {
       const clean = pathname === "/index.html" ? "/" : pathname.slice(0, -5);
       return send(res, 301, "", "text/plain; charset=utf-8", { Location: clean + url.search });
@@ -202,6 +215,7 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { ok: true }, "application/json; charset=utf-8", { "Set-Cookie": "nova_admin=; HttpOnly; SameSite=Strict; Path=/admin; Max-Age=0" });
     }
     if (pathname === "/admin/api/collections" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(contentFile, "utf8")));
+    if (pathname === "/admin/api/media" && req.method === "GET") return send(res, 200, { items: mediaItems() });
     if (/^\/admin\/api\/collection\/(?:blog|work|brands)$/.test(pathname) && req.method === "POST") {
       const name = pathname.split("/").at(-1);
       const section = await bodyJson(req, 2 * 1024 * 1024);

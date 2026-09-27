@@ -1,0 +1,23 @@
+.media-toolbar,.media-dialog-head,.media-picker-actions{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.media-toolbar .help{margin:5px 0 0}
+.media-filters{display:flex;gap:10px;margin:20px 0 8px}
+.media-filters input,.media-filters select,.media-picker-actions input{border:1px solid #cbd8e1;border-radius:8px;padding:10px 12px;background:#fff;color:#173046}
+.media-filters input,.media-picker-actions input{flex:1;min-width:0}
+.media-count{color:#60788d;font-size:13px;margin:0 0 16px}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;align-content:start}
+.media-card{min-width:0;overflow:hidden;border:1px solid #dce6ee;border-radius:12px;background:#fff}
+.media-thumb{height:145px;display:grid;place-items:center;background:#f2f6f9;padding:12px}
+.media-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.media-card-body{display:grid;gap:7px;padding:12px}
+.media-card-body strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:#18364e}
+.media-card-body small{font-size:11px;color:#60788d}
+.media-card-body button{justify-self:start;margin-top:3px}
+.media-dialog{width:min(1000px,calc(100vw - 32px));max-height:90vh;border:1px solid #d7e3eb;border-radius:16px;padding:24px;box-shadow:0 25px 75px #10283a45;color:#132333}
+.media-dialog::backdrop{background:#071a2aba}
+.media-dialog-head h2{margin:0 0 5px;font-size:21px}
+.media-dialog-head p{margin:0;color:#60788d;font-size:13px}
+.media-close{border:0;background:#eff4f7;border-radius:8px;width:34px;height:34px;color:#34566e;font-size:24px;line-height:1}
+.media-picker-actions{justify-content:flex-start;margin:18px 0}
+.media-dialog .media-grid{max-height:60vh;overflow:auto;padding:2px}
+.upload-row{flex-wrap:wrap}
+@media(max-width:600px){.media-toolbar,.media-picker-actions{align-items:stretch;flex-direction:column}.media-filters{flex-direction:column}.media-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.media-dialog{padding:16px}.media-dialog .media-grid{max-height:55vh}}
