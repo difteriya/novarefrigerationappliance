@@ -6,6 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const STYLE_VERSION = require("node:crypto").createHash("sha256").update(fs.readFileSync(path.join(__dirname, "css", "styles.css"))).digest("hex").slice(0, 10);
 const COLLECTIONS = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "collections.json"), "utf8"));
 const HOME = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "home.json"), "utf8"));
 const SERVICE_CONTENT = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "services.json"), "utf8"));
@@ -545,7 +546,7 @@ ${image ? "" : '<meta property="og:image:width" content="1200">\n<meta property=
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${base}${socialImage}">
 <meta name="theme-color" content="#0b2a4a">
-<link rel="stylesheet" href="${rel(depth, "css/styles.css")}?v=20260927-13">
+<link rel="stylesheet" href="${rel(depth, "css/styles.css")}?v=${STYLE_VERSION}">
 </head>
 <body>`;
 }
