@@ -4,6 +4,28 @@
   const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const groups = { blog: { title: "Repair guides", field: "posts", singular: "guide" }, work: { title: "Our work", field: "projects", singular: "project" }, brands: { title: "Brands", field: "profiles", singular: "brand" } };
   let state = null, view = "home", selected = 0, pageList = [], pagePath = "index.html", sourceMode = false, pageHtml = "";
+  let savedBrandMeta = "", savedBrandProfiles = new Map();
+  function brandMeta() { const { profiles, ...meta } = state.brands; return meta; }
+  async function saveBrands() {
+    const current = new Set(state.brands.profiles);
+    for (const [profile, saved] of savedBrandProfiles) if (!current.has(profile)) {
+      await api("/admin/api/brands/delete", "POST", { slug: saved.slug });
+      savedBrandProfiles.delete(profile);
+    }
+    for (const profile of state.brands.profiles) {
+      const saved = savedBrandProfiles.get(profile);
+      const snapshot = JSON.stringify(profile);
+      if (!saved || saved.snapshot !== snapshot) {
+        await api("/admin/api/brands/profile", "POST", { originalSlug: saved?.slug || null, profile });
+        savedBrandProfiles.set(profile, { slug: profile.slug, snapshot });
+      }
+    }
+    const meta = brandMeta(), snapshot = JSON.stringify(meta);
+    if (snapshot !== savedBrandMeta) {
+      await api("/admin/api/brands/meta", "POST", meta);
+      savedBrandMeta = snapshot;
+    }
+  }
   async function api(url, method = "GET", data) {
     const response = await fetch(url, { method, credentials: "same-origin", headers: data ? { "Content-Type": "application/json" } : {}, body: data ? JSON.stringify(data) : undefined });
     const result = response.headers.get("content-type")?.includes("application/json") ? await response.json() : { error: response.status === 403 ? `The hosting security blocked this request (403). Contact Hostinger support${response.headers.get("x-hcdn-request-id") ? ` with request ID ${response.headers.get("x-hcdn-request-id")}` : ""} if it continues.` : `Request failed (${response.status})` };
@@ -24,6 +46,8 @@
   async function load() {
     const [collections, home, services, storage] = await Promise.all([api("/admin/api/collections"), api("/admin/api/home"), api("/admin/api/services"), api("/admin/api/storage")]);
     state = { ...collections, home, services };
+    savedBrandMeta = JSON.stringify(brandMeta());
+    savedBrandProfiles = new Map(state.brands.profiles.map((profile) => [profile, { slug: profile.slug, snapshot: JSON.stringify(profile) }]));
     $("#storage-mode").textContent = storage.mode === "mysql" ? "Database connected" : "Local storage · deploys can erase edits";
     pageList = await api("/admin/api/pages");
     $("#login").hidden = true; $("#app").hidden = false;
@@ -48,6 +72,7 @@
       if (view === "pages" || view === "contact") await savePage();
       else if (view === "home") await api("/admin/api/home", "POST", state.home);
       else if (view === "services") await api("/admin/api/services", "POST", state.services);
+      else if (view === "brands") await saveBrands();
       else await api(`/admin/api/collection/${view}`, "POST", state[view]);
       status("Published successfully");
       pageList = await api("/admin/api/pages");

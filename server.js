@@ -185,6 +185,30 @@ const server = http.createServer(async (req, res) => {
       removeUnpublished(oldData, nextData);
       return send(res, 200, { ok: true });
     }
+    if (/^\/admin\/api\/brands\/(?:profile|delete|meta)$/.test(pathname) && req.method === "POST") {
+      const action = pathname.split("/").at(-1);
+      const data = await bodyJson(req, 256 * 1024);
+      const oldData = JSON.parse(fs.readFileSync(contentFile, "utf8"));
+      const nextData = structuredClone(oldData);
+      const profiles = nextData.brands.profiles;
+      if (action === "delete") {
+        const index = profiles.findIndex((item) => item.slug === data.slug);
+        if (index >= 0) profiles.splice(index, 1);
+      } else if (action === "profile") {
+        if (!data.profile || typeof data.profile !== "object") return send(res, 400, { error: "Invalid brand profile" });
+        const index = data.originalSlug ? profiles.findIndex((item) => item.slug === data.originalSlug) : -1;
+        if (data.originalSlug && index < 0) return send(res, 409, { error: "Brand changed elsewhere. Reload and try again." });
+        if (index < 0) profiles.push(data.profile);
+        else profiles[index] = data.profile;
+      } else {
+        if (!data || typeof data !== "object" || Array.isArray(data) || "profiles" in data) return send(res, 400, { error: "Invalid brand page information" });
+        nextData.brands = { ...nextData.brands, ...data };
+      }
+      validateCollections(nextData);
+      await storage.saveContent("collections", nextData, rebuild);
+      removeUnpublished(oldData, nextData);
+      return send(res, 200, { ok: true });
+    }
     if (pathname === "/admin/api/home" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(homeFile, "utf8")));
     if (pathname === "/admin/api/services" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(servicesFile, "utf8")));
     if (pathname === "/admin/api/services" && (req.method === "POST" || req.method === "PUT")) {
