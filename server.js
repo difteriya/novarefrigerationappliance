@@ -98,14 +98,20 @@ function removeUnpublished(oldData, newData) {
     }
   }
 }
+function notFound(req, res, pathname) {
+  if (/^\/(?:assets|css|js)\//.test(pathname)) return send(res, 404, "Not found", "text/plain; charset=utf-8");
+  return send(res, 404, fs.readFileSync(path.join(root, "404.html")), "text/html; charset=utf-8", { "X-Robots-Tag": "noindex, nofollow" });
+}
 function staticFile(req, res, pathname) {
-  let name = decodeURIComponent(pathname).replace(/^\/+/, "") || "index.html";
+  let name;
+  try { name = decodeURIComponent(pathname).replace(/^\/+/, "") || "index.html"; }
+  catch { return notFound(req, res, pathname); }
   if (name.endsWith("/")) name += "index.html";
   if (!path.posix.extname(name)) name += ".html";
-  if (!/^(?:assets|css|js|services|areas|blog|work|brands)\/[\w %().-]+(?:\/[\w %().-]+)*$/.test(name) && !/^[a-z0-9-]+\.(?:html|xml|txt)$/.test(name)) return send(res, 404, "Not found", "text/plain");
+  if (!/^(?:assets|css|js|services|areas|blog|work|brands)\/[\w %().-]+(?:\/[\w %().-]+)*$/.test(name) && !/^[a-z0-9-]+\.(?:html|xml|txt)$/.test(name)) return notFound(req, res, pathname);
   const full = path.resolve(root, name);
-  if (!full.startsWith(root + path.sep) || !mime[path.extname(full)]) return send(res, 404, "Not found", "text/plain");
-  fs.readFile(full, (error, data) => error ? send(res, 404, "Not found", "text/plain") : send(res, 200, data, mime[path.extname(full)], { "Cache-Control": "public, max-age=300" }));
+  if (!full.startsWith(root + path.sep) || !mime[path.extname(full)]) return notFound(req, res, pathname);
+  fs.readFile(full, (error, data) => error ? notFound(req, res, pathname) : send(res, 200, data, mime[path.extname(full)], { "Cache-Control": "public, max-age=300" }));
 }
 
 const server = http.createServer(async (req, res) => {
@@ -113,7 +119,7 @@ const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
     const pathname = url.pathname;
     if (pathname === "/services/microwave-repair.html" || pathname === "/services/microwave-repair") return send(res, 301, "", "text/plain; charset=utf-8", { Location: "/services" });
-    if (pathname === "/admin" || pathname === "/admin/" || pathname === "/coffeeplanet/") {
+    if (pathname === "/coffeeplanet/") {
       return send(res, 302, "", "text/plain; charset=utf-8", { Location: "/coffeeplanet" });
     }
     if (pathname === "/coffeeplanet") {
