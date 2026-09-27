@@ -6,9 +6,19 @@
   let state = null, view = "home", selected = 0, pageList = [], pagePath = "index.html", sourceMode = false, pageHtml = "";
   async function api(url, method = "GET", data) {
     const response = await fetch(url, { method, credentials: "same-origin", headers: data ? { "Content-Type": "application/json" } : {}, body: data ? JSON.stringify(data) : undefined });
-    const result = await response.json();
+    const result = response.headers.get("content-type")?.includes("application/json") ? await response.json() : { error: response.status === 403 ? `The hosting security blocked this request (403). Contact Hostinger support${response.headers.get("x-hcdn-request-id") ? ` with request ID ${response.headers.get("x-hcdn-request-id")}` : ""} if it continues.` : `Request failed (${response.status})` };
     if (!response.ok) throw new Error(result.error || "Request failed");
     return result;
+  }
+  async function uploadImage(file) {
+    const response = await fetch("/admin/api/upload", { method: "POST", credentials: "same-origin", headers: { "Content-Type": file.type }, body: file });
+    const result = response.headers.get("content-type")?.includes("application/json") ? await response.json() : null;
+    if (!response.ok) {
+      const requestId = response.headers.get("x-hcdn-request-id");
+      throw new Error(result?.error || (response.status === 403 ? `The hosting security blocked this image upload (403). Try a smaller image. If it continues, contact Hostinger support${requestId ? ` with request ID ${requestId}` : ""}.` : `Image upload failed (${response.status})`));
+    }
+    if (!result?.path) throw new Error("The upload returned an unexpected response. Please try again.");
+    return result.path;
   }
   function status(message, error = false) { const el = $("#status"); el.textContent = message; el.style.color = error ? "#b3261e" : "#345e43"; }
   async function load() {
@@ -36,9 +46,9 @@
     const button = $("#save"); button.disabled = true; status("Saving…");
     try {
       if (view === "pages" || view === "contact") await savePage();
-      else if (view === "home") await api("/admin/api/home", "PUT", state.home);
-      else if (view === "services") await api("/admin/api/services", "PUT", state.services);
-      else { const { home, services, ...collections } = state; await api("/admin/api/collections", "PUT", collections); }
+      else if (view === "home") await api("/admin/api/home", "POST", state.home);
+      else if (view === "services") await api("/admin/api/services", "POST", state.services);
+      else { const { home, services, ...collections } = state; await api("/admin/api/collections", "POST", collections); }
       status("Published successfully");
       pageList = await api("/admin/api/pages");
     } catch (error) { status(error.message, true); }
@@ -106,7 +116,7 @@
   }
   async function pickUpload() {
     const input = document.createElement("input"); input.type = "file"; input.accept = "image/png,image/jpeg,image/webp,image/gif";
-    return new Promise((resolve, reject) => { input.onchange = async () => { const file = input.files?.[0]; if (!file) return resolve(null); if (file.size > 8 * 1024 * 1024) return reject(new Error("Image must be under 8 MB")); try { const base64 = await new Promise((done, fail) => { const reader = new FileReader(); reader.onload = () => done(String(reader.result).split(",")[1]); reader.onerror = fail; reader.readAsDataURL(file); }); const result = await api("/admin/api/upload", "POST", { type: file.type, base64 }); resolve(result.path); } catch (error) { reject(error); } }; input.click(); });
+    return new Promise((resolve, reject) => { input.onchange = async () => { const file = input.files?.[0]; if (!file) return resolve(null); if (file.size > 8 * 1024 * 1024) return reject(new Error("Image must be under 8 MB")); try { resolve(await uploadImage(file)); } catch (error) { reject(error); } }; input.click(); });
   }
   async function renderPages(contactOnly = false) {
     if (contactOnly) pagePath = "contact.html";
@@ -148,7 +158,7 @@
   }
   async function savePage() {
     const html = sourceMode ? $("#source-editor").value : serializePage();
-    await api("/admin/api/page", "PUT", { path: pagePath, html });
+    await api("/admin/api/page", "POST", { path: pagePath, html });
     pageHtml = html;
   }
   async function render() {

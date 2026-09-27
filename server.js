@@ -29,6 +29,21 @@ function bodyJson(req, limit = 12 * 1024 * 1024) {
     req.on("error", reject);
   });
 }
+function bodyBytes(req, limit = 8 * 1024 * 1024) {
+  return new Promise((resolve, reject) => {
+    const chunks = []; let size = 0; let tooLarge = false;
+    req.on("data", (chunk) => {
+      size += chunk.length;
+      if (size > limit) tooLarge = true;
+      else if (!tooLarge) chunks.push(chunk);
+    });
+    req.on("end", () => {
+      if (tooLarge) { const error = new Error("Image must be under 8 MB"); error.status = 413; reject(error); }
+      else resolve(Buffer.concat(chunks));
+    });
+    req.on("error", reject);
+  });
+}
 function currentSession(req) {
   const match = /(?:^|; )nova_admin=([a-f0-9]{64})(?:;|$)/.exec(req.headers.cookie || "");
   if (!match) return false;
@@ -162,17 +177,17 @@ const server = http.createServer(async (req, res) => {
     if (pathname === "/admin/api/collections" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(contentFile, "utf8")));
     if (pathname === "/admin/api/home" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(homeFile, "utf8")));
     if (pathname === "/admin/api/services" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(servicesFile, "utf8")));
-    if (pathname === "/admin/api/services" && req.method === "PUT") {
+    if (pathname === "/admin/api/services" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req); validateServices(data);
       await storage.saveContent("services", data, rebuild);
       return send(res, 200, { ok: true });
     }
-    if (pathname === "/admin/api/home" && req.method === "PUT") {
+    if (pathname === "/admin/api/home" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req); validateHome(data);
       await storage.saveContent("home", data, rebuild);
       return send(res, 200, { ok: true });
     }
-    if (pathname === "/admin/api/collections" && req.method === "PUT") {
+    if (pathname === "/admin/api/collections" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req); validateCollections(data);
       const oldData = JSON.parse(fs.readFileSync(contentFile, "utf8"));
       await storage.saveContent("collections", data, rebuild);
@@ -185,7 +200,7 @@ const server = http.createServer(async (req, res) => {
       if (!page || !fs.existsSync(page.full)) return send(res, 404, { error: "Page not found" });
       return send(res, 200, { html: fs.readFileSync(page.full, "utf8") });
     }
-    if (pathname === "/admin/api/page" && req.method === "PUT") {
+    if (pathname === "/admin/api/page" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req, 3 * 1024 * 1024);
       const page = safePage(data.path);
       if (!page || !fs.existsSync(page.full) || typeof data.html !== "string" || !/^<!doctype html>/i.test(data.html.trim())) return send(res, 400, { error: "Invalid page" });
@@ -193,21 +208,21 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { ok: true });
     }
     if (pathname === "/admin/api/upload" && req.method === "POST") {
-      const data = await bodyJson(req, 12 * 1024 * 1024);
-      const ext = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif" }[data.type];
-      if (!ext || typeof data.base64 !== "string") return send(res, 400, { error: "Use PNG, JPEG, WebP, or GIF" });
-      const buffer = Buffer.from(data.base64, "base64");
+      const type = String(req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
+      const ext = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif" }[type];
+      if (!ext) return send(res, 415, { error: "Use PNG, JPEG, WebP, or GIF" });
+      const buffer = await bodyBytes(req);
       if (!buffer.length || buffer.length > 8 * 1024 * 1024) return send(res, 400, { error: "Image must be under 8 MB" });
       const valid = ext === "png" ? buffer.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex")) : ext === "jpg" ? buffer.subarray(0, 3).equals(Buffer.from("ffd8ff", "hex")) : ext === "webp" ? buffer.toString("ascii", 0, 4) === "RIFF" && buffer.toString("ascii", 8, 12) === "WEBP" : buffer.toString("ascii", 0, 3) === "GIF";
       if (!valid) return send(res, 400, { error: "Invalid image data" });
       const name = `${Date.now()}-${crypto.randomBytes(5).toString("hex")}.${ext}`;
-      const assetPath = await storage.saveUpload(name, data.type, buffer);
+      const assetPath = await storage.saveUpload(name, type, buffer);
       return send(res, 200, { path: assetPath });
     }
     return send(res, 404, { error: "Unknown endpoint" });
   } catch (error) {
     console.error(error);
-    return send(res, 500, { error: error.message || "Server error" });
+    return send(res, error.status || 500, { error: error.message || "Server error" });
   }
 });
 
