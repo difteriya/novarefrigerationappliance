@@ -48,7 +48,7 @@
       if (view === "pages" || view === "contact") await savePage();
       else if (view === "home") await api("/admin/api/home", "POST", state.home);
       else if (view === "services") await api("/admin/api/services", "POST", state.services);
-      else { const { home, services, ...collections } = state; await api("/admin/api/collections", "POST", collections); }
+      else await api(`/admin/api/collection/${view}`, "POST", state[view]);
       status("Published successfully");
       pageList = await api("/admin/api/pages");
     } catch (error) { status(error.message, true); }
@@ -158,7 +158,12 @@
   }
   async function savePage() {
     const html = sourceMode ? $("#source-editor").value : serializePage();
-    await api("/admin/api/page", "POST", { path: pagePath, html });
+    const response = await fetch(`/admin/api/page?path=${encodeURIComponent(pagePath)}`, { method: "POST", credentials: "same-origin", headers: { "Content-Type": "text/html; charset=utf-8" }, body: html });
+    const result = response.headers.get("content-type")?.includes("application/json") ? await response.json() : null;
+    if (!response.ok) {
+      const requestId = response.headers.get("x-hcdn-request-id");
+      throw new Error(result?.error || (response.status === 403 ? `The hosting security blocked this page save (403). Contact Hostinger support${requestId ? ` with request ID ${requestId}` : ""} if it continues.` : `Page save failed (${response.status})`));
+    }
     pageHtml = html;
   }
   async function render() {

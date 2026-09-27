@@ -175,6 +175,16 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { ok: true }, "application/json; charset=utf-8", { "Set-Cookie": "nova_admin=; HttpOnly; SameSite=Strict; Path=/admin; Max-Age=0" });
     }
     if (pathname === "/admin/api/collections" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(contentFile, "utf8")));
+    if (/^\/admin\/api\/collection\/(?:blog|work|brands)$/.test(pathname) && req.method === "POST") {
+      const name = pathname.split("/").at(-1);
+      const section = await bodyJson(req, 2 * 1024 * 1024);
+      const oldData = JSON.parse(fs.readFileSync(contentFile, "utf8"));
+      const nextData = { ...oldData, [name]: section };
+      validateCollections(nextData);
+      await storage.saveContent("collections", nextData, rebuild);
+      removeUnpublished(oldData, nextData);
+      return send(res, 200, { ok: true });
+    }
     if (pathname === "/admin/api/home" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(homeFile, "utf8")));
     if (pathname === "/admin/api/services" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(servicesFile, "utf8")));
     if (pathname === "/admin/api/services" && (req.method === "POST" || req.method === "PUT")) {
@@ -201,7 +211,10 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { html: fs.readFileSync(page.full, "utf8") });
     }
     if (pathname === "/admin/api/page" && (req.method === "POST" || req.method === "PUT")) {
-      const data = await bodyJson(req, 3 * 1024 * 1024);
+      const contentType = String(req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
+      const data = contentType === "text/html"
+        ? { path: url.searchParams.get("path"), html: (await bodyBytes(req, 3 * 1024 * 1024)).toString("utf8") }
+        : await bodyJson(req, 3 * 1024 * 1024);
       const page = safePage(data.path);
       if (!page || !fs.existsSync(page.full) || typeof data.html !== "string" || !/^<!doctype html>/i.test(data.html.trim())) return send(res, 400, { error: "Invalid page" });
       await storage.savePage(page.name, data.html, rebuild);
