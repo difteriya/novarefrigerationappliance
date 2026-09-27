@@ -8,6 +8,7 @@ const contentFiles = {
   collections: path.join(root, "content", "collections.json"),
   home: path.join(root, "content", "home.json"),
   services: path.join(root, "content", "services.json"),
+  layout: path.join(root, "content", "layout.json"),
 };
 const overrideRoot = path.join(root, "content", "page-overrides");
 const uploadsRoot = path.join(root, "assets", "uploads");
@@ -101,26 +102,33 @@ async function initialize(rebuild) {
   rebuild();
 }
 
-async function saveContent(key, data, rebuild) {
+async function saveContent(key, data, rebuild, layout = null) {
   const file = contentFiles[key];
   if (!file) throw new Error("Unknown content type");
   const next = JSON.stringify(data, null, 2) + "\n";
   const previous = fs.readFileSync(file, "utf8");
+  const layoutFile = contentFiles.layout;
+  const previousLayout = layout ? fs.readFileSync(layoutFile, "utf8") : null;
+  const nextLayout = layout ? JSON.stringify(layout, null, 2) + "\n" : null;
   if (!pool) {
     writeFile(file, next);
-    try { rebuild(); } catch (error) { writeFile(file, previous); rebuild(); throw error; }
+    if (nextLayout) writeFile(layoutFile, nextLayout);
+    try { rebuild(); } catch (error) { writeFile(file, previous); if (previousLayout !== null) writeFile(layoutFile, previousLayout); rebuild(); throw error; }
     return;
   }
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
     await connection.execute("UPDATE nova_content SET body = ? WHERE content_key = ?", [next, key]);
+    if (nextLayout) await connection.execute("UPDATE nova_content SET body = ? WHERE content_key = ?", [nextLayout, "layout"]);
     writeFile(file, next);
+    if (nextLayout) writeFile(layoutFile, nextLayout);
     rebuild();
     await connection.commit();
   } catch (error) {
     await connection.rollback();
     writeFile(file, previous);
+    if (previousLayout !== null) writeFile(layoutFile, previousLayout);
     rebuild();
     throw error;
   } finally {
@@ -128,25 +136,46 @@ async function saveContent(key, data, rebuild) {
   }
 }
 
-async function savePage(name, html, rebuild) {
+async function savePage(name, html, rebuild, layout = null, services = null) {
   if (!safeStoredPath(name)) throw new Error("Invalid page path");
   const file = path.join(overrideRoot, name);
   const previous = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : null;
+  const layoutFile = contentFiles.layout;
+  const previousLayout = layout ? fs.readFileSync(layoutFile, "utf8") : null;
+  const nextLayout = layout ? JSON.stringify(layout, null, 2) + "\n" : null;
+  const servicesFile = contentFiles.services;
+  const previousServices = services ? fs.readFileSync(servicesFile, "utf8") : null;
+  const nextServices = services ? JSON.stringify(services, null, 2) + "\n" : null;
   if (!pool) {
     writeFile(file, html);
-    rebuild();
+    if (nextLayout) writeFile(layoutFile, nextLayout);
+    if (nextServices) writeFile(servicesFile, nextServices);
+    try { rebuild(); }
+    catch (error) {
+      if (previous === null) fs.rmSync(file, { force: true }); else writeFile(file, previous);
+      if (previousLayout !== null) writeFile(layoutFile, previousLayout);
+      if (previousServices !== null) writeFile(servicesFile, previousServices);
+      rebuild();
+      throw error;
+    }
     return;
   }
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
     await connection.execute("INSERT INTO nova_page_overrides (page_path, html) VALUES (?, ?) ON DUPLICATE KEY UPDATE html = VALUES(html)", [name, html]);
+    if (nextLayout) await connection.execute("UPDATE nova_content SET body = ? WHERE content_key = ?", [nextLayout, "layout"]);
+    if (nextServices) await connection.execute("UPDATE nova_content SET body = ? WHERE content_key = ?", [nextServices, "services"]);
     writeFile(file, html);
+    if (nextLayout) writeFile(layoutFile, nextLayout);
+    if (nextServices) writeFile(servicesFile, nextServices);
     rebuild();
     await connection.commit();
   } catch (error) {
     await connection.rollback();
     if (previous === null) fs.rmSync(file, { force: true }); else writeFile(file, previous);
+    if (previousLayout !== null) writeFile(layoutFile, previousLayout);
+    if (previousServices !== null) writeFile(servicesFile, previousServices);
     rebuild();
     throw error;
   } finally {

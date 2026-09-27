@@ -5,11 +5,13 @@ const fs = require("node:fs");
 const path = require("node:path");
 const crypto = require("node:crypto");
 const storage = require("./storage");
+const sharedLayout = require("./shared-layout");
 
 const root = __dirname;
 const contentFile = path.join(root, "content", "collections.json");
 const homeFile = path.join(root, "content", "home.json");
 const servicesFile = path.join(root, "content", "services.json");
+const layoutFile = path.join(root, "content", "layout.json");
 const bundledCollections = JSON.parse(fs.readFileSync(contentFile, "utf8"));
 const port = Number(process.env.PORT || 3000);
 const adminPassword = process.env.ADMIN_PASSWORD || "";
@@ -107,6 +109,28 @@ function validateServices(data) {
   for (const entries of Object.values(data.faq)) {
     if (!Array.isArray(entries) || entries.some((item) => typeof item.question !== "string" || typeof item.answer !== "string")) throw new Error("Invalid service FAQ");
   }
+}
+function htmlText(value) {
+  return value.replace(/<[^>]*>/g, "").replace(/&(#(?:x[\da-f]+|\d+)|amp|lt|gt|quot|apos|nbsp|#39);/gi, (match, entity) => {
+    const named = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
+    if (entity.startsWith("#")) {
+      const number = entity[1].toLowerCase() === "x" ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
+      return Number.isFinite(number) && number > 0 && number <= 0x10ffff ? String.fromCodePoint(number) : match;
+    }
+    return named[entity.toLowerCase()] || match;
+  }).replace(/\s+/g, " ").trim();
+}
+function warrantyFromHtml(section) {
+  const head = /<div\b[^>]*class=["'][^"']*\bsection-head\b[^"']*["'][^>]*>([\s\S]*?)<\/div>/i.exec(section)?.[1] || "";
+  const extract = (html, tag, className) => {
+    const classPart = className ? `[^>]*class=["'][^"']*\\b${className}\\b[^"']*["'][^>]*` : "[^>]*";
+    return htmlText(new RegExp(`<${tag}\\b${classPart}>([\\s\\S]*?)<\\/${tag}>`, "i").exec(html)?.[1] || "");
+  };
+  const cards = [...section.matchAll(/<div\b[^>]*class=["'][^"']*\bwarranty-card\b[^"']*["'][^>]*>([\s\S]*?)<\/div>/gi)]
+    .map(([, html]) => ({ duration: extract(html, "span", "warranty-duration"), title: extract(html, "h3"), description: extract(html, "p") }));
+  const warranty = { heading: extract(head, "h2"), intro: extract(head, "p"), cards };
+  if (!warranty.heading || !warranty.intro || cards.length !== 3 || cards.some((card) => !card.duration || !card.title || !card.description)) throw new Error("Warranty needs a heading, introduction, and three complete cards.");
+  return warranty;
 }
 function rebuild() {
   const buildPath = path.join(root, "build.js");
@@ -216,7 +240,9 @@ const server = http.createServer(async (req, res) => {
     if (pathname === "/admin/api/services" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(servicesFile, "utf8")));
     if (pathname === "/admin/api/services" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req); validateServices(data);
-      await storage.saveContent("services", data, rebuild);
+      const previous = JSON.parse(fs.readFileSync(servicesFile, "utf8"));
+      const nextLayout = JSON.stringify(previous.warranty) === JSON.stringify(data.warranty) ? null : { ...JSON.parse(fs.readFileSync(layoutFile, "utf8")), warranty: sharedLayout.warrantyMarkup(data.warranty) };
+      await storage.saveContent("services", data, rebuild, nextLayout);
       return sendSaved(res);
     }
     if (pathname === "/admin/api/home" && (req.method === "POST" || req.method === "PUT")) {
@@ -235,7 +261,8 @@ const server = http.createServer(async (req, res) => {
     if (pathname === "/admin/api/page" && req.method === "GET") {
       const page = safePage(url.searchParams.get("path"));
       if (!page || !fs.existsSync(page.full)) return send(res, 404, { error: "Page not found" });
-      return send(res, 200, { html: fs.readFileSync(page.full, "utf8") });
+      const layoutVersion = crypto.createHash("sha256").update(fs.readFileSync(layoutFile)).digest("hex");
+      return send(res, 200, { html: fs.readFileSync(page.full, "utf8"), layoutVersion });
     }
     if (pathname === "/admin/api/page" && (req.method === "POST" || req.method === "PUT")) {
       const contentType = String(req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
@@ -244,8 +271,36 @@ const server = http.createServer(async (req, res) => {
         : await bodyJson(req, 3 * 1024 * 1024);
       const page = safePage(data.path);
       if (!page || !fs.existsSync(page.full) || typeof data.html !== "string" || !/^<!doctype html>/i.test(data.html.trim())) return send(res, 400, { error: "Invalid page" });
-      await storage.savePage(page.name, data.html, rebuild);
-      return sendSaved(res);
+      const changes = new Set((url.searchParams.get("sharedChanged") || "").split(",").filter(Boolean));
+      if (url.searchParams.get("headerChanged") === "1") changes.add("header");
+      if (url.searchParams.get("footerChanged") === "1") changes.add("footer");
+      if ([...changes].some((name) => !["header", "footer", "cta", "warranty", "serviceCards"].includes(name))) return send(res, 400, { error: "Invalid shared section" });
+      let nextLayout = null;
+      let nextServices = null;
+      if (changes.size) {
+        const currentVersion = crypto.createHash("sha256").update(fs.readFileSync(layoutFile)).digest("hex");
+        if (url.searchParams.get("layoutVersion") !== currentVersion) return send(res, 409, { error: "A shared section changed elsewhere. Reload this page before saving." });
+        nextLayout = JSON.parse(fs.readFileSync(layoutFile, "utf8"));
+        for (const type of changes) {
+          if (type === "serviceCards") {
+            const cards = sharedLayout.serviceCards(data.html);
+            if (cards.length !== 8) return send(res, 400, { error: "The shared service list must contain all eight cards." });
+            nextLayout.serviceCards = cards.map((card) => sharedLayout.normalized(card, page.name));
+            continue;
+          }
+          const section = sharedLayout.block(data.html, type);
+          if (!section) return send(res, 400, { error: `The ${type} is missing from this page.` });
+          nextLayout[type] = sharedLayout.normalized(section.html, page.name);
+          if (type === "warranty") {
+            nextServices = JSON.parse(fs.readFileSync(servicesFile, "utf8"));
+            nextServices.warranty = warrantyFromHtml(section.html);
+            validateServices(nextServices);
+          }
+        }
+      }
+      await storage.savePage(page.name, data.html, rebuild, nextLayout, nextServices);
+      const layoutVersion = crypto.createHash("sha256").update(fs.readFileSync(layoutFile)).digest("hex");
+      return sendSaved(res, { ok: true, layoutVersion });
     }
     if (pathname === "/admin/api/upload" && req.method === "POST") {
       const type = String(req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();

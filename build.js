@@ -6,10 +6,12 @@
 
 const fs = require("fs");
 const path = require("path");
+const sharedLayout = require("./shared-layout");
 const STYLE_VERSION = require("node:crypto").createHash("sha256").update(fs.readFileSync(path.join(__dirname, "css", "styles.css"))).digest("hex").slice(0, 10);
 const COLLECTIONS = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "collections.json"), "utf8"));
 const HOME = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "home.json"), "utf8"));
 const SERVICE_CONTENT = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "services.json"), "utf8"));
+const LAYOUT = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "layout.json"), "utf8"));
 const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
 /* ----------------------------------------------------------------------- */
@@ -780,11 +782,13 @@ const changed = new Set();
 function write(relPath, html) {
   const full = path.join(__dirname, relPath);
   const override = path.join(__dirname, "content", "page-overrides", relPath);
+  const generatedHtml = html;
   if (relPath.endsWith(".html") && fs.existsSync(override)) {
     const saved = fs.readFileSync(override, "utf8");
     html = relPath === "index.html" ? syncHomeContent(saved, html) : saved;
   }
   if (relPath.endsWith(".html")) html = cleanPublicLinks(html, relPath);
+  if (relPath.endsWith(".html")) html = sharedLayout.apply(html, LAYOUT, relPath, generatedHtml);
   fs.mkdirSync(path.dirname(full), { recursive: true });
   let previous = null;
   try { previous = fs.readFileSync(full, "utf8"); } catch (e) {}
@@ -1210,18 +1214,7 @@ ${relatedGuides[s.slug] ? `      <p class="related-service-link">Want to underst
     </div>
   </div>
 </section>
-<section class="section alt warranty-section" aria-labelledby="warranty-heading">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Our commitment</span>
-      <h2 id="warranty-heading">${esc(warranty.heading)}</h2>
-      <p>${esc(warranty.intro)}</p>
-    </div>
-    <div class="grid grid-2 warranty-grid">
-      ${warranty.cards.map((card) => `<div class="warranty-card"><span class="warranty-duration">${esc(card.duration)}</span><h3>${esc(card.title)}</h3><p>${esc(card.description)}</p></div>`).join("\n      ")}
-    </div>
-  </div>
-</section>
+${sharedLayout.warrantyMarkup(warranty)}
 ` + faqSection(serviceFaq) + ctaBand(1) + footer(1);
     write("services/" + s.slug + ".html", html);
   });

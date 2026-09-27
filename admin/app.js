@@ -4,6 +4,7 @@
   const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const groups = { blog: { title: "Repair guides", field: "posts", singular: "guide" }, work: { title: "Our work", field: "projects", singular: "project" }, brands: { title: "Brands", field: "profiles", singular: "brand" } };
   let state = null, view = "home", selected = 0, pageList = [], pagePath = "index.html", sourceMode = false, pageHtml = "";
+  let pageLayoutVersion = "", pageSharedBefore = {};
   let savedBrandMeta = "", savedBrandProfiles = new Map();
   function brandMeta() { const { profiles, ...meta } = state.brands; return meta; }
   async function saveBrands() {
@@ -145,13 +146,15 @@
   }
   async function renderPages(contactOnly = false) {
     if (contactOnly) pagePath = "contact.html";
-    $("#workspace").innerHTML = `<section class="panel"><h2>${contactOnly ? "Edit the contact page" : "Edit a site page"}</h2><p class="page-help">Click text in the preview to edit it. Click an image to replace it. Title and description below control how this page appears in search. All changes are saved when you press “Save and publish”.</p>${contactOnly ? "" : `<select id="page-select" class="page-select">${pageList.map((name) => `<option value="${esc(name)}" ${name === pagePath ? "selected" : ""}>${esc(name)}</option>`).join("")}</select>`}<div class="page-toolbar"><div class="field"><label>SEO title</label><input id="seo-title"></div><div class="field"><label>Meta description</label><textarea id="seo-description"></textarea></div></div><button type="button" class="toggle-source" id="toggle-source">Edit HTML source</button><iframe id="editor-frame" class="editor-frame" sandbox="allow-same-origin" title="Page editor"></iframe><textarea id="source-editor" class="source-editor" hidden spellcheck="false"></textarea><p class="muted">The HTML view also allows FAQ and schema edits. Image files can be uploaded in the visual view.</p></section>`;
+    $("#workspace").innerHTML = `<section class="panel"><h2>${contactOnly ? "Edit the contact page" : "Edit a site page"}</h2><p class="page-help">Click text in the preview to edit it. Click an image to replace it. Shared header, footer, call-to-action, warranty, and service cards update wherever they appear. Title and description below control how this page appears in search. All changes are saved when you press “Save and publish”.</p>${contactOnly ? "" : `<select id="page-select" class="page-select">${pageList.map((name) => `<option value="${esc(name)}" ${name === pagePath ? "selected" : ""}>${esc(name)}</option>`).join("")}</select>`}<div class="page-toolbar"><div class="field"><label>SEO title</label><input id="seo-title"></div><div class="field"><label>Meta description</label><textarea id="seo-description"></textarea></div></div><button type="button" class="toggle-source" id="toggle-source">Edit HTML source</button><iframe id="editor-frame" class="editor-frame" sandbox="allow-same-origin" title="Page editor"></iframe><textarea id="source-editor" class="source-editor" hidden spellcheck="false"></textarea><p class="muted">The HTML view also allows FAQ and schema edits. Image files can be uploaded in the visual view.</p></section>`;
     $("#page-select")?.addEventListener("change", async (event) => { pagePath = event.target.value; await loadPage(); });
     $("#toggle-source").addEventListener("click", () => { sourceMode = !sourceMode; const frame = $("#editor-frame"), source = $("#source-editor"); if (sourceMode) source.value = serializePage(); else { pageHtml = source.value; showFrame(); } frame.hidden = sourceMode; source.hidden = !sourceMode; $("#toggle-source").textContent = sourceMode ? "Edit visually" : "Edit HTML source"; });
     await loadPage();
   }
   async function loadPage() {
-    pageHtml = (await api(`/admin/api/page?path=${encodeURIComponent(pagePath)}`)).html;
+    const data = await api(`/admin/api/page?path=${encodeURIComponent(pagePath)}`);
+    pageHtml = data.html; pageLayoutVersion = data.layoutVersion;
+    pageSharedBefore = sharedMarkup(pageHtml);
     sourceMode = false; $("#source-editor").hidden = true; $("#editor-frame").hidden = false; $("#toggle-source").textContent = "Edit HTML source";
     showFrame();
   }
@@ -181,15 +184,30 @@
     doc.querySelector("base[data-admin]")?.remove();
     return "<!DOCTYPE html>\n" + doc.documentElement.outerHTML;
   }
+  function sharedMarkup(html) {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const cards = [...doc.querySelectorAll(".service-card")].map((item) => item.outerHTML);
+    return {
+      header: [doc.querySelector(".topbar")?.outerHTML || "", doc.querySelector(".site-header")?.outerHTML || ""].join("\n"),
+      footer: [doc.querySelector(".site-footer")?.outerHTML || "", doc.querySelector(".mobile-callbar")?.outerHTML || ""].join("\n"),
+      cta: doc.querySelector(".cta-band")?.outerHTML || null,
+      warranty: doc.querySelector(".warranty-section")?.outerHTML || null,
+      serviceCards: cards.length ? cards : null,
+    };
+  }
   async function savePage() {
     const html = sourceMode ? $("#source-editor").value : serializePage();
-    const response = await fetch(`/admin/api/page?path=${encodeURIComponent(pagePath)}`, { method: "POST", credentials: "same-origin", headers: { "Content-Type": "text/html; charset=utf-8" }, body: html });
+    const shared = sharedMarkup(html);
+    const changes = Object.keys(shared).filter((key) => JSON.stringify(shared[key]) !== JSON.stringify(pageSharedBefore[key]));
+    const params = new URLSearchParams({ path: pagePath, layoutVersion: pageLayoutVersion, sharedChanged: changes.join(",") });
+    const response = await fetch(`/admin/api/page?${params}`, { method: "POST", credentials: "same-origin", headers: { "Content-Type": "text/html; charset=utf-8" }, body: html });
     const result = response.headers.get("content-type")?.includes("application/json") ? await response.json() : null;
     if (!response.ok) {
       const requestId = response.headers.get("x-hcdn-request-id");
       throw new Error(result?.error || (response.status === 403 ? `The hosting security blocked this page save (403). Contact Hostinger support${requestId ? ` with request ID ${requestId}` : ""} if it continues.` : `Page save failed (${response.status})`));
     }
-    pageHtml = html;
+    pageHtml = html; pageLayoutVersion = result.layoutVersion;
+    pageSharedBefore = shared;
   }
   async function render() {
     $("#view-title").textContent = view === "home" ? "Home page" : view === "services" ? "Services" : view === "contact" ? "Contact page" : groups[view]?.title || "Site pages";
