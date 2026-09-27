@@ -21,6 +21,9 @@ function send(res, status, body, type = "application/json; charset=utf-8", heade
   res.writeHead(status, { "Content-Type": type, "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", ...headers });
   res.end(type.startsWith("application/json") ? JSON.stringify(body) : body);
 }
+function sendSaved(res, body = { ok: true }) {
+  return send(res, 200, body, "application/json; charset=utf-8", { "Clear-Site-Data": '"cache"' });
+}
 function bodyJson(req, limit = 12 * 1024 * 1024) {
   return new Promise((resolve, reject) => {
     const chunks = []; let size = 0;
@@ -183,7 +186,7 @@ const server = http.createServer(async (req, res) => {
       validateCollections(nextData);
       await storage.saveContent("collections", nextData, rebuild);
       removeUnpublished(oldData, nextData);
-      return send(res, 200, { ok: true });
+      return sendSaved(res);
     }
     if (/^\/admin\/api\/brands\/(?:profile|delete|meta)$/.test(pathname) && req.method === "POST") {
       const action = pathname.split("/").at(-1);
@@ -207,26 +210,26 @@ const server = http.createServer(async (req, res) => {
       validateCollections(nextData);
       await storage.saveContent("collections", nextData, rebuild);
       removeUnpublished(oldData, nextData);
-      return send(res, 200, { ok: true });
+      return sendSaved(res);
     }
     if (pathname === "/admin/api/home" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(homeFile, "utf8")));
     if (pathname === "/admin/api/services" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(servicesFile, "utf8")));
     if (pathname === "/admin/api/services" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req); validateServices(data);
       await storage.saveContent("services", data, rebuild);
-      return send(res, 200, { ok: true });
+      return sendSaved(res);
     }
     if (pathname === "/admin/api/home" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req); validateHome(data);
       await storage.saveContent("home", data, rebuild);
-      return send(res, 200, { ok: true });
+      return sendSaved(res);
     }
     if (pathname === "/admin/api/collections" && (req.method === "POST" || req.method === "PUT")) {
       const data = await bodyJson(req); validateCollections(data);
       const oldData = JSON.parse(fs.readFileSync(contentFile, "utf8"));
       await storage.saveContent("collections", data, rebuild);
       removeUnpublished(oldData, data);
-      return send(res, 200, { ok: true });
+      return sendSaved(res);
     }
     if (pathname === "/admin/api/pages" && req.method === "GET") return send(res, 200, htmlPages());
     if (pathname === "/admin/api/page" && req.method === "GET") {
@@ -242,7 +245,7 @@ const server = http.createServer(async (req, res) => {
       const page = safePage(data.path);
       if (!page || !fs.existsSync(page.full) || typeof data.html !== "string" || !/^<!doctype html>/i.test(data.html.trim())) return send(res, 400, { error: "Invalid page" });
       await storage.savePage(page.name, data.html, rebuild);
-      return send(res, 200, { ok: true });
+      return sendSaved(res);
     }
     if (pathname === "/admin/api/upload" && req.method === "POST") {
       const type = String(req.headers["content-type"] || "").split(";")[0].trim().toLowerCase();
@@ -254,7 +257,7 @@ const server = http.createServer(async (req, res) => {
       if (!valid) return send(res, 400, { error: "Invalid image data" });
       const name = `${Date.now()}-${crypto.randomBytes(5).toString("hex")}.${ext}`;
       const assetPath = await storage.saveUpload(name, type, buffer);
-      return send(res, 200, { path: assetPath });
+      return sendSaved(res, { path: assetPath });
     }
     return send(res, 404, { error: "Unknown endpoint" });
   } catch (error) {
