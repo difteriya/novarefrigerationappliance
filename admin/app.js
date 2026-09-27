@@ -47,17 +47,18 @@
   function at(path) { return path.reduce((value, part) => value[part], state); }
   function set(path, value) { at(path.slice(0, -1))[path.at(-1)] = value; }
   function label(key) {
-    const names = { faq: "Questions", offers: "Offers", img: "Image", w: "Image width", h: "Image height", desc: "Description", unit: "Price note", badge: "Image label", alt: "Image description", warranty: "Warranty", duration: "Coverage period" };
+    const names = { faq: "Questions", offers: "Offers", gallery: "Photo gallery", img: "Image", w: "Image width", h: "Image height", desc: "Description", unit: "Price note", badge: "Image label", alt: "Image description", warranty: "Warranty", duration: "Coverage period" };
     return names[key] || key.replace(/([A-Z])/g, " $1").replace(/[-_]/g, " ").replace(/^./, (c) => c.toUpperCase());
   }
   function template(group) {
     if (group === "blog") return { slug: "new-guide", status: "draft", title: "New repair guide", seoTitle: "", metaDescription: "", excerpt: "", datePublished: new Date().toISOString().slice(0, 10), dateModified: new Date().toISOString().slice(0, 10), author: "Nova Refrigeration & Appliance Repair", image: "", imageAlt: "", sections: [{ heading: "", paragraphs: [""] }], sources: [], faq: [] };
-    if (group === "work") return { slug: "new-project", status: "draft", sample: false, title: "New project", seoTitle: "", metaDescription: "", excerpt: "", appliance: "", brand: "", area: "", image: "", imageAlt: "", problem: "", diagnosis: "", solution: "", faq: [] };
+    if (group === "work") return { slug: "new-project", status: "draft", sample: false, title: "New project", seoTitle: "", metaDescription: "", excerpt: "", appliance: "", brand: "", area: "", image: "", imageAlt: "", gallery: [], problem: "", diagnosis: "", solution: "", faq: [] };
     return { slug: "new-brand", name: "New brand", status: "draft", logo: "", title: "", metaDescription: "", intro: "", focus: [""], sections: [{ heading: "", body: "" }], faq: [] };
   }
   function arrayTemplate(key, array, path) {
     if (key === "faq") return { question: "", answer: "" };
     if (key === "offers") return { status: "draft", img: "", w: 1200, h: 800, alt: "", badge: "", price: "", unit: "", title: "New offer", desc: "" };
+    if (key === "gallery") return { image: "", alt: "", caption: "" };
     if (key === "sections") return path[0] === "brands" ? { heading: "", body: "" } : { heading: "", paragraphs: [""] };
     if (key === "sources") return { label: "", url: "https://" };
     if (array.length) return typeof array[0] === "string" ? "" : structuredClone(array[0]);
@@ -95,6 +96,7 @@
   }
   function renderCollection() {
     const group = groups[view], data = state[view], items = data[group.field];
+    if (view === "work") items.forEach((item) => { if (!Array.isArray(item.gallery)) item.gallery = []; });
     const meta = Object.entries(data).filter(([key]) => key !== group.field);
     $("#workspace").innerHTML = `<section class="panel"><h2>Page information</h2><p class="help">Edit the listing page title, search description, introduction, and questions.</p><div class="intro-fields">${meta.filter(([key]) => key !== "faq").map(([key, value]) => field(key, value, [view, key])).join("")}</div>${field("faq", data.faq, [view, "faq"])}</section><div class="collection-layout"><div class="item-list">${items.map((item, index) => `<button type="button" data-select="${index}" class="${index === selected ? "selected" : ""}"><strong>${esc(item.title || item.name || item.slug)}</strong><small>${esc(item.status)}${item.sample ? " · sample" : ""}</small></button>`).join("")}<button type="button" class="add" id="add-entry">+ Add ${group.singular}</button></div><section class="panel">${items[selected] ? `<div class="entry-head"><h2>${esc(items[selected].title || items[selected].name)}</h2><button type="button" class="danger" id="delete-entry">Delete</button></div>${items[selected].sample ? `<p class="sample-badge">Illustrative sample project</p>` : ""}${Object.entries(items[selected]).map(([key, value]) => field(key, value, [view, group.field, selected, key])).join("")}` : `<h2>No ${group.singular}s yet</h2><p>Add one to get started.</p>`}</section></div>`;
     bindFields(renderCollection);

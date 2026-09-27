@@ -62,6 +62,12 @@ function validateCollections(data) {
     for (const item of data[name][field]) {
       if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.slug || "") || slugs.has(item.slug)) throw new Error(`Invalid or duplicate ${name} slug`);
       if (!["draft", "published"].includes(item.status)) throw new Error("Status must be draft or published");
+      if (name === "work" && item.gallery !== undefined) {
+        if (!Array.isArray(item.gallery) || item.gallery.length > 30) throw new Error("A project gallery can contain up to 30 photos");
+        for (const photo of item.gallery) {
+          if (!photo || typeof photo.image !== "string" || typeof photo.alt !== "string" || typeof photo.caption !== "string" || (photo.image && !/^assets\/[\w /().-]+\.(?:png|jpe?g|webp|gif)$/i.test(photo.image))) throw new Error("Invalid project gallery photo");
+        }
+      }
       slugs.add(item.slug);
     }
   }
