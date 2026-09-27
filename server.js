@@ -4,12 +4,13 @@ const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
 const crypto = require("node:crypto");
+const storage = require("./storage");
 
 const root = __dirname;
 const contentFile = path.join(root, "content", "collections.json");
 const homeFile = path.join(root, "content", "home.json");
 const servicesFile = path.join(root, "content", "services.json");
-const overrideRoot = path.join(root, "content", "page-overrides");
+const bundledCollections = JSON.parse(fs.readFileSync(contentFile, "utf8"));
 const port = Number(process.env.PORT || 3000);
 const adminPassword = process.env.ADMIN_PASSWORD || "";
 const sessions = new Map();
@@ -83,12 +84,6 @@ function validateServices(data) {
     if (!Array.isArray(entries) || entries.some((item) => typeof item.question !== "string" || typeof item.answer !== "string")) throw new Error("Invalid service FAQ");
   }
 }
-function atomicWrite(file, text) {
-  fs.mkdirSync(path.dirname(file), { recursive: true });
-  const temp = `${file}.${process.pid}.tmp`;
-  fs.writeFileSync(temp, text, { encoding: "utf8", mode: 0o600 });
-  fs.renameSync(temp, file);
-}
 function rebuild() {
   const buildPath = path.join(root, "build.js");
   delete require.cache[require.resolve(buildPath)];
@@ -144,6 +139,7 @@ const server = http.createServer(async (req, res) => {
       return send(res, 200, { ok: true }, "application/json; charset=utf-8", { "Set-Cookie": `nova_admin=${token}; HttpOnly; SameSite=Strict; Path=/admin; Max-Age=43200${secure}` });
     }
     if (!currentSession(req)) return send(res, 401, { error: "Sign in required" });
+    if (pathname === "/admin/api/storage" && req.method === "GET") return send(res, 200, { mode: storage.configured ? "mysql" : "local" });
     if (pathname === "/admin/api/logout" && req.method === "POST") {
       const token = /nova_admin=([a-f0-9]{64})/.exec(req.headers.cookie || "")?.[1]; if (token) sessions.delete(token);
       return send(res, 200, { ok: true }, "application/json; charset=utf-8", { "Set-Cookie": "nova_admin=; HttpOnly; SameSite=Strict; Path=/admin; Max-Age=0" });
@@ -153,24 +149,19 @@ const server = http.createServer(async (req, res) => {
     if (pathname === "/admin/api/services" && req.method === "GET") return send(res, 200, JSON.parse(fs.readFileSync(servicesFile, "utf8")));
     if (pathname === "/admin/api/services" && req.method === "PUT") {
       const data = await bodyJson(req); validateServices(data);
-      const backup = fs.readFileSync(servicesFile, "utf8");
-      atomicWrite(servicesFile, JSON.stringify(data, null, 2) + "\n");
-      try { rebuild(); } catch (error) { atomicWrite(servicesFile, backup); rebuild(); throw error; }
+      await storage.saveContent("services", data, rebuild);
       return send(res, 200, { ok: true });
     }
     if (pathname === "/admin/api/home" && req.method === "PUT") {
       const data = await bodyJson(req); validateHome(data);
-      const backup = fs.readFileSync(homeFile, "utf8");
-      atomicWrite(homeFile, JSON.stringify(data, null, 2) + "\n");
-      try { rebuild(); } catch (error) { atomicWrite(homeFile, backup); rebuild(); throw error; }
+      await storage.saveContent("home", data, rebuild);
       return send(res, 200, { ok: true });
     }
     if (pathname === "/admin/api/collections" && req.method === "PUT") {
       const data = await bodyJson(req); validateCollections(data);
       const oldData = JSON.parse(fs.readFileSync(contentFile, "utf8"));
-      const backup = fs.readFileSync(contentFile, "utf8");
-      atomicWrite(contentFile, JSON.stringify(data, null, 2) + "\n");
-      try { rebuild(); removeUnpublished(oldData, data); } catch (error) { atomicWrite(contentFile, backup); rebuild(); throw error; }
+      await storage.saveContent("collections", data, rebuild);
+      removeUnpublished(oldData, data);
       return send(res, 200, { ok: true });
     }
     if (pathname === "/admin/api/pages" && req.method === "GET") return send(res, 200, htmlPages());
@@ -183,8 +174,7 @@ const server = http.createServer(async (req, res) => {
       const data = await bodyJson(req, 3 * 1024 * 1024);
       const page = safePage(data.path);
       if (!page || !fs.existsSync(page.full) || typeof data.html !== "string" || !/^<!doctype html>/i.test(data.html.trim())) return send(res, 400, { error: "Invalid page" });
-      atomicWrite(path.join(overrideRoot, page.name), data.html);
-      rebuild();
+      await storage.savePage(page.name, data.html, rebuild);
       return send(res, 200, { ok: true });
     }
     if (pathname === "/admin/api/upload" && req.method === "POST") {
@@ -196,9 +186,8 @@ const server = http.createServer(async (req, res) => {
       const valid = ext === "png" ? buffer.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex")) : ext === "jpg" ? buffer.subarray(0, 3).equals(Buffer.from("ffd8ff", "hex")) : ext === "webp" ? buffer.toString("ascii", 0, 4) === "RIFF" && buffer.toString("ascii", 8, 12) === "WEBP" : buffer.toString("ascii", 0, 3) === "GIF";
       if (!valid) return send(res, 400, { error: "Invalid image data" });
       const name = `${Date.now()}-${crypto.randomBytes(5).toString("hex")}.${ext}`;
-      const target = path.join(root, "assets", "uploads", name);
-      fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, buffer);
-      return send(res, 200, { path: `assets/uploads/${name}` });
+      const assetPath = await storage.saveUpload(name, data.type, buffer);
+      return send(res, 200, { path: assetPath });
     }
     return send(res, 404, { error: "Unknown endpoint" });
   } catch (error) {
@@ -207,4 +196,10 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(port, () => console.log(`Nova site and admin running at http://localhost:${port}/`));
+storage.initialize(rebuild).then(() => {
+  removeUnpublished(bundledCollections, JSON.parse(fs.readFileSync(contentFile, "utf8")));
+  server.listen(port, () => console.log(`Nova site and admin running at http://localhost:${port}/ (${storage.configured ? "MySQL" : "local files"})`));
+}).catch((error) => {
+  console.error("Storage initialization failed:", error);
+  process.exit(1);
+});

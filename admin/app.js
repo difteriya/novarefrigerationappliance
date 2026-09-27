@@ -12,8 +12,9 @@
   }
   function status(message, error = false) { const el = $("#status"); el.textContent = message; el.style.color = error ? "#b3261e" : "#345e43"; }
   async function load() {
-    const [collections, home, services] = await Promise.all([api("/admin/api/collections"), api("/admin/api/home"), api("/admin/api/services")]);
+    const [collections, home, services, storage] = await Promise.all([api("/admin/api/collections"), api("/admin/api/home"), api("/admin/api/services"), api("/admin/api/storage")]);
     state = { ...collections, home, services };
+    $("#storage-mode").textContent = storage.mode === "mysql" ? "Database connected" : "Local storage · deploys can erase edits";
     pageList = await api("/admin/api/pages");
     $("#login").hidden = true; $("#app").hidden = false;
     await render();

@@ -2,6 +2,14 @@
   "name": "nova-refrigeration-site",
   "version": "1.0.0",
   "private": true,
-  "scripts": { "build": "node build.js", "start": "node server.js" },
-  "engines": { "node": ">=20" }
+  "scripts": {
+    "build": "node build.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "mysql2": "^3.24.4"
+  }
 }

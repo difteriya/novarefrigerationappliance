@@ -1,26 +1,34 @@
-# Hostinger shared hosting deployment
+# Hostinger Web App deployment
 
-The supplied Hostinger web app details show support for Node.js 20, 22, and 24. This
-project uses only built-in Node.js modules and starts with `npm start`.
+The production site is a Node.js Web App connected to GitHub. Use Node.js 20 or newer,
+`npm run build` as the build command, and `npm start` as the start command. The app
+installs its `mysql2` dependency from `package-lock.json` during deployment.
 
-1. Back up the current live site in Hostinger. The existing domain is attached to a
-   PHP/HTML website, while the Web Apps area currently has no deployed Node app.
-2. Package the project, including `admin/`, `assets/`, `content/`, generated HTML,
-   `server.js`, `build.js`, `package.json`, `css/`, and `js/`. Keep this project directory
-   writable and persistent.
-3. In Hostinger's Web Apps setup, choose a temporary domain first and deploy the
-   project from a ZIP or repository. Select Node.js 20 or newer and use `npm start`.
-   Verify the app and admin panel on the temporary domain before moving the existing
-   domain from its PHP/HTML website to the Web App.
-4. Set `ADMIN_PASSWORD` as a long, unique environment variable in the hosting panel.
-   The app refuses admin sign-in if it is missing. Do not put the password in source
-   files or upload a `.env` file to a public directory.
-5. Ensure the application can write to `content/`, the generated page directories,
-   `sitemap.xml`, and `assets/uploads/`. These paths must persist across app restarts
-   and deployments or admin edits and uploads will be lost.
-6. Start the app and open `/admin`. Sign in, save a small change, then verify the
-   corresponding public page and `sitemap.xml`. Confirm HTTPS is active before
-   switching the production domain.
+## Persistent admin content
+
+Hostinger deployment folders are replaced on redeploy. Create a MySQL database under
+Websites → novarefrigerationappliance.com → Databases → Management. Record the **full**
+database name and username, including Hostinger's `u..._` prefix. Set these environment
+variables under the Web App's Environment variables page:
+
+| Key | Value |
+| --- | --- |
+| `DB_HOST` | `localhost` (or the host shown by Hostinger) |
+| `DB_PORT` | `3306` |
+| `DB_NAME` | Full Hostinger database name |
+| `DB_USER` | Full Hostinger database username |
+| `DB_PASSWORD` | Database password, entered only in Hostinger |
+
+Keep the existing `ADMIN_PASSWORD`. Do not commit credentials or a `.env` file. Add
+all database variables before deploying this version of the app. On its first start,
+the app creates its own tables and seeds them from the bundled `content/*.json` files.
+On later starts it restores admin content, page overrides, and uploaded images from
+MySQL, then regenerates public pages and the sitemap. A database connection failure
+stops the app rather than serving stale content. The admin sidebar displays
+**Database connected** once the production connection is active.
+
+Back up the MySQL database regularly in Hostinger. The database now contains all
+admin changes, including images; a backup of only the website files is insufficient.
 
 Public pages use extensionless addresses, such as `/brands` and
 `/services/washer-repair`. The Node app serves those addresses and redirects old
@@ -39,9 +47,8 @@ Their detail pages are `noindex` and omitted from the sitemap while `sample` is 
 - **Site pages:** Select any generated page. Edit visible text in the preview, click an
   image to upload a replacement, or edit the HTML source for advanced changes such as
   JSON-LD. Page SEO title and description have separate fields.
-- **Save and publish:** Rebuilds generated pages and updates the sitemap. Site Page
-  edits are stored in `content/page-overrides/` and survive rebuilds. Back up both
-  `content/` and `assets/uploads/` before replacing the app directory.
+- **Save and publish:** Stores changes in MySQL, rebuilds generated pages, and updates
+  the sitemap. Site Page edits and uploads are restored from MySQL after a redeploy.
 
 Admin authentication uses a password supplied by the hosting environment and a
 12-hour, HttpOnly, SameSite session cookie. Do not use a static-only deployment for

@@ -2,6 +2,7 @@
 node_modules/
 .env
 content/page-overrides/
+assets/uploads/
 
 # OS / editor cruft
 .DS_Store

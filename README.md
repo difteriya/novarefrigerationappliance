@@ -1,10 +1,11 @@
 # Nova Refrigeration & Appliance Repair — Website
 
 A fast, SEO-friendly website with a Node.js admin panel. Public pages are generated as
-HTML by [build.js](build.js). Home page FAQs and offers live in
-[content/home.json](content/home.json). Blog posts, project examples, and brand profiles live in
-[content/collections.json](content/collections.json); the admin panel edits both files and
-rebuilds the public pages automatically.
+HTML by [build.js](build.js). The bundled [content/home.json](content/home.json),
+[content/services.json](content/services.json), and [content/collections.json](content/collections.json)
+seed MySQL on the first deployment. After that, MySQL stores admin content, page edits,
+and uploaded images across deployments. The app restores them and rebuilds the public
+pages when it starts.
 
 ---
 
@@ -29,6 +30,7 @@ Set an admin password, then start the app:
 
 ```powershell
 $env:ADMIN_PASSWORD = 'choose-a-long-unique-password'
+$env:ALLOW_LOCAL_STORAGE = '1' # local preview only; deployed admin uses MySQL
 npm start
 ```
 
