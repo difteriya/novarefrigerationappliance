@@ -35,7 +35,7 @@
   $("#save").addEventListener("click", async () => {
     const button = $("#save"); button.disabled = true; status("Saving…");
     try {
-      if (view === "pages") await savePage();
+      if (view === "pages" || view === "contact") await savePage();
       else if (view === "home") await api("/admin/api/home", "PUT", state.home);
       else if (view === "services") await api("/admin/api/services", "PUT", state.services);
       else { const { home, services, ...collections } = state; await api("/admin/api/collections", "PUT", collections); }
@@ -106,9 +106,10 @@
     const input = document.createElement("input"); input.type = "file"; input.accept = "image/png,image/jpeg,image/webp,image/gif";
     return new Promise((resolve, reject) => { input.onchange = async () => { const file = input.files?.[0]; if (!file) return resolve(null); if (file.size > 8 * 1024 * 1024) return reject(new Error("Image must be under 8 MB")); try { const base64 = await new Promise((done, fail) => { const reader = new FileReader(); reader.onload = () => done(String(reader.result).split(",")[1]); reader.onerror = fail; reader.readAsDataURL(file); }); const result = await api("/admin/api/upload", "POST", { type: file.type, base64 }); resolve(result.path); } catch (error) { reject(error); } }; input.click(); });
   }
-  async function renderPages() {
-    $("#workspace").innerHTML = `<section class="panel"><h2>Edit a site page</h2><p class="page-help">Click text in the preview to edit it. Click an image to replace it. Title and description below control how this page appears in search. All changes are saved when you press “Save and publish”.</p><select id="page-select" class="page-select">${pageList.map((name) => `<option value="${esc(name)}" ${name === pagePath ? "selected" : ""}>${esc(name)}</option>`).join("")}</select><div class="page-toolbar"><div class="field"><label>SEO title</label><input id="seo-title"></div><div class="field"><label>Meta description</label><textarea id="seo-description"></textarea></div></div><button type="button" class="toggle-source" id="toggle-source">Edit HTML source</button><iframe id="editor-frame" class="editor-frame" sandbox="allow-same-origin" title="Page editor"></iframe><textarea id="source-editor" class="source-editor" hidden spellcheck="false"></textarea><p class="muted">The HTML view also allows FAQ and schema edits. Image files can be uploaded in the visual view.</p></section>`;
-    $("#page-select").addEventListener("change", async (event) => { pagePath = event.target.value; await loadPage(); });
+  async function renderPages(contactOnly = false) {
+    if (contactOnly) pagePath = "contact.html";
+    $("#workspace").innerHTML = `<section class="panel"><h2>${contactOnly ? "Edit the contact page" : "Edit a site page"}</h2><p class="page-help">Click text in the preview to edit it. Click an image to replace it. Title and description below control how this page appears in search. All changes are saved when you press “Save and publish”.</p>${contactOnly ? "" : `<select id="page-select" class="page-select">${pageList.map((name) => `<option value="${esc(name)}" ${name === pagePath ? "selected" : ""}>${esc(name)}</option>`).join("")}</select>`}<div class="page-toolbar"><div class="field"><label>SEO title</label><input id="seo-title"></div><div class="field"><label>Meta description</label><textarea id="seo-description"></textarea></div></div><button type="button" class="toggle-source" id="toggle-source">Edit HTML source</button><iframe id="editor-frame" class="editor-frame" sandbox="allow-same-origin" title="Page editor"></iframe><textarea id="source-editor" class="source-editor" hidden spellcheck="false"></textarea><p class="muted">The HTML view also allows FAQ and schema edits. Image files can be uploaded in the visual view.</p></section>`;
+    $("#page-select")?.addEventListener("change", async (event) => { pagePath = event.target.value; await loadPage(); });
     $("#toggle-source").addEventListener("click", () => { sourceMode = !sourceMode; const frame = $("#editor-frame"), source = $("#source-editor"); if (sourceMode) source.value = serializePage(); else { pageHtml = source.value; showFrame(); } frame.hidden = sourceMode; source.hidden = !sourceMode; $("#toggle-source").textContent = sourceMode ? "Edit visually" : "Edit HTML source"; });
     await loadPage();
   }
@@ -149,9 +150,9 @@
     pageHtml = html;
   }
   async function render() {
-    $("#view-title").textContent = view === "home" ? "Home page" : view === "services" ? "Services" : groups[view]?.title || "Site pages";
+    $("#view-title").textContent = view === "home" ? "Home page" : view === "services" ? "Services" : view === "contact" ? "Contact page" : groups[view]?.title || "Site pages";
     $("#save").textContent = "Save and publish";
-    if (view === "pages") await renderPages(); else if (view === "home") renderHome(); else if (view === "services") renderServices(); else renderCollection();
+    if (view === "pages" || view === "contact") await renderPages(view === "contact"); else if (view === "home") renderHome(); else if (view === "services") renderServices(); else renderCollection();
   }
   api("/admin/api/collections").then(() => load()).catch(() => {});
 })();
